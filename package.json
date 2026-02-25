@@ -7,11 +7,16 @@
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.3.2",
 		"@testing-library/user-event": "^14.4.3",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
 		"date-fns": "^4.1.0",
+		"lucide-react": "^0.575.0",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
 		"react-router-dom": "^7.13.1",
 		"sass": "^1.97.3",
+		"tailwind-merge": "^3.5.0",
+		"tailwindcss-animate": "^1.0.7",
 		"web-vitals": "^5.1.0"
 	},
 	"scripts": {
@@ -19,14 +24,9 @@
 		"predeploy": "npm run build",
 		"deploy": "gh-pages -d build",
 		"build": "vite build",
-		"test": "vitest",
+		    "test": "vitest",
+		    "typecheck": "tsc --noEmit",		"lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview"
-	},
-	"eslintConfig": {
-		"extends": [
-			"react-app",
-			"react-app/jest"
-		]
 	},
 	"browserslist": {
 		"production": [
@@ -41,9 +41,20 @@
 		]
 	},
 	"devDependencies": {
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
 		"@vitejs/plugin-react": "^5.1.4",
+		"@vitejs/plugin-react-swc": "^4.2.3",
+		"autoprefixer": "^10.4.27",
+		"eslint": "^9.39.3",
+		"eslint-plugin-react": "^7.37.5",
+		"eslint-plugin-react-hooks": "^7.0.1",
+		"eslint-plugin-react-refresh": "^0.5.2",
 		"gh-pages": "^6.3.0",
 		"jsdom": "^28.1.0",
+		"postcss": "^8.5.6",
+		"tailwindcss": "^4.2.1",
+		"typescript": "^5.9.3",
 		"vite": "^7.3.1",
 		"vitest": "^4.0.18"
 	}
