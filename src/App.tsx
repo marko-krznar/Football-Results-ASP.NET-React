@@ -1,8 +1,11 @@
-import React, { Component } from "react";
-import "./style.scss";
+import { ThemeProvider } from "@/components/theme-provider";
 
-export default class App extends Component {
-	render() {
-		return <div>ŠD Hotanj 19h Ukupni rezultat</div>;
-	}
+function App() {
+	return (
+		<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+			<h1>Hello from App!</h1>
+		</ThemeProvider>
+	);
 }
+
+export default App;

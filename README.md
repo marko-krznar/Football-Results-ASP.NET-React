@@ -1,26 +1,73 @@
-# React - Football Statistics
+# React + TypeScript + Vite
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Description
+Currently, two official plugins are available:
 
-Main purpose for this App is to show information about Football league. App shows football results, fixtures, teams, team information and standings. This app is created for ReactJS and API exercises.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Working Features
+## React Compiler
 
--   Shows results
--   Shows fixtures
--   Shows teams
--   Shows team information
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Features I'll be adding through time
+## Expanding the ESLint configuration
 
--   More leagues
--   Select favourite team and see information about all games played in current season
--   Display all results in current season
--   Glass UI
--   Make light/dark mode
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-This is a plan for now but as I'll work on this project I believe I'll get more ideas which I'll be implementing. If you have any ideas, you are more than welcome to share them with me.
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-:point_right: [Check out the app](https://marko-krznar.github.io/React-Football-Results/).
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
