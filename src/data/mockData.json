@@ -1,0 +1,44 @@
+{
+	"match": {
+		"score": "2:5",
+		"teams": [
+			{
+				"name": "Crni",
+				"score": 2,
+				"players": [
+					"Vukovarac",
+					"Tomo",
+					"Vinko",
+					"Lukas",
+					"Perende",
+					"Lovrić",
+					"Bruno",
+					"Miro",
+					"Mate",
+					"Mirko",
+					"Jerga",
+					"Mića"
+				]
+			},
+			{
+				"name": "Bijeli",
+				"score": 5,
+				"players": [
+					"Ante",
+					"Haris",
+					"Bebić",
+					"Mališa",
+					"Dama",
+					"Lale",
+					"Rotač",
+					"Dino",
+					"Šime",
+					"Juka",
+					"Paljak",
+					"Kulić",
+					"Marko"
+				]
+			}
+		]
+	}
+}
