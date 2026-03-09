@@ -6,6 +6,7 @@ import "@fontsource/roboto/700.css";
 import "./App.scss";
 
 import {
+	Avatar,
 	Divider,
 	Stack,
 	ThemeProvider,
@@ -53,35 +54,71 @@ function App() {
 				spacing={4}
 				direction={"row"}
 				divider={<Divider orientation="vertical" flexItem />}
+				justifyContent={"center"}
 			>
-				<Stack spacing={2}>
+				<Stack spacing={2} divider={<Divider />}>
 					<Typography variant="body2" align="center">
 						Crni
 					</Typography>
-					{crni.map((player: any) => (
-						<Typography
-							variant="body1"
-							align="center"
-							key={player.id}
-						>
-							{player.name}
-						</Typography>
-					))}
+					<>
+						{crni.map((player: any) => (
+							<Stack
+								spacing={2}
+								direction={"row"}
+								alignItems={"center"}
+								minWidth={200}
+							>
+								<Avatar>{player.name[0]}</Avatar>
+								<Typography
+									variant="body1"
+									align="center"
+									key={player.id}
+								>
+									{player.name}
+								</Typography>
+							</Stack>
+						))}
+					</>
 				</Stack>
-				<Stack spacing={2}>
+				<Stack spacing={2} divider={<Divider />}>
 					<Typography variant="body2" align="center">
 						Bijeli
 					</Typography>
-					{bijeli.map((player: any) => (
-						<Typography
-							variant="body1"
-							align="center"
-							key={player.id}
-						>
-							{player.name}
-						</Typography>
-					))}
+					<>
+						{bijeli.map((player: any) => (
+							<Stack
+								spacing={2}
+								direction={"row"}
+								alignItems={"center"}
+								minWidth={200}
+							>
+								<Avatar>{player.name[0]}</Avatar>
+
+								<Typography
+									variant="body1"
+									align="center"
+									key={player.id}
+								>
+									{player.name}
+								</Typography>
+							</Stack>
+						))}
+					</>
 				</Stack>
+			</Stack>
+			<Typography variant="body2" align="center">
+				Termin 10.03.2026 19:00h
+			</Typography>
+			<Stack spacing={4}>
+				<Typography variant="body2" align="center">
+					Crni : Bijeli
+				</Typography>
+				<Typography variant="body2" align="center">
+					4:6
+				</Typography>
+				<Typography variant="body2" align="center">
+					5:5 - ne računa se jer nije završeno
+				</Typography>
 			</Stack>
 		</ThemeProvider>
 	);
