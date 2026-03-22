@@ -13,7 +13,12 @@ export default function Landing() {
 				<Typography variant="subtitle1" align="center">
 					Ukupni rezultat
 				</Typography>
-				<Stack direction="row" justifyContent="center" spacing={2}>
+				<Stack
+					direction="row"
+					justifyContent="center"
+					alignItems="center"
+					spacing={2}
+				>
 					<Box>
 						<Typography variant="subtitle2" align="center">
 							3
@@ -22,6 +27,9 @@ export default function Landing() {
 							Crni
 						</Typography>
 					</Box>
+					<Typography variant="subtitle2" align="center">
+						-
+					</Typography>
 					<Box>
 						<Typography variant="subtitle2" align="center">
 							6
@@ -31,10 +39,10 @@ export default function Landing() {
 						</Typography>
 					</Box>
 				</Stack>
-				<Typography variant="body2" align="center">
-					Odigrani termini: 5
-				</Typography>
 			</Card>
+			<Typography variant="body2" align="center">
+				Odigrani termini: 5
+			</Typography>
 		</Stack>
 	);
 }
