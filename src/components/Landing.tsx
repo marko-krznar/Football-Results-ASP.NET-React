@@ -16,7 +16,7 @@ export default function Landing() {
 				<Stack direction="row" justifyContent="center" spacing={2}>
 					<Box>
 						<Typography variant="subtitle2" align="center">
-							2
+							3
 						</Typography>
 						<Typography variant="body2" align="center">
 							Crni
@@ -32,7 +32,7 @@ export default function Landing() {
 					</Box>
 				</Stack>
 				<Typography variant="body2" align="center">
-					Odigrani termini: 4
+					Odigrani termini: 5
 				</Typography>
 			</Card>
 		</Stack>
