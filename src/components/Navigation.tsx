@@ -11,8 +11,8 @@ export default function Navigation() {
 			alignItems="center"
 			sx={{
 				padding: 2,
-				marginBottom: 2,
 				borderBottom: `1px solid ${theme.palette.text.secondary}`,
+				backdropFilter: "blur(12px)",
 			}}
 		>
 			<SportsSoccerIcon />
