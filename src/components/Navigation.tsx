@@ -11,12 +11,12 @@ export default function Navigation() {
 			alignItems="center"
 			sx={{
 				padding: 2,
-				borderBottom: `1px solid ${theme.palette.text.secondary}`,
+				borderBottom: `1px solid ${theme.palette.text.disabled}`,
 				backdropFilter: "blur(12px)",
 			}}
 		>
 			<SportsSoccerIcon />
-			<Typography variant="subtitle1">HPD Prsten Superliga</Typography>
+			<Typography variant="button">HPD Prsten Superliga</Typography>
 		</Stack>
 	);
 }
