@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Chip, Stack, Typography } from "@mui/material";
 
 function LandingSquadsCard() {
 	const bijeli = [
@@ -20,14 +20,18 @@ function LandingSquadsCard() {
 		"Miro",
 	];
 	return (
-		<Stack>
+		<Stack display="flex" flexDirection="column" gap={2} width="100%">
+			<Typography variant="body1">Bijeli</Typography>
 			<Box display="flex" flexDirection="row" gap={1} alignItems="center">
-				<Typography variant="body1">Bijeli: </Typography>
-				{bijeli.map((player) => player + ", ")}
+				{bijeli.map((player) => (
+					<Chip label={player} />
+				))}
 			</Box>
+			<Typography variant="body1">Crni </Typography>
 			<Box display="flex" flexDirection="row" gap={1} alignItems="center">
-				<Typography variant="body1">Crni: </Typography>
-				{crni.map((player) => player + ", ")}
+				{crni.map((player) => (
+					<Chip label={player} />
+				))}
 			</Box>
 		</Stack>
 	);
