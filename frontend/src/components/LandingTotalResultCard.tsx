@@ -6,12 +6,14 @@ function LandingTotalResultCard() {
 			sx={{
 				display: "flex",
 				alignItems: "center",
+				justifyContent: "center",
 				minWidth: "254px",
 				backgroundColor: "#262727",
+				flex: 1,
 			}}
 		>
 			<CardContent>
-				<Typography variant="body1" textAlign="center">
+				<Typography variant="subtitle2" textAlign="center">
 					<span style={{ color: "#95CFFF" }}>Ukupni rezultat</span>
 				</Typography>
 				<Box

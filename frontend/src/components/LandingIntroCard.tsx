@@ -2,7 +2,11 @@ import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
 
 function LandingIntroCard() {
 	return (
-		<Card>
+		<Card
+			sx={{
+				flex: 2,
+			}}
+		>
 			<CardContent>
 				<Typography variant="body1">
 					Aktivna sezona: proljeće 2026.
