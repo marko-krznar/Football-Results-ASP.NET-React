@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Avatar, Divider, Stack, Typography } from "@mui/material";
-import React from "react";
 import mockPlayers from "../data/mockPlayers.json";
 
 export default function Teams() {
@@ -22,25 +21,20 @@ export default function Teams() {
 				<Typography variant="body2" align="center">
 					Crni
 				</Typography>
-				<>
-					{crni.map((player: any) => (
-						<Stack
-							spacing={2}
-							direction={"row"}
-							alignItems={"center"}
-							minWidth={200}
-						>
-							<Avatar>{player.name[0]}</Avatar>
-							<Typography
-								variant="body1"
-								align="center"
-								key={player.id}
-							>
-								{player.name}
-							</Typography>
-						</Stack>
-					))}
-				</>
+				{crni.map((player: any) => (
+					<Stack
+						spacing={2}
+						direction={"row"}
+						alignItems={"center"}
+						minWidth={200}
+						key={player.id}
+					>
+						<Avatar>{player.name[0]}</Avatar>
+						<Typography variant="body1" align="center">
+							{player.name}
+						</Typography>
+					</Stack>
+				))}
 			</Stack>
 			<Stack spacing={2} divider={<Divider />}>
 				<Typography variant="body2" align="center">
@@ -53,14 +47,11 @@ export default function Teams() {
 							direction={"row"}
 							alignItems={"center"}
 							minWidth={200}
+							key={player.id}
 						>
 							<Avatar>{player.name[0]}</Avatar>
 
-							<Typography
-								variant="body1"
-								align="center"
-								key={player.id}
-							>
+							<Typography variant="body1" align="center">
 								{player.name}
 							</Typography>
 						</Stack>
