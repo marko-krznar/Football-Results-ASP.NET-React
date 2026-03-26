@@ -20,7 +20,13 @@ export default function Landing() {
 				flexGrow: 1,
 			}}
 		>
-			<Box display="flex" flexDirection="row" gap={4} flexGrow={1}>
+			<Box
+				display="flex"
+				flexDirection="row"
+				gap={4}
+				flexGrow={1}
+				overflow="hidden"
+			>
 				<LandingIntroCard />
 				<LandingTotalResultCard />
 			</Box>
