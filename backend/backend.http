@@ -1,6 +1,5 @@
 @backend_HostAddress = http://localhost:5220
 
-GET {{backend_HostAddress}}/weatherforecast/
+### 1. Get all match sessions (with sets and players)
+GET {{backend_HostAddress}}/api/matches
 Accept: application/json
-
-###
