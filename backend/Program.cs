@@ -51,8 +51,6 @@ using (var scope = app.Services.CreateScope())
             new Player { Id = 24, Name = "Mića", IsCaptain = false, Team = "Black" }
         };
 
-        context.Players.AddRange(players);
-
         // Seed Session 1
         var session1 = new MatchSession
         {
