@@ -8,7 +8,7 @@ namespace backend.Controlers
     [ApiController]
     public class MatchController : ControllerBase
     {
-        private static readonly List<MatchOverallModel> teams =
+        private static readonly List<MatchOverallModel> matches =
         [
             new MatchOverallModel {
                 Id = 1,
@@ -72,9 +72,17 @@ namespace backend.Controlers
         [HttpGet("matches")]
         public ActionResult<List<PlayerModel>> GetPlayersWhiteTeam()
         {
-            var matches = teams.ToList();
-            return Ok(matches);
+            var matchList = matches.ToList();
+            return Ok(matchList);
         }
 
+        [HttpGet("latest-match")]
+        public ActionResult<List<PlayerModel>> GetLatestMatch()
+        {
+            var latesMatch = matches
+                .OrderByDescending(m => m.Date)
+                .FirstOrDefault();
+            return Ok(latesMatch);
+        }
     }
 }

@@ -25,3 +25,7 @@ Accept: application/json
 ### 4. Controller matches
 GET {{backend_HostAddress}}/api/Match/matches
 Accept: application/json
+
+### 4. Controller latest-match
+GET {{backend_HostAddress}}/api/Match/latest-match
+Accept: application/json
