@@ -1,7 +1,7 @@
 using backend.Data;
+using backend.Endpoints;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("FootballDb"));
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -121,48 +122,49 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
 
 // 4. ENDPOINT: GET /api/matches (returns sessions + sets + players)
-app.MapGet("/api/matches", async (AppDbContext context) =>
-{
-    var sessions = await context.MatchSessions
-        .Include(m => m.Sets)
-        .Include(m => m.WhiteTeam)
-            .ThenInclude(p => p.Player)
-        .Include(m => m.BlackTeam)
-            .ThenInclude(p => p.Player)
-        .ToListAsync();
+// app.MapGet("/api/matches", async (AppDbContext context) =>
+// {
+//     var sessions = await context.MatchSessions
+//         .Include(m => m.Sets)
+//         .Include(m => m.WhiteTeam)
+//             .ThenInclude(p => p.Player)
+//         .Include(m => m.BlackTeam)
+//             .ThenInclude(p => p.Player)
+//         .ToListAsync();
 
-    var flattenedSessions = sessions.Select(s => new 
-    {
-        s.Id,
-        s.PlayedAt,
-        Sets = s.Sets.Select(set => new {
-            set.Id,
-            set.SetNumber,
-            set.BlackScore,
-            set.WhiteScore,
-            set.Winner
-        }),
-        s.OverallScore,
-        WhiteTeam = s.WhiteTeam.Select(sp => new {
-            sp.Player?.Id,
-            sp.Player?.Name,
-            sp.Player?.IsCaptain
-        }),
-        BlackTeam = s.BlackTeam.Select(sp => new {
-            sp.Player?.Id,
-            sp.Player?.Name,
-            sp.Player?.IsCaptain
-        })
-    });
+//     var flattenedSessions = sessions.Select(s => new 
+//     {
+//         s.Id,
+//         s.PlayedAt,
+//         Sets = s.Sets.Select(set => new {
+//             set.Id,
+//             set.SetNumber,
+//             set.BlackScore,
+//             set.WhiteScore,
+//             set.Winner
+//         }),
+//         s.OverallScore,
+//         WhiteTeam = s.WhiteTeam.Select(sp => new {
+//             sp.Player?.Id,
+//             sp.Player?.Name,
+//             sp.Player?.IsCaptain
+//         }),
+//         BlackTeam = s.BlackTeam.Select(sp => new {
+//             sp.Player?.Id,
+//             sp.Player?.Name,
+//             sp.Player?.IsCaptain
+//         })
+//     });
 
-    return Results.Ok(flattenedSessions);
-})
-.WithName("GetMatches");
+//     return Results.Ok(flattenedSessions);
+// })
+// .WithName("GetMatches");
+app.MapMatchEndpoints();
+app.MapControllers();
 
 app.Run();

@@ -3,3 +3,25 @@
 ### 1. Get all match sessions (with sets and players)
 GET {{backend_HostAddress}}/api/matches
 Accept: application/json
+
+### 2. Get all white team players
+GET {{backend_HostAddress}}/team/white
+Accept: application/json
+
+### 3. Get all black team players
+GET {{backend_HostAddress}}/team/black
+Accept: application/json
+
+# Controler calls
+
+### 4. Controller players white
+GET {{backend_HostAddress}}/api/Players/white
+Accept: application/json
+
+### 4. Controller players black
+GET {{backend_HostAddress}}/api/Players/black
+Accept: application/json
+
+### 4. Controller matches
+GET {{backend_HostAddress}}/api/Match/matches
+Accept: application/json

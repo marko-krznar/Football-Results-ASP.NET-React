@@ -57,5 +57,43 @@ public static class MatchEndpoints
         // Ovdje možete lako dodati nove endpointove, npr.:
         // group.MapGet("/{id}", async (int id, AppDbContext context) => { ... });
         // group.MapPost("/", async (MatchSessionDto match, AppDbContext context) => { ... });
+
+        // Get white players endpoint
+        app.MapGet("/team/white", async (AppDbContext context, int page = 1, int pageSize = 20) =>
+        {
+            var whitePlayers = await context.Players
+                .Where(p => p.Team == "White")
+                .OrderBy(p => p.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new PlayerDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    IsCaptain = p.IsCaptain
+                })
+                .ToListAsync();
+
+            return Results.Ok(whitePlayers);
+        });
+
+        // Get black players endpoint
+        app.MapGet("/team/black", async (AppDbContext context, int page = 1, int pageSize = 20) =>
+        {
+            var blackPlayers = await context.Players
+                .Where(p => p.Team == "Black")
+                .OrderBy(p => p.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new PlayerDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    IsCaptain = p.IsCaptain
+                })
+                .ToListAsync();
+
+            return Results.Ok(blackPlayers);
+        });
     }
 }
