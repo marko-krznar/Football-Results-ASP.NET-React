@@ -10,23 +10,17 @@ import {
 
 function LandingSquadsCard() {
 	const bijeli = [
+		"Haris",
+		"Lale",
 		"Mališa",
-		"Marko",
-		"Ante",
+		"Dama",
+		"Rotac",
 		"Dino",
-		"Bebić",
-		"Rotim",
-		"Juka",
+		"Marko",
 	];
-	const crni = [
-		"Tomo",
-		"Vukovarac",
-		"Bruno",
-		"Filip",
-		"Mate",
-		"Perić",
-		"Miro",
-	];
+
+	const crni = ["Lukas", "Tomo", "Lovrić", "Bruno", "Miro", "Mića", "Mate"];
+
 	return (
 		<Card sx={{ flex: 1 }}>
 			<CardContent sx={{ flexDirection: "row" }}>
