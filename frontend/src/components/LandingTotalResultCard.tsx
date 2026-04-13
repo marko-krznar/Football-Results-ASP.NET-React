@@ -33,7 +33,7 @@ function LandingTotalResultCard() {
 							fontWeight="bold"
 							textAlign="center"
 						>
-							4
+							6
 						</Typography>
 						<Typography variant="body1" textAlign="center">
 							Crni
@@ -51,7 +51,7 @@ function LandingTotalResultCard() {
 							fontWeight="bold"
 							textAlign="center"
 						>
-							6
+							7
 						</Typography>
 						<Typography variant="body1" textAlign="center">
 							Bijeli

@@ -25,13 +25,13 @@ function LandingIntroCard() {
 						<Typography variant="body1">
 							Odigrani termini
 						</Typography>
-						<Typography variant="subtitle2">6</Typography>
+						<Typography variant="subtitle2">7</Typography>
 					</Box>
 					<Box>
 						<Typography variant="body1">
 							Posljednji termin
 						</Typography>
-						<Typography variant="subtitle2">23.03.2026.</Typography>
+						<Typography variant="subtitle2">13.04.2026.</Typography>
 					</Box>
 				</Box>
 			</CardContent>

@@ -14,7 +14,7 @@ namespace backend.Controlers
                 Id = 1,
                 BlackScore = 0,
                 WhiteScore = 0,
-                Date = new DateTime(2024, 3, 23).Date,
+                Date = new DateTime(2026, 3, 23).Date,
                 Sets =
                 [
                     new SetModel { Id = 1, BlackScore = 6, WhiteScore = 3 },
@@ -39,10 +39,10 @@ namespace backend.Controlers
                 ],
             },
             new MatchOverallModel {
-                Id = 1,
+                Id = 2,
                 BlackScore = 0,
                 WhiteScore = 0,
-                Date = new DateTime(2024, 3, 30).Date,
+                Date = new DateTime(2026, 3, 30).Date,
                 Sets =
                 [
                     new SetModel { Id = 1, BlackScore = 6, WhiteScore = 0 },
@@ -65,7 +65,35 @@ namespace backend.Controlers
                     new PlayerModel { Id = 19, Name = "Bruno", IsCaptain = false, Team = 2 },
                     new PlayerModel { Id = 20, Name = "Miro", IsCaptain = false, Team = 2 },
                 ],
-
+            },
+            new MatchOverallModel {
+                Id = 3,
+                BlackScore = 0,
+                WhiteScore = 1,
+                Date = new DateTime(2026, 4, 13).Date,
+                Sets =
+                [
+                    new SetModel { Id = 1, BlackScore = 3, WhiteScore = 6 },
+                    new SetModel { Id = 2, BlackScore = 3, WhiteScore = 4 }
+                ],
+                WhiteTeamPlayers = [
+                    new PlayerModel { Id = 1, Name = "Haris", IsCaptain = false, Team = 1 },
+                    new PlayerModel { Id = 5, Name = "Lale", IsCaptain = false, Team = 1 },
+                    new PlayerModel { Id = 3, Name = "Mališa", IsCaptain = false, Team = 1 },
+                    new PlayerModel { Id = 4, Name = "Dama", IsCaptain = false, Team = 1 },
+                    new PlayerModel { Id = 6, Name = "Rotac", IsCaptain = false, Team = 1 },
+                    new PlayerModel { Id = 7, Name = "Dino", IsCaptain = false, Team = 1 },
+                    new PlayerModel { Id = 12, Name = "Marko", IsCaptain = false, Team = 1 }
+                ],
+                BlackTeamPlayers = [
+                    new PlayerModel { Id = 16, Name = "Lukas", IsCaptain = false, Team = 2 },
+                    new PlayerModel { Id = 14, Name = "Tomo", IsCaptain = false, Team = 2 },
+                    new PlayerModel { Id = 18, Name = "Lovrić", IsCaptain = false, Team = 2 },
+                    new PlayerModel { Id = 19, Name = "Bruno", IsCaptain = false, Team = 2 },
+                    new PlayerModel { Id = 20, Name = "Miro", IsCaptain = false, Team = 2 },
+                    new PlayerModel { Id = 24, Name = "Mića", IsCaptain = false, Team = 2 },
+                    new PlayerModel { Id = 21, Name = "Mate", IsCaptain = false, Team = 2 }
+                ],
             },
         ];
 

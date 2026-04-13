@@ -40,7 +40,7 @@ function LandingTerminResults() {
 						</Box>
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								6
+								3
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Crni
@@ -49,7 +49,7 @@ function LandingTerminResults() {
 						<Divider orientation="vertical" flexItem />
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								<span style={{ color: "#ADAAAA" }}>3</span>
+								<span style={{ color: "#ADAAAA" }}>6</span>
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Bijeli
@@ -79,7 +79,7 @@ function LandingTerminResults() {
 						</Box>
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								5
+								3
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Crni
@@ -88,7 +88,7 @@ function LandingTerminResults() {
 						<Divider orientation="vertical" flexItem />
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								<span style={{ color: "#ADAAAA" }}>3</span>
+								<span style={{ color: "#ADAAAA" }}>4</span>
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Bijeli
@@ -128,7 +128,7 @@ function LandingTerminResults() {
 								textAlign="center"
 								color="#95CFFF"
 							>
-								1
+								0
 							</Typography>
 							<Typography
 								variant="body1"
@@ -151,7 +151,7 @@ function LandingTerminResults() {
 								textAlign="center"
 								color="#ADAAAA"
 							>
-								0
+								1
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Bijeli
@@ -163,7 +163,7 @@ function LandingTerminResults() {
 						textAlign="center"
 						color="#95CFFF"
 					>
-						Pobjeda: Crni
+						Pobjeda: Bijeli
 					</Typography>
 				</Card>
 			</Box>
