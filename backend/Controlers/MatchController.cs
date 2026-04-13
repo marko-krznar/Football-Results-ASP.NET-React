@@ -12,7 +12,7 @@ namespace backend.Controlers
         [
             new MatchOverallModel {
                 Id = 1,
-                BlackScore = 0,
+                BlackScore = 1,
                 WhiteScore = 0,
                 Date = new DateTime(2026, 3, 23).Date,
                 Sets =
@@ -40,7 +40,7 @@ namespace backend.Controlers
             },
             new MatchOverallModel {
                 Id = 2,
-                BlackScore = 0,
+                BlackScore = 2,
                 WhiteScore = 0,
                 Date = new DateTime(2026, 3, 30).Date,
                 Sets =
