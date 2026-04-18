@@ -1,22 +1,65 @@
-import { Stack, Typography, useTheme } from "@mui/material";
+import {
+	AppBar,
+	Toolbar,
+	Button,
+	Typography,
+	Box,
+	Container,
+} from "@mui/material";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import { Link } from "react-router";
 
 export default function Navigation() {
-	const theme = useTheme();
-
 	return (
-		<Stack
-			direction="row"
-			spacing={1}
-			alignItems="center"
+		<AppBar
+			position="sticky"
+			color="transparent"
+			elevation={0}
 			sx={{
-				padding: 2,
-				borderBottom: `1px solid ${theme.palette.text.disabled}`,
 				backdropFilter: "blur(12px)",
+				borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
 			}}
 		>
-			<SportsSoccerIcon />
-			<Typography variant="button">HPD Prsten Superliga</Typography>
-		</Stack>
+			<Container maxWidth="xl">
+				<Toolbar disableGutters>
+					<Button
+						component={Link}
+						to="/"
+						sx={{
+							gap: 1,
+						}}
+					>
+						<SportsSoccerIcon sx={{ fontSize: "2rem" }} />
+						<Typography
+							variant="body1"
+							noWrap
+							sx={{
+								fontWeight: 700,
+								color: (theme) => theme.palette.primary.main,
+							}}
+						>
+							HPD PRSTEN
+						</Typography>
+					</Button>
+
+					<Box sx={{ flexGrow: 1 }} />
+
+					<Box sx={{ display: "flex", gap: 1 }}>
+						<Button component={Link} to="/" color="inherit">
+							Naslovna
+						</Button>
+						<Button component={Link} to="/matches" color="inherit">
+							Termini
+						</Button>
+						<Button component={Link} to="/teams" color="inherit">
+							Momčadi
+						</Button>
+						<Button href="#text-buttons" color="inherit">
+							Troškovi
+						</Button>
+					</Box>
+				</Toolbar>
+			</Container>
+		</AppBar>
 	);
 }
