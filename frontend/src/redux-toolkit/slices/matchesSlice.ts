@@ -10,6 +10,106 @@ interface MatchesState {
 const initialState: MatchesState = {
 	data: [
 		{
+			id: 1778190651699,
+			date: "2026-05-07",
+			blackScore: 1,
+			whiteScore: 1,
+			sets: [
+				{
+					id: 1,
+					blackScore: 6,
+					whiteScore: 3,
+				},
+				{
+					id: 2,
+					blackScore: 2,
+					whiteScore: 6,
+				},
+			],
+			whiteTeamPlayers: [
+				{
+					id: 115,
+					name: "Mališa",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 116,
+					name: "Dama",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 117,
+					name: "Lale",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 118,
+					name: "Rotač",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 119,
+					name: "Dino",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 124,
+					name: "Marko",
+					isCaptain: false,
+					team: 1,
+				},
+			],
+			blackTeamPlayers: [
+				{
+					id: 100,
+					name: "Vukovarac",
+					isCaptain: true,
+					team: 2,
+				},
+				{
+					id: 101,
+					name: "Tomo",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 103,
+					name: "Lukas",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 106,
+					name: "Bruno",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 107,
+					name: "Miro",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 108,
+					name: "Mate",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 111,
+					name: "Mića",
+					isCaptain: false,
+					team: 2,
+				},
+			],
+		},
+		{
 			id: 1,
 			blackScore: 2,
 			whiteScore: 0,
@@ -192,8 +292,12 @@ const matchesSlice = createSlice({
 		setError: (state, action: PayloadAction<string | null>) => {
 			state.error = action.payload;
 		},
+		addMatch: (state, action: PayloadAction<MatchOverall>) => {
+			state.data = [action.payload, ...state.data];
+		},
 	},
 });
 
-export const { setMatches, setLoading, setError } = matchesSlice.actions;
+export const { setMatches, setLoading, setError, addMatch } =
+	matchesSlice.actions;
 export default matchesSlice.reducer;

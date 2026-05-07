@@ -6,11 +6,16 @@ import {
 	Card,
 	Avatar,
 	Container,
+	Button,
 } from "@mui/material";
+import { useState } from "react";
 import { useAppSelector } from "../redux-toolkit/hooks";
+import AddMatchModal from "./AddMatchModal";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function Matches() {
 	const matches = useAppSelector((state) => state.matches.data);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	return (
 		<Container maxWidth="xl">
@@ -34,9 +39,25 @@ export default function Matches() {
 							flexDirection: "column",
 						}}
 					>
-						<Typography variant="subtitle2" color={"textPrimary"}>
-							Statistika za sezonu 2026 proljeće
-						</Typography>
+						<Box
+							display="flex"
+							justifyContent="space-between"
+							alignItems="center"
+						>
+							<Typography
+								variant="subtitle2"
+								color={"textPrimary"}
+							>
+								Statistika za sezonu 2026 proljeće
+							</Typography>
+							<Button
+								variant="contained"
+								startIcon={<AddIcon />}
+								onClick={() => setIsModalOpen(true)}
+							>
+								Dodaj utakmicu
+							</Button>
+						</Box>
 						<Typography variant="body1">
 							Dobrodošli u pregled statistike za sezonu Proljeće
 							2026. Naši susreti odvijaju se svakog ponedjeljka u
@@ -77,7 +98,7 @@ export default function Matches() {
 										fontWeight="bold"
 										textAlign="center"
 									>
-										8
+										9
 									</Typography>
 									<Typography
 										variant="body1"
@@ -98,7 +119,7 @@ export default function Matches() {
 										fontWeight="bold"
 										textAlign="center"
 									>
-										7
+										8
 									</Typography>
 									<Typography
 										variant="body1"
@@ -256,6 +277,10 @@ export default function Matches() {
 					))}
 				</div>
 			</Box>
+			<AddMatchModal
+				open={isModalOpen}
+				onClose={() => setIsModalOpen(false)}
+			/>
 		</Container>
 	);
 }
