@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import App from "./App";
 import Landing from "./components/Landing";
-import Matches from "./components/Matches";
+import Matches from "./components/matches/Matches";
 import Teams from "./components/Teams";
 
 export const router = createBrowserRouter([

@@ -10,6 +10,107 @@ interface MatchesState {
 const initialState: MatchesState = {
 	data: [
 		{
+			id: 1778884175144,
+			date: "2026-05-11",
+			blackScore: 0,
+			whiteScore: 0,
+			sets: [
+				{
+					id: 1,
+					blackScore: 5,
+					whiteScore: 6,
+				},
+			],
+			whiteTeamPlayers: [
+				{
+					id: 112,
+					name: "Ante",
+					isCaptain: true,
+					team: 1,
+				},
+				{
+					id: 113,
+					name: "Haris",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 115,
+					name: "Mališa",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 117,
+					name: "Lale",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 118,
+					name: "Rotač",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 119,
+					name: "Dino",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 123,
+					name: "Kulić",
+					isCaptain: false,
+					team: 1,
+				},
+				{
+					id: 124,
+					name: "Marko",
+					isCaptain: false,
+					team: 1,
+				},
+			],
+			blackTeamPlayers: [
+				{
+					id: 102,
+					name: "Vinko",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 104,
+					name: "Perende",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 105,
+					name: "Lovrić",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 106,
+					name: "Bruno",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 107,
+					name: "Miro",
+					isCaptain: false,
+					team: 2,
+				},
+				{
+					id: 108,
+					name: "Mate",
+					isCaptain: false,
+					team: 2,
+				},
+			],
+		},
+		{
 			id: 1778190651699,
 			date: "2026-05-07",
 			blackScore: 1,

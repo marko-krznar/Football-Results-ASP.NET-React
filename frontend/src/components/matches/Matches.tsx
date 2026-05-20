@@ -1,21 +1,18 @@
 import {
 	Typography,
 	Box,
-	Chip,
 	CardContent,
 	Card,
 	Avatar,
 	Container,
-	Button,
+	Chip,
 } from "@mui/material";
-import { useState } from "react";
-import { useAppSelector } from "../redux-toolkit/hooks";
-import AddMatchModal from "./AddMatchModal";
-import AddIcon from "@mui/icons-material/Add";
+import { useAppSelector } from "../../redux-toolkit/hooks";
+import MatchesIntro from "./MatchesIntro";
+import MatchSets from "./MatchSets";
 
 export default function Matches() {
 	const matches = useAppSelector((state) => state.matches.data);
-	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	return (
 		<Container maxWidth="xl">
@@ -31,42 +28,7 @@ export default function Matches() {
 						gap: "4rem",
 					}}
 				>
-					<div
-						style={{
-							flex: 1,
-							gap: "2rem",
-							display: "flex",
-							flexDirection: "column",
-						}}
-					>
-						<Box
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-						>
-							<Typography
-								variant="subtitle2"
-								color={"textPrimary"}
-							>
-								Statistika za sezonu 2026 proljeće
-							</Typography>
-							<Button
-								variant="contained"
-								startIcon={<AddIcon />}
-								onClick={() => setIsModalOpen(true)}
-							>
-								Dodaj utakmicu
-							</Button>
-						</Box>
-						<Typography variant="body1">
-							Dobrodošli u pregled statistike za sezonu Proljeće
-							2026. Naši susreti odvijaju se svakog ponedjeljka u
-							19:00h u ŠD Hotanj. U nastavku možete istražiti
-							povijest svih odigranih termina, uključujući točne
-							datume, rezultate po setovima, konačne ishode te
-							popise igrača koji su sudjelovali u svakom dvoboju.
-						</Typography>
-					</div>
+					<MatchesIntro />
 					<Card
 						sx={{
 							// display: "flex",
@@ -167,7 +129,7 @@ export default function Matches() {
 									<div
 										style={{
 											display: "flex",
-											gap: "16px",
+											gap: "1rem",
 											alignItems: "center",
 										}}
 									>
@@ -207,80 +169,115 @@ export default function Matches() {
 									</div>
 								</div>
 							</Card>
-							<div style={{ paddingInline: "2rem" }}>
+							<div
+								style={{
+									paddingInline: "2rem",
+									display: "flex",
+									alignItems: "flex-start",
+									flexGrow: 1,
+									gap: "2rem",
+								}}
+							>
 								<div
 									style={{
 										display: "flex",
-										gap: "16px",
-										alignItems: "center",
+										flexDirection: "column",
+										gap: "2rem",
+										flexGrow: 1,
 									}}
 								>
-									<Typography variant="body1">
-										Setovi
-									</Typography>
-									{match.sets.map((set) => (
-										<Chip
-											label={`${set.blackScore} - ${set.whiteScore}`}
-										/>
-									))}
+									<div
+										style={{
+											display: "flex",
+											gap: "1rem",
+											flexDirection: "column",
+										}}
+									>
+										<div>
+											<Chip label="Crni" />
+										</div>
+										<div
+											style={{
+												display: "flex",
+												gap: "1rem",
+											}}
+										>
+											{match.blackTeamPlayers.map(
+												(player) => (
+													<Box
+														display={"flex"}
+														flexDirection="column"
+														alignItems="center"
+														gap={1}
+													>
+														<Avatar>
+															{player.name.charAt(
+																0
+															)}
+														</Avatar>
+														<Typography variant="body2">
+															{player.name}
+														</Typography>
+													</Box>
+												)
+											)}
+										</div>
+									</div>
+									<div
+										style={{
+											display: "flex",
+											gap: "1rem",
+											flexDirection: "column",
+										}}
+									>
+										<div>
+											<Chip label="Bijeli" />
+										</div>
+										<div
+											style={{
+												display: "flex",
+												gap: "1rem",
+											}}
+										>
+											{match.whiteTeamPlayers.map(
+												(player) => (
+													<Box
+														display={"flex"}
+														flexDirection="column"
+														alignItems="center"
+														gap={1}
+													>
+														<Avatar>
+															{player.name.charAt(
+																0
+															)}
+														</Avatar>
+														<Typography variant="body2">
+															{player.name}
+														</Typography>
+													</Box>
+												)
+											)}
+										</div>
+									</div>
 								</div>
 								<div
 									style={{
 										display: "flex",
-										gap: "16px",
-										marginBottom: "16px",
+										flexDirection: "column",
+										gap: "1rem",
 									}}
 								>
-									<Typography>Crni</Typography>
-									{match.blackTeamPlayers.map((player) => (
-										<Box
-											display={"flex"}
-											flexDirection="column"
-											alignItems="center"
-											gap={1}
-										>
-											<Avatar>
-												{player.name.charAt(0)}
-											</Avatar>
-											<Typography variant="body2">
-												{player.name}
-											</Typography>
-										</Box>
-									))}
-								</div>
-								<div
-									style={{
-										display: "flex",
-										gap: "16px",
-										marginBottom: "16px",
-									}}
-								>
-									<Typography>Bijeli</Typography>
-									{match.whiteTeamPlayers.map((player) => (
-										<Box
-											display={"flex"}
-											flexDirection="column"
-											alignItems="center"
-											gap={1}
-										>
-											<Avatar>
-												{player.name.charAt(0)}
-											</Avatar>
-											<Typography variant="body2">
-												{player.name}
-											</Typography>
-										</Box>
-									))}
+									<div>
+										<Chip label="Setovi" />
+									</div>
+									<MatchSets matchSets={match.sets} />
 								</div>
 							</div>
 						</div>
 					))}
 				</div>
 			</Box>
-			<AddMatchModal
-				open={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-			/>
 		</Container>
 	);
 }
