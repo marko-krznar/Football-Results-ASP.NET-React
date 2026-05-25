@@ -7,19 +7,10 @@ import {
 	Divider,
 	Typography,
 } from "@mui/material";
+import { useAppSelector } from "../redux-toolkit/hooks";
 
 function LandingSquadsCard() {
-	const bijeli = [
-		"Haris",
-		"Lale",
-		"Mališa",
-		"Dama",
-		"Rotac",
-		"Dino",
-		"Marko",
-	];
-
-	const crni = ["Lukas", "Tomo", "Lovrić", "Bruno", "Miro", "Mića", "Mate"];
+	const matches = useAppSelector((state) => state.matches.data);
 
 	return (
 		<Card sx={{ flex: 1 }}>
@@ -40,8 +31,8 @@ function LandingSquadsCard() {
 						flexWrap="wrap"
 						gap={2}
 					>
-						{crni.map((player) => {
-							if (player === "Vukovarac") {
+						{matches[0].blackTeamPlayers.map((player) => {
+							if (player.isCaptain) {
 								return (
 									<Box
 										display="flex"
@@ -52,10 +43,12 @@ function LandingSquadsCard() {
 										gap={1}
 									>
 										<Badge badgeContent="C" color="primary">
-											<Avatar>{player.charAt(0)}</Avatar>
+											<Avatar>
+												{player.name.charAt(0)}
+											</Avatar>
 										</Badge>
 										<Typography variant="body2">
-											{player}
+											{player.name}
 										</Typography>
 									</Box>
 								);
@@ -70,9 +63,9 @@ function LandingSquadsCard() {
 									paddingInline={3}
 									gap={1}
 								>
-									<Avatar>{player.charAt(0)}</Avatar>
+									<Avatar>{player.name.charAt(0)}</Avatar>
 									<Typography variant="body2">
-										{player}
+										{player.name}
 									</Typography>
 								</Box>
 							);
@@ -96,8 +89,8 @@ function LandingSquadsCard() {
 						flexWrap="wrap"
 						gap={2}
 					>
-						{bijeli.map((player) => {
-							if (player === "Ante") {
+						{matches[0].whiteTeamPlayers.map((player) => {
+							if (player.name === "Ante") {
 								return (
 									<Box
 										display="flex"
@@ -108,10 +101,12 @@ function LandingSquadsCard() {
 										gap={1}
 									>
 										<Badge badgeContent="C" color="primary">
-											<Avatar>{player.charAt(0)}</Avatar>
+											<Avatar>
+												{player.name.charAt(0)}
+											</Avatar>
 										</Badge>
 										<Typography variant="body2">
-											{player}
+											{player.name}
 										</Typography>
 									</Box>
 								);
@@ -126,9 +121,9 @@ function LandingSquadsCard() {
 									paddingInline={3}
 									gap={1}
 								>
-									<Avatar>{player.charAt(0)}</Avatar>
+									<Avatar>{player.name.charAt(0)}</Avatar>
 									<Typography variant="body2">
-										{player}
+										{player.name}
 									</Typography>
 								</Box>
 							);
