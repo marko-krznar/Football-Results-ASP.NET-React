@@ -1,15 +1,7 @@
-import {
-	Typography,
-	Box,
-	CardContent,
-	Card,
-	Avatar,
-	Container,
-	Chip,
-} from "@mui/material";
+import { Typography, Box, CardContent, Card, Container } from "@mui/material";
 import { useAppSelector } from "../../redux-toolkit/hooks";
 import MatchesIntro from "./MatchesIntro";
-import MatchSets from "./MatchSets";
+import MatchesItem from "./MatchesItem";
 
 export default function Matches() {
 	const matches = useAppSelector((state) => state.matches.data);
@@ -31,9 +23,6 @@ export default function Matches() {
 					<MatchesIntro />
 					<Card
 						sx={{
-							// display: "flex",
-							// alignItems: "center",
-							// justifyContent: "center",
 							flex: 1,
 						}}
 					>
@@ -60,7 +49,7 @@ export default function Matches() {
 										fontWeight="bold"
 										textAlign="center"
 									>
-										9
+										{matches[0].blackScore}
 									</Typography>
 									<Typography
 										variant="body1"
@@ -81,7 +70,7 @@ export default function Matches() {
 										fontWeight="bold"
 										textAlign="center"
 									>
-										8
+										{matches[0].whiteScore}
 									</Typography>
 									<Typography
 										variant="body1"
@@ -103,178 +92,7 @@ export default function Matches() {
 					}}
 				>
 					{matches.map((match) => (
-						<div
-							style={{
-								border: "1px solid #1e1e1e",
-								borderRadius: "1rem",
-								padding: "2rem",
-								display: "flex",
-							}}
-							key={match.id}
-						>
-							<Card>
-								<div
-									style={{
-										display: "flex",
-										flexDirection: "column",
-										justifyContent: "center",
-										alignItems: "center",
-										gap: "8px",
-										marginBottom: "8px",
-									}}
-								>
-									<Typography variant="h6" fontWeight="bold">
-										{match.date}
-									</Typography>
-									<div
-										style={{
-											display: "flex",
-											gap: "1rem",
-											alignItems: "center",
-										}}
-									>
-										<div
-											style={{
-												display: "flex",
-												flexDirection: "column",
-												alignItems: "center",
-												gap: "8px",
-											}}
-										>
-											<Typography variant="subtitle2">
-												{match.blackScore}
-											</Typography>
-											<Typography variant="body1">
-												Crni
-											</Typography>
-										</div>
-										<Typography variant="body1">
-											:
-										</Typography>
-										<div
-											style={{
-												display: "flex",
-												flexDirection: "column",
-												alignItems: "center",
-												gap: "8px",
-											}}
-										>
-											<Typography variant="subtitle2">
-												{match.whiteScore}
-											</Typography>
-											<Typography variant="body1">
-												Bijeli
-											</Typography>
-										</div>
-									</div>
-								</div>
-							</Card>
-							<div
-								style={{
-									paddingInline: "2rem",
-									display: "flex",
-									alignItems: "flex-start",
-									flexGrow: 1,
-									gap: "2rem",
-								}}
-							>
-								<div
-									style={{
-										display: "flex",
-										flexDirection: "column",
-										gap: "2rem",
-										flexGrow: 1,
-									}}
-								>
-									<div
-										style={{
-											display: "flex",
-											gap: "1rem",
-											flexDirection: "column",
-										}}
-									>
-										<div>
-											<Chip label="Crni" />
-										</div>
-										<div
-											style={{
-												display: "flex",
-												gap: "1rem",
-											}}
-										>
-											{match.blackTeamPlayers.map(
-												(player) => (
-													<Box
-														display={"flex"}
-														flexDirection="column"
-														alignItems="center"
-														gap={1}
-													>
-														<Avatar>
-															{player.name.charAt(
-																0
-															)}
-														</Avatar>
-														<Typography variant="body2">
-															{player.name}
-														</Typography>
-													</Box>
-												)
-											)}
-										</div>
-									</div>
-									<div
-										style={{
-											display: "flex",
-											gap: "1rem",
-											flexDirection: "column",
-										}}
-									>
-										<div>
-											<Chip label="Bijeli" />
-										</div>
-										<div
-											style={{
-												display: "flex",
-												gap: "1rem",
-											}}
-										>
-											{match.whiteTeamPlayers.map(
-												(player) => (
-													<Box
-														display={"flex"}
-														flexDirection="column"
-														alignItems="center"
-														gap={1}
-													>
-														<Avatar>
-															{player.name.charAt(
-																0
-															)}
-														</Avatar>
-														<Typography variant="body2">
-															{player.name}
-														</Typography>
-													</Box>
-												)
-											)}
-										</div>
-									</div>
-								</div>
-								<div
-									style={{
-										display: "flex",
-										flexDirection: "column",
-										gap: "1rem",
-									}}
-								>
-									<div>
-										<Chip label="Setovi" />
-									</div>
-									<MatchSets matchSets={match.sets} />
-								</div>
-							</div>
-						</div>
+						<MatchesItem key={match.id} match={match} />
 					))}
 				</div>
 			</Box>
