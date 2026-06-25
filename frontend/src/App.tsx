@@ -6,7 +6,7 @@ import "./App.scss";
 import { ThemeProvider, createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navigation from "./components/Navigation";
-import Landing from "./components/Landing";
+import { Outlet } from "react-router";
 
 const theme = createTheme({
 	palette: {
@@ -64,7 +64,7 @@ function App() {
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Navigation />
-			<Landing />
+			<Outlet />
 		</ThemeProvider>
 	);
 }

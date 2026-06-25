@@ -1,6 +1,9 @@
 import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
+import { useAppSelector } from "../redux-toolkit/hooks";
 
 function LandingIntroCard() {
+	const matches = useAppSelector((state) => state.matches.data);
+
 	return (
 		<Card
 			sx={{
@@ -21,17 +24,19 @@ function LandingIntroCard() {
 				</Typography>
 				<Divider />
 				<Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-					<Box>
+					{/* <Box>
 						<Typography variant="body1">
 							Odigrani termini
 						</Typography>
 						<Typography variant="subtitle2">7</Typography>
-					</Box>
+					</Box> */}
 					<Box>
 						<Typography variant="body1">
 							Posljednji termin
 						</Typography>
-						<Typography variant="subtitle2">13.04.2026.</Typography>
+						<Typography variant="subtitle2">
+							{matches[0].date}
+						</Typography>
 					</Box>
 				</Box>
 			</CardContent>
