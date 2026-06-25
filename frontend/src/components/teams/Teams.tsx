@@ -45,7 +45,7 @@ export default function Teams() {
 					{crni.map((player: any) => (
 						<Stack
 							key={player.id}
-							alignItems="flex-start"
+							alignItems="center"
 							gap={1}
 							paddingInline={2}
 							flexGrow={1}
@@ -78,7 +78,7 @@ export default function Teams() {
 					{bijeli.map((player: any) => (
 						<Stack
 							key={player.id}
-							alignItems="flex-start"
+							alignItems="center"
 							gap={1}
 							paddingInline={2}
 							flexGrow={1}
