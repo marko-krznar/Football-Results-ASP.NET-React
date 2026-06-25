@@ -54,9 +54,10 @@ export default function Navigation() {
 						<Button component={Link} to="/teams" color="inherit">
 							Momčadi
 						</Button>
-						<Button href="#text-buttons" color="inherit">
+						{/* TODO feature to be added */}
+						{/* <Button href="#text-buttons" color="inherit">
 							Troškovi
-						</Button>
+						</Button> */}
 					</Box>
 				</Toolbar>
 			</Container>
