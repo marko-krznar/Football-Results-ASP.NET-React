@@ -87,7 +87,6 @@ export default function Matches() {
 					style={{
 						display: "flex",
 						flexDirection: "column",
-						gap: "4rem",
 						marginTop: "2rem",
 					}}
 				>
