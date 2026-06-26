@@ -175,13 +175,13 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 						</Box>
 
 						<Grid container spacing={4}>
-							<Grid item xs={12} md={6}>
+							<Grid size={{ xs: 12, md: 6 }}>
 								<Typography variant="h6" gutterBottom color="primary">
 									Bijeli tim
 								</Typography>
 								<Grid container>
 									{whitePlayers.map((player) => (
-										<Grid item xs={6} key={player.id}>
+										<Grid size={{ xs: 6 }} key={player.id}>
 											<FormControlLabel
 												control={
 													<Checkbox
@@ -219,13 +219,13 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 								</Grid>
 							</Grid>
 
-							<Grid item xs={12} md={6}>
+							<Grid size={{ xs: 12, md: 6 }}>
 								<Typography variant="h6" gutterBottom sx={{ color: "text.primary" }}>
 									Crni tim
 								</Typography>
 								<Grid container>
 									{blackPlayers.map((player) => (
-										<Grid item xs={6} key={player.id}>
+										<Grid size={{ xs: 6 }} key={player.id}>
 											<FormControlLabel
 												control={
 													<Checkbox
