@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import { Link } from "react-router";
+import Authentication from "./authentication/Authentication";
 
 export default function Navigation() {
 	return (
@@ -59,6 +60,8 @@ export default function Navigation() {
 							Troškovi
 						</Button> */}
 					</Box>
+
+					<Authentication />
 				</Toolbar>
 			</Container>
 		</AppBar>
