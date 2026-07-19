@@ -7,13 +7,8 @@ import {
 	Typography,
 } from "@mui/material";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
-import { useAppSelector } from "../redux-toolkit/hooks";
-import { calculateMatchScore } from "../utils/matchUtils";
 
 function LandingTerminResults() {
-	const matches = useAppSelector((state) => state.matches.data);
-	const { blackTotal, whiteTotal } = calculateMatchScore(matches[0].sets);
-
 	return (
 		<>
 			<Box display="flex" flexDirection="column" gap={1} width="100%">
@@ -45,7 +40,7 @@ function LandingTerminResults() {
 						</Box>
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								{matches[0].sets[0].blackScore}
+								3
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Crni
@@ -54,9 +49,7 @@ function LandingTerminResults() {
 						<Divider orientation="vertical" flexItem />
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								<span style={{ color: "#ADAAAA" }}>
-									{matches[0].sets[0].whiteScore}
-								</span>
+								<span style={{ color: "#ADAAAA" }}>6</span>
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Bijeli
@@ -86,9 +79,7 @@ function LandingTerminResults() {
 						</Box>
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								<span style={{ color: "#ADAAAA" }}>
-									{matches[0].sets[1].blackScore}
-								</span>
+								3
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Crni
@@ -97,9 +88,7 @@ function LandingTerminResults() {
 						<Divider orientation="vertical" flexItem />
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								<span style={{ color: "#ADAAAA" }}>
-									{matches[0].sets[1].whiteScore}
-								</span>
+								<span style={{ color: "#ADAAAA" }}>4</span>
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Bijeli
@@ -139,7 +128,7 @@ function LandingTerminResults() {
 								textAlign="center"
 								color="#95CFFF"
 							>
-								{blackTotal}
+								0
 							</Typography>
 							<Typography
 								variant="body1"
@@ -162,7 +151,7 @@ function LandingTerminResults() {
 								textAlign="center"
 								color="#ADAAAA"
 							>
-								{whiteTotal}
+								1
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Bijeli
@@ -174,7 +163,7 @@ function LandingTerminResults() {
 						textAlign="center"
 						color="#95CFFF"
 					>
-						Pobjeda: Crni
+						Pobjeda: Bijeli
 					</Typography>
 				</Card>
 			</Box>

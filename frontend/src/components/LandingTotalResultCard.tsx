@@ -1,9 +1,6 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import { useAppSelector } from "../redux-toolkit/hooks";
 
 function LandingTotalResultCard() {
-	const matches = useAppSelector((state) => state.matches.data);
-
 	return (
 		<Card
 			sx={{
@@ -36,7 +33,7 @@ function LandingTotalResultCard() {
 							fontWeight="bold"
 							textAlign="center"
 						>
-							{matches[0].blackScore}
+							6
 						</Typography>
 						<Typography variant="body1" textAlign="center">
 							Crni
@@ -54,7 +51,7 @@ function LandingTotalResultCard() {
 							fontWeight="bold"
 							textAlign="center"
 						>
-							{matches[0].whiteScore}
+							7
 						</Typography>
 						<Typography variant="body1" textAlign="center">
 							Bijeli
