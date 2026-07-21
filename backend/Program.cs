@@ -1,7 +1,6 @@
 using backend.Data;
-using backend.Models;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using dotenv.net;
 using Scalar.AspNetCore;
 
@@ -12,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IPlayersService, PlayersService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

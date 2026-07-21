@@ -1,28 +1,27 @@
-using backend.Data;
 using backend.Models;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace backend.Controlers
+namespace backend.Controlers;
+
+[Route("api/players")]
+[ApiController]
+public class PlayersController(IPlayersService playersService) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PlayersController(AppDbContext context) : ControllerBase
+    private readonly IPlayersService _playersService = playersService;
+
+    [HttpGet]
+    public async Task<IActionResult> GetPlayers()
     {
-        private readonly AppDbContext _context = context;
+        var players = await _playersService.GetPlayers();
+        return Ok(players);
+    }
 
-        [HttpGet("players")]
-        public async Task<ActionResult<List<PlayerDto>>> GetPlayers()
-        {
-            var players = await _context.Players
-                .Select(p => new PlayerDto
-                {
-                    Id = p.Id,
-                    Name = p.Name
-                })
-                .ToListAsync();
-
-            return Ok(players);
-        }
+    [HttpPost]
+    public async Task<IActionResult> AddPlayer([FromBody] CreatePlayerDto dto)
+    {
+        var player = await _playersService.AddPlayer(dto);
+        return CreatedAtAction(nameof(GetPlayers), new { id = player.Id }, player);
     }
 }
+
