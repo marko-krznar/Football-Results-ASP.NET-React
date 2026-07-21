@@ -3,6 +3,7 @@ using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using dotenv.net;
+using Scalar.AspNetCore;
 
 DotEnv.Load();
 
@@ -22,6 +23,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
