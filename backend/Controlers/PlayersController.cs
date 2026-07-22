@@ -17,6 +17,7 @@ public class PlayersController(IPlayersService playersService) : ControllerBase
         return Ok(players);
     }
 
+    [Microsoft.AspNetCore.Authorization.Authorize]
     [HttpPost]
     public async Task<IActionResult> AddPlayer([FromBody] CreatePlayerDto dto)
     {
