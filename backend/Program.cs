@@ -13,6 +13,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IPlayersService, PlayersService>();
+builder.Services.AddScoped<ISeasonsService, SeasonsService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

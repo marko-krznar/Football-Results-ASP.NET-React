@@ -7,6 +7,7 @@ namespace backend.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext(options)
 {
     public DbSet<Player> Players => Set<Player>();
+    public DbSet<Season> Seasons => Set<Season>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

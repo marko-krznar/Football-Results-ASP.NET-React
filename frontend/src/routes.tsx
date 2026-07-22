@@ -3,6 +3,7 @@ import App from "./App";
 import Landing from "./components/Landing";
 import Matches from "./components/matches/Matches";
 import Teams from "./components/teams/Teams";
+import Seasons from "./components/seasons/Seasons";
 
 export const router = createBrowserRouter([
 	{
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
 			{
 				path: "teams",
 				element: <Teams />,
+			},
+			{
+				path: "seasons",
+				element: <Seasons />,
 			},
 		],
 	},

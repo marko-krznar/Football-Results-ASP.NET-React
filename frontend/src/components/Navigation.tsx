@@ -54,6 +54,9 @@ export default function Navigation() {
 						<Button component={Link} to="/teams" color="inherit">
 							Momčadi
 						</Button>
+						<Button component={Link} to="/seasons" color="inherit">
+							Sezone
+						</Button>
 						{/* TODO feature to be added */}
 						{/* <Button href="#text-buttons" color="inherit">
 							Troškovi
