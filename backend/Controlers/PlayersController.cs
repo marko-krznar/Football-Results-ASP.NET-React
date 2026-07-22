@@ -10,7 +10,6 @@ public class PlayersController(IPlayersService playersService) : ControllerBase
 {
     private readonly IPlayersService _playersService = playersService;
 
-    [Microsoft.AspNetCore.Authorization.Authorize]
     [HttpGet]
     public async Task<IActionResult> GetPlayers()
     {

@@ -7,9 +7,12 @@ import {
 	Stack,
 	Divider,
 } from "@mui/material";
+import { useGetPlayersQuery } from "../../redux-toolkit/api/playersApi";
 import mockPlayers from "../../data/mockPlayers.json";
 
 export default function Teams() {
+	const { data: backendPlayers, isLoading, error } = useGetPlayersQuery();
+
 	const crni = mockPlayers.players.filter(
 		(player: any) => player.team === "crni"
 	);
@@ -19,6 +22,68 @@ export default function Teams() {
 
 	return (
 		<Container maxWidth="xl">
+			<Box sx={{ mt: 4, mb: 2, paddingInline: 2 }}>
+				<Typography variant="h5">Aktivni igrači</Typography>
+				{isLoading && (
+					<Typography variant="body2">
+						Učitavanje igrača...
+					</Typography>
+				)}
+				{error && (
+					<Typography variant="body2" color="error">
+						Greška pri dohvaćanju igrača s backenda.
+					</Typography>
+				)}
+				{backendPlayers && (
+					<Stack
+						direction="row"
+						flexWrap="wrap"
+						gap={2}
+						sx={{ mb: 4 }}
+					>
+						{backendPlayers.map((player) => (
+							<Stack
+								key={player.id}
+								direction="row"
+								alignItems="center"
+								gap={1}
+								sx={{
+									background: "#1E1F1E",
+									padding: "8px 16px",
+									borderRadius: "8px",
+									minWidth: "150px",
+								}}
+							>
+								<Avatar
+									sx={{
+										width: 28,
+										height: 28,
+										fontSize: "0.9rem",
+									}}
+								>
+									{player.name[0]}
+								</Avatar>
+								<Typography
+									variant="body2"
+									sx={{ color: "#fff" }}
+								>
+									{player.name}
+								</Typography>
+							</Stack>
+						))}
+						{backendPlayers.length === 0 && (
+							<Typography
+								variant="body2"
+								sx={{ color: "#ADAAAA" }}
+							>
+								Nema igrača u bazi podataka.
+							</Typography>
+						)}
+					</Stack>
+				)}
+			</Box>
+			<Divider sx={{ mb: 2 }} />
+
 			<Stack
 				direction="row"
 				alignItems="flex-start"
