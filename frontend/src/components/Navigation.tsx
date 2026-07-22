@@ -57,6 +57,9 @@ export default function Navigation() {
 						<Button component={Link} to="/seasons" color="inherit">
 							Sezone
 						</Button>
+						<Button component={Link} to="/admin" color="inherit">
+							Admin
+						</Button>
 						{/* TODO feature to be added */}
 						{/* <Button href="#text-buttons" color="inherit">
 							Troškovi

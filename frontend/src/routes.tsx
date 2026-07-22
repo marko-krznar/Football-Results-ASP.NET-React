@@ -4,6 +4,7 @@ import Landing from "./components/Landing";
 import Matches from "./components/matches/Matches";
 import Teams from "./components/teams/Teams";
 import Seasons from "./components/seasons/Seasons";
+import Admin from "./pages/Admin";
 
 export const router = createBrowserRouter([
 	{
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
 			{
 				path: "seasons",
 				element: <Seasons />,
+			},
+			{
+				path: "admin",
+				element: <Admin />,
 			},
 		],
 	},
