@@ -3,6 +3,7 @@ import matchesReducer from "./slices/matchesSlice";
 import { playersApi } from "./api/playersApi";
 import { seasonsApi } from "./api/seasonsApi";
 import { teamsApi } from "./api/teamsApi";
+import { teamMembersApi } from "./api/teamMembersApi";
 
 export const store = configureStore({
 	reducer: {
@@ -10,12 +11,14 @@ export const store = configureStore({
 		[playersApi.reducerPath]: playersApi.reducer,
 		[seasonsApi.reducerPath]: seasonsApi.reducer,
 		[teamsApi.reducerPath]: teamsApi.reducer,
+		[teamMembersApi.reducerPath]: teamMembersApi.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware()
 			.concat(playersApi.middleware)
 			.concat(seasonsApi.middleware)
-			.concat(teamsApi.middleware),
+			.concat(teamsApi.middleware)
+			.concat(teamMembersApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

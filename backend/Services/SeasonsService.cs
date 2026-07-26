@@ -30,6 +30,21 @@ public class SeasonsService(AppDbContext context) : ISeasonsService
             throw new ArgumentException("Invalid season type. Allowed values are 'Spring' or 'Autumn'.");
         }
 
+        if (dto.Year <= 0)
+        {
+            throw new ArgumentException("Year must be a positive value.");
+        }
+
+        if (dto.StartDate == default || dto.EndDate == default)
+        {
+            throw new ArgumentException("StartDate and EndDate must be valid, non-default dates.");
+        }
+
+        if (dto.EndDate < dto.StartDate)
+        {
+            throw new ArgumentException("EndDate cannot be earlier than StartDate.");
+        }
+
         var season = new Season
         {
             Year = dto.Year,

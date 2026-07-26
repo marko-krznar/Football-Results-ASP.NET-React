@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IPlayersService, PlayersService>();
 builder.Services.AddScoped<ISeasonsService, SeasonsService>();
 builder.Services.AddScoped<ITeamsService, TeamsService>();
+builder.Services.AddScoped<ITeamMembersService, TeamMembersService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
