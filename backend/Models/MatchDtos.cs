@@ -1,27 +1,29 @@
-namespace backend.DTOs;
+namespace backend.Models;
 
-public class PlayerDto
+public class MatchDto
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public bool IsCaptain { get; set; }
+    public int SeasonId { get; set; }
+    public string SeasonName { get; set; } = string.Empty;
+    public DateOnly Date { get; set; }
+    public string? Location { get; set; }
+    public int FirstTeamId { get; set; }
+    public string FirstTeamName { get; set; } = string.Empty;
+    public int SecondTeamId { get; set; }
+    public string SecondTeamName { get; set; } = string.Empty;
+    public string? Note { get; set; }
+    public int FirstTeamSetsWon { get; set; }
+    public int SecondTeamSetsWon { get; set; }
+    public int FirstTeamTotalGoals { get; set; }
+    public int SecondTeamTotalGoals { get; set; }
 }
 
-public class MatchSetDto
+public class CreateMatchDto
 {
-    public int Id { get; set; }
-    public int SetNumber { get; set; }
-    public int BlackScore { get; set; }
-    public int WhiteScore { get; set; }
-    public string Winner { get; set; } = string.Empty;
-}
-
-public class MatchSessionDto
-{
-    public int Id { get; set; }
-    public DateTime PlayedAt { get; set; }
-    public IEnumerable<MatchSetDto> Sets { get; set; } = [];
-    public string OverallScore { get; set; } = string.Empty;
-    public IEnumerable<PlayerDto> WhiteTeam { get; set; } = [];
-    public IEnumerable<PlayerDto> BlackTeam { get; set; } = [];
+    public required int SeasonId { get; set; }
+    public required DateOnly Date { get; set; }
+    public string? Location { get; set; }
+    public required int FirstTeamId { get; set; }
+    public required int SecondTeamId { get; set; }
+    public string? Note { get; set; }
 }
