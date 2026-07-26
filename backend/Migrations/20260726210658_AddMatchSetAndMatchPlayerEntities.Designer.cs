@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Data;
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260726210658_AddMatchSetAndMatchPlayerEntities")]
+    partial class AddMatchSetAndMatchPlayerEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,10 +233,6 @@ namespace backend.Migrations
                     b.Property<int>("FirstTeamId")
                         .HasColumnType("integer")
                         .HasColumnName("first_team_id");
-
-                    b.Property<DateOnly>("MatchDate")
-                        .HasColumnType("date")
-                        .HasColumnName("date");
 
                     b.Property<int>("SeasonId")
                         .HasColumnType("integer")
