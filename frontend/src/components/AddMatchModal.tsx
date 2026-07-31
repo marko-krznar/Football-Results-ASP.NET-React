@@ -16,8 +16,8 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { useAppDispatch } from "../redux-toolkit/hooks";
-import { addMatch } from "../redux-toolkit/slices/matchesSlice";
+import { useAppDispatch } from "../redux/hooks";
+import { addMatch } from "../redux/slices/matchesSlice";
 import type { MatchOverall, MatchSet, Player } from "../types/match";
 import mockPlayersData from "../data/mockPlayers.json";
 
@@ -29,7 +29,7 @@ interface AddMatchModalProps {
 const allPlayers: Player[] = mockPlayersData.players.map((p, index) => {
 	const isWhiteTeam = p.team === "bijeli";
 	const isCaptain = isWhiteTeam ? p.name === "Ante" : p.name === "Vukovarac";
-	
+
 	return {
 		id: index + 100,
 		name: p.name,
@@ -41,9 +41,7 @@ const allPlayers: Player[] = mockPlayersData.players.map((p, index) => {
 export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 	const dispatch = useAppDispatch();
 	const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-	const [sets, setSets] = useState<MatchSet[]>([
-		{ id: 1, blackScore: 0, whiteScore: 0 },
-	]);
+	const [sets, setSets] = useState<MatchSet[]>([{ id: 1, blackScore: 0, whiteScore: 0 }]);
 	const [selectedPlayerIds, setSelectedPlayerIds] = useState<number[]>([]);
 	const [blackScore, setBlackScore] = useState(0);
 	const [whiteScore, setWhiteScore] = useState(0);
@@ -51,16 +49,11 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 	const [generatedJson, setGeneratedJson] = useState<string | null>(null);
 
 	const handleTogglePlayer = (id: number) => {
-		setSelectedPlayerIds((prev) =>
-			prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
-		);
+		setSelectedPlayerIds((prev) => (prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]));
 	};
 
 	const handleAddSet = () => {
-		setSets([
-			...sets,
-			{ id: sets.length + 1, blackScore: 0, whiteScore: 0 },
-		]);
+		setSets([...sets, { id: sets.length + 1, blackScore: 0, whiteScore: 0 }]);
 	};
 
 	const handleRemoveSet = (index: number) => {
@@ -80,11 +73,7 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 		setWhiteScore(whiteWins);
 	};
 
-	const handleSetScoreChange = (
-		index: number,
-		field: "blackScore" | "whiteScore",
-		value: number
-	) => {
+	const handleSetScoreChange = (index: number, field: "blackScore" | "whiteScore", value: number) => {
 		const newSets = [...sets];
 		newSets[index] = { ...newSets[index], [field]: value };
 		setSets(newSets);
@@ -92,9 +81,7 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 	};
 
 	const handleSave = () => {
-		const selectedPlayers = allPlayers.filter((p) =>
-			selectedPlayerIds.includes(p.id)
-		);
+		const selectedPlayers = allPlayers.filter((p) => selectedPlayerIds.includes(p.id));
 		const whiteTeamPlayers = selectedPlayers.filter((p) => p.team === 1);
 		const blackTeamPlayers = selectedPlayers.filter((p) => p.team === 2);
 
@@ -126,9 +113,7 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 
 	return (
 		<Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
-			<DialogTitle>
-				{generatedJson ? "Kopiraj JSON objekt" : "Dodaj novu utakmicu"}
-			</DialogTitle>
+			<DialogTitle>{generatedJson ? "Kopiraj JSON objekt" : "Dodaj novu utakmicu"}</DialogTitle>
 			<DialogContent>
 				{generatedJson ? (
 					<Box sx={{ mt: 2 }}>
@@ -185,32 +170,20 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 											<FormControlLabel
 												control={
 													<Checkbox
-														checked={selectedPlayerIds.includes(
-															player.id
-														)}
-														onChange={() =>
-															handleTogglePlayer(
-																player.id
-															)
-														}
+														checked={selectedPlayerIds.includes(player.id)}
+														onChange={() => handleTogglePlayer(player.id)}
 													/>
 												}
 												label={
 													<Typography
 														variant="body2"
 														sx={{
-															fontWeight:
-																player.isCaptain
-																	? "bold"
-																	: "normal",
-															color: player.isCaptain
-																? "secondary.main"
-																: "inherit",
+															fontWeight: player.isCaptain ? "bold" : "normal",
+															color: player.isCaptain ? "secondary.main" : "inherit",
 														}}
 													>
 														{player.name}
-														{player.isCaptain &&
-															" (K)"}
+														{player.isCaptain && " (K)"}
 													</Typography>
 												}
 											/>
@@ -229,32 +202,20 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 											<FormControlLabel
 												control={
 													<Checkbox
-														checked={selectedPlayerIds.includes(
-															player.id
-														)}
-														onChange={() =>
-															handleTogglePlayer(
-																player.id
-															)
-														}
+														checked={selectedPlayerIds.includes(player.id)}
+														onChange={() => handleTogglePlayer(player.id)}
 													/>
 												}
 												label={
 													<Typography
 														variant="body2"
 														sx={{
-															fontWeight:
-																player.isCaptain
-																	? "bold"
-																	: "normal",
-															color: player.isCaptain
-																? "secondary.main"
-																: "inherit",
+															fontWeight: player.isCaptain ? "bold" : "normal",
+															color: player.isCaptain ? "secondary.main" : "inherit",
 														}}
 													>
 														{player.name}
-														{player.isCaptain &&
-															" (K)"}
+														{player.isCaptain && " (K)"}
 													</Typography>
 												}
 											/>
@@ -265,44 +226,22 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 						</Grid>
 
 						<Box sx={{ borderTop: "1px solid #333", pt: 2 }}>
-							<Box
-								display="flex"
-								justifyContent="space-between"
-								alignItems="center"
-								mb={1}
-							>
+							<Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
 								<Typography variant="h6">Setovi</Typography>
-								<Button
-									startIcon={<AddIcon />}
-									onClick={handleAddSet}
-									variant="outlined"
-									size="small"
-								>
+								<Button startIcon={<AddIcon />} onClick={handleAddSet} variant="outlined" size="small">
 									Dodaj set
 								</Button>
 							</Box>
 							{sets.map((set, index) => (
-								<Box
-									key={index}
-									display="flex"
-									gap={2}
-									alignItems="center"
-									mb={2}
-								>
-									<Typography sx={{ minWidth: 60 }}>
-										Set {index + 1}
-									</Typography>
+								<Box key={index} display="flex" gap={2} alignItems="center" mb={2}>
+									<Typography sx={{ minWidth: 60 }}>Set {index + 1}</Typography>
 									<TextField
 										label="Crni"
 										type="number"
 										size="small"
 										value={set.blackScore}
 										onChange={(e) =>
-											handleSetScoreChange(
-												index,
-												"blackScore",
-												parseInt(e.target.value) || 0
-											)
+											handleSetScoreChange(index, "blackScore", parseInt(e.target.value) || 0)
 										}
 									/>
 									<TextField
@@ -311,11 +250,7 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 										size="small"
 										value={set.whiteScore}
 										onChange={(e) =>
-											handleSetScoreChange(
-												index,
-												"whiteScore",
-												parseInt(e.target.value) || 0
-											)
+											handleSetScoreChange(index, "whiteScore", parseInt(e.target.value) || 0)
 										}
 									/>
 									<IconButton
@@ -332,15 +267,9 @@ export default function AddMatchModal({ open, onClose }: AddMatchModalProps) {
 				)}
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={handleClose}>
-					{generatedJson ? "Zatvori" : "Odustani"}
-				</Button>
+				<Button onClick={handleClose}>{generatedJson ? "Zatvori" : "Odustani"}</Button>
 				{!generatedJson && (
-					<Button
-						onClick={handleSave}
-						variant="contained"
-						color="primary"
-					>
+					<Button onClick={handleSave} variant="contained" color="primary">
 						Spremi i Generiraj JSON
 					</Button>
 				)}

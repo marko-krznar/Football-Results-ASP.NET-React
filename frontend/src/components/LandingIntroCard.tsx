@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
-import { useAppSelector } from "../redux-toolkit/hooks";
+import { useAppSelector } from "../redux/hooks";
 
 function LandingIntroCard() {
 	const matches = useAppSelector((state) => state.matches.data);
@@ -11,16 +11,12 @@ function LandingIntroCard() {
 			}}
 		>
 			<CardContent>
-				<Typography variant="body1">
-					Aktivna sezona: proljeće 2026.
-				</Typography>
+				<Typography variant="body1">Aktivna sezona: proljeće 2026.</Typography>
 				<Typography variant="h1" fontWeight="bold">
-					HPD PRSTEN{" "}
-					<span style={{ color: "#95CFFF" }}>SUPERLIGA</span>
+					HPD PRSTEN <span style={{ color: "#95CFFF" }}>SUPERLIGA</span>
 				</Typography>
 				<Typography variant="body1">
-					Praćenje rezultata, statistika i dinamike igre u realnom
-					vremenu.
+					Praćenje rezultata, statistika i dinamike igre u realnom vremenu.
 				</Typography>
 				<Divider />
 				<Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
@@ -31,12 +27,8 @@ function LandingIntroCard() {
 						<Typography variant="subtitle2">7</Typography>
 					</Box> */}
 					<Box>
-						<Typography variant="body1">
-							Posljednji termin
-						</Typography>
-						<Typography variant="subtitle2">
-							{matches[0].date}
-						</Typography>
+						<Typography variant="body1">Posljednji termin</Typography>
+						<Typography variant="subtitle2">{matches[0].date}</Typography>
 					</Box>
 				</Box>
 			</CardContent>

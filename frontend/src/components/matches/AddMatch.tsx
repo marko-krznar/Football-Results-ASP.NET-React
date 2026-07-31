@@ -22,10 +22,10 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { useMemo, useState, type FormEvent } from "react";
-import { useGetSeasonsQuery } from "../../redux-toolkit/api/seasonsApi";
-import { useGetTeamsQuery } from "../../redux-toolkit/api/teamsApi";
-import { useAddMatchWithDetailsMutation } from "../../redux-toolkit/api/matchesApi";
-import { useGetTeamMembersQuery } from "../../redux-toolkit//api/teamMembersApi";
+import { useGetSeasonsQuery } from "../../redux/api/seasonsApi";
+import { useGetTeamsQuery } from "../../redux/api/teamsApi";
+import { useAddMatchWithDetailsMutation } from "../../redux/api/matchesApi";
+import { useGetTeamMembersQuery } from "../../redux/api/teamMembersApi";
 
 interface SetRow {
 	setNumber: number;

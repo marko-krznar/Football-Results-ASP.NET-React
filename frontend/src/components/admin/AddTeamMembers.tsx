@@ -13,23 +13,18 @@ import {
 	Typography,
 	type SelectChangeEvent,
 } from "@mui/material";
-import { useGetTeamsQuery } from "../../redux-toolkit/api/teamsApi";
+import { useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useState } from "react";
-import { useGetPlayersQuery } from "../../redux-toolkit/api/playersApi";
+import { useGetPlayersQuery } from "../../redux/api/playersApi";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import React from "react";
-import { useAddTeamMembersMutation } from "../../redux-toolkit/api/teamMembersApi";
+import { useAddTeamMembersMutation } from "../../redux/api/teamMembersApi";
 
 export default function AddTeamMembers() {
-	const [addTeamMembers, { isLoading: isAdding }] =
-		useAddTeamMembersMutation();
+	const [addTeamMembers, { isLoading: isAdding }] = useAddTeamMembersMutation();
 	const { data: playersList, isLoading, error } = useGetPlayersQuery();
-	const {
-		data: teamsList,
-		isLoading: teamsListIsLoading,
-		error: teamsListError,
-	} = useGetTeamsQuery();
+	const { data: teamsList, isLoading: teamsListIsLoading, error: teamsListError } = useGetTeamsQuery();
 	const [successMsg, setSuccessMsg] = useState<string>("");
 	const [formError, setFormError] = useState<string>("");
 	const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
@@ -55,25 +50,17 @@ export default function AddTeamMembers() {
 			setFormError("");
 		} catch (err: unknown) {
 			const apiError = err as { data?: { message?: string } };
-			setFormError(
-				apiError?.data?.message || "Greška pri dodavanju tima."
-			);
+			setFormError(apiError?.data?.message || "Greška pri dodavanju tima.");
 		}
 	};
 
 	const handlePlayersChange = (event: SelectChangeEvent<number[]>) => {
 		const { value } = event.target;
-		setPersonName(
-			typeof value === "string" ? value.split(",").map(Number) : value
-		);
+		setPersonName(typeof value === "string" ? value.split(",").map(Number) : value);
 	};
 	return (
 		<Stack spacing={4}>
-			<Typography
-				variant="h4"
-				gutterBottom
-				sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}
-			>
+			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}>
 				Upravljanje članovim tima
 			</Typography>
 
@@ -81,21 +68,14 @@ export default function AddTeamMembers() {
 			{successMsg && <h1>{successMsg}</h1>}
 			{formError && <h1>{formError}</h1>}
 			{teamsList && (
-				<Box
-					component="form"
-					flexDirection="column"
-					sx={{ display: "flex", gap: 2 }}
-					onSubmit={handleSubmit}
-				>
+				<Box component="form" flexDirection="column" sx={{ display: "flex", gap: 2 }} onSubmit={handleSubmit}>
 					<TextField
 						id="outlined-select-currency"
 						select
 						label="Odaberi tim"
 						fullWidth
 						value={selectedTeam}
-						onChange={(e) =>
-							setSelectedTeam(Number(e.target.value))
-						}
+						onChange={(e) => setSelectedTeam(Number(e.target.value))}
 					>
 						{teamsList.map((player) => (
 							<MenuItem key={player.id} value={player.id}>
@@ -104,9 +84,7 @@ export default function AddTeamMembers() {
 						))}
 					</TextField>
 					<FormControl fullWidth>
-						<InputLabel id="demo-multiple-checkbox-label">
-							Igrači
-						</InputLabel>
+						<InputLabel id="demo-multiple-checkbox-label">Igrači</InputLabel>
 						<Select
 							labelId="demo-multiple-checkbox-label"
 							id="demo-multiple-checkbox"
@@ -123,18 +101,11 @@ export default function AddTeamMembers() {
 						>
 							{playersList &&
 								playersList.map((player) => {
-									const selected = personName.includes(
-										player.id
-									);
-									const SelectionIcon = selected
-										? CheckBoxIcon
-										: CheckBoxOutlineBlankIcon;
+									const selected = personName.includes(player.id);
+									const SelectionIcon = selected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
 
 									return (
-										<MenuItem
-											key={player.id}
-											value={player.id}
-										>
+										<MenuItem key={player.id} value={player.id}>
 											<SelectionIcon
 												fontSize="small"
 												style={{
@@ -143,9 +114,7 @@ export default function AddTeamMembers() {
 													boxSizing: "content-box",
 												}}
 											/>
-											<ListItemText
-												primary={player.name}
-											/>
+											<ListItemText primary={player.name} />
 										</MenuItem>
 									);
 								})}
@@ -160,11 +129,7 @@ export default function AddTeamMembers() {
 							disabled={isAdding}
 							sx={{ mt: 2 }}
 						>
-							{isAdding ? (
-								<CircularProgress size={24} />
-							) : (
-								"Spremi Članove"
-							)}
+							{isAdding ? <CircularProgress size={24} /> : "Spremi Članove"}
 						</Button>
 					</Stack>
 				</Box>

@@ -11,7 +11,7 @@ import {
 	Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useAddSeasonMutation } from "../../redux-toolkit/api/seasonsApi";
+import { useAddSeasonMutation } from "../../redux/api/seasonsApi";
 
 export default function AddSeason() {
 	const [addSeason, { isLoading: isAdding }] = useAddSeasonMutation();
@@ -56,24 +56,13 @@ export default function AddSeason() {
 
 	return (
 		<Stack spacing={4}>
-			<Typography
-				variant="h4"
-				gutterBottom
-				sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}
-			>
+			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}>
 				Upravljanje Sezonama
 			</Typography>
 			{/* Form Card */}
-			<Card
-				variant="outlined"
-				sx={{ background: "#1E1F1E", borderColor: "#2E302F" }}
-			>
+			<Card variant="outlined" sx={{ background: "#1E1F1E", borderColor: "#2E302F" }}>
 				<CardContent>
-					<Typography
-						variant="h6"
-						gutterBottom
-						sx={{ color: "#fff", mb: 3 }}
-					>
+					<Typography variant="h6" gutterBottom sx={{ color: "#fff", mb: 3 }}>
 						Dodaj novu sezonu
 					</Typography>
 
@@ -94,9 +83,7 @@ export default function AddSeason() {
 								label="Godina"
 								type="number"
 								value={year}
-								onChange={(e) =>
-									setYear(Number(e.target.value))
-								}
+								onChange={(e) => setYear(Number(e.target.value))}
 								required
 								fullWidth
 							/>
@@ -109,25 +96,16 @@ export default function AddSeason() {
 								required
 								fullWidth
 							>
-								<MenuItem value="Spring">
-									Proljeće (Spring)
-								</MenuItem>
-								<MenuItem value="Autumn">
-									Jesen (Autumn)
-								</MenuItem>
+								<MenuItem value="Spring">Proljeće (Spring)</MenuItem>
+								<MenuItem value="Autumn">Jesen (Autumn)</MenuItem>
 							</TextField>
 
-							<Stack
-								direction={{ xs: "column", sm: "row" }}
-								spacing={2}
-							>
+							<Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
 								<TextField
 									label="Datum početka"
 									type="date"
 									value={startDate}
-									onChange={(e) =>
-										setStartDate(e.target.value)
-									}
+									onChange={(e) => setStartDate(e.target.value)}
 									InputLabelProps={{ shrink: true }}
 									required
 									fullWidth
@@ -151,11 +129,7 @@ export default function AddSeason() {
 								disabled={isAdding}
 								sx={{ mt: 2 }}
 							>
-								{isAdding ? (
-									<CircularProgress size={24} />
-								) : (
-									"Spremi Sezonu"
-								)}
+								{isAdding ? <CircularProgress size={24} /> : "Spremi Sezonu"}
 							</Button>
 						</Stack>
 					</Box>

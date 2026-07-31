@@ -1,33 +1,14 @@
-import {
-	Box,
-	Button,
-	CircularProgress,
-	MenuItem,
-	Stack,
-	TextField,
-	Typography,
-} from "@mui/material";
-import {
-	useAddTeamMutation,
-	useGetTeamsQuery,
-} from "../../redux-toolkit/api/teamsApi";
+import { Box, Button, CircularProgress, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { useAddTeamMutation, useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useState } from "react";
-import { useGetPlayersQuery } from "../../redux-toolkit/api/playersApi";
-import { useGetSeasonsQuery } from "../../redux-toolkit/api/seasonsApi";
+import { useGetPlayersQuery } from "../../redux/api/playersApi";
+import { useGetSeasonsQuery } from "../../redux/api/seasonsApi";
 
 export default function AddTeam() {
 	const [addTeam, { isLoading: isAdding }] = useAddTeamMutation();
 	const { data: playersList, isLoading, error } = useGetPlayersQuery();
-	const {
-		data: seasonsList,
-		isLoading: seasonsListIsLoading,
-		error: seasonsListError,
-	} = useGetSeasonsQuery();
-	const {
-		data: teamsList,
-		isLoading: teamsListIsLoading,
-		error: teamsListError,
-	} = useGetTeamsQuery();
+	const { data: seasonsList, isLoading: seasonsListIsLoading, error: seasonsListError } = useGetSeasonsQuery();
+	const { data: teamsList, isLoading: teamsListIsLoading, error: teamsListError } = useGetTeamsQuery();
 	const [successMsg, setSuccessMsg] = useState<string>("");
 	const [formError, setFormError] = useState<string>("");
 	const [selectedTeam, setSelectedTeam] = useState("");
@@ -63,18 +44,12 @@ export default function AddTeam() {
 			setFormError("");
 		} catch (err: unknown) {
 			const apiError = err as { data?: { message?: string } };
-			setFormError(
-				apiError?.data?.message || "Greška pri dodavanju tima."
-			);
+			setFormError(apiError?.data?.message || "Greška pri dodavanju tima.");
 		}
 	};
 	return (
 		<Stack spacing={4}>
-			<Typography
-				variant="h4"
-				gutterBottom
-				sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}
-			>
+			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}>
 				Upravljanje timovima
 			</Typography>
 
@@ -137,11 +112,7 @@ export default function AddTeam() {
 						disabled={isAdding}
 						sx={{ mt: 2 }}
 					>
-						{isAdding ? (
-							<CircularProgress size={24} />
-						) : (
-							"Spremi Tim"
-						)}
+						{isAdding ? <CircularProgress size={24} /> : "Spremi Tim"}
 					</Button>
 				</Stack>
 			</Box>

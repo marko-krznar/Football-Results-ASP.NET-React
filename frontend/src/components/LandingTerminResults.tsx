@@ -1,13 +1,6 @@
-import {
-	Box,
-	Card,
-	CardContent,
-	Chip,
-	Divider,
-	Typography,
-} from "@mui/material";
+import { Box, Card, CardContent, Chip, Divider, Typography } from "@mui/material";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
-import { useAppSelector } from "../redux-toolkit/hooks";
+import { useAppSelector } from "../redux/hooks";
 import { calculateMatchScore } from "../utils/matchUtils";
 
 function LandingTerminResults() {
@@ -18,9 +11,7 @@ function LandingTerminResults() {
 		<>
 			<Box display="flex" flexDirection="column" gap={1} width="100%">
 				<Typography variant="h3">Zadnji odigrani termin</Typography>
-				<Typography variant="body1">
-					Analiza setova i konačan ishod
-				</Typography>
+				<Typography variant="body1">Analiza setova i konačan ishod</Typography>
 			</Box>
 			<Box display="flex" flexDirection="row" gap={4} width="100%">
 				<Card sx={{ flexGrow: 1 }}>
@@ -33,13 +24,7 @@ function LandingTerminResults() {
 							gap: 4,
 						}}
 					>
-						<Box
-							width="100%"
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-							gap={1}
-						>
+						<Box width="100%" display="flex" justifyContent="space-between" alignItems="center" gap={1}>
 							<Chip label="Set 1" />
 							<SportsSoccerIcon />
 						</Box>
@@ -54,9 +39,7 @@ function LandingTerminResults() {
 						<Divider orientation="vertical" flexItem />
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								<span style={{ color: "#ADAAAA" }}>
-									{matches[0].sets[0].whiteScore}
-								</span>
+								<span style={{ color: "#ADAAAA" }}>{matches[0].sets[0].whiteScore}</span>
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Bijeli
@@ -74,21 +57,13 @@ function LandingTerminResults() {
 							gap: 4,
 						}}
 					>
-						<Box
-							width="100%"
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-							gap={1}
-						>
+						<Box width="100%" display="flex" justifyContent="space-between" alignItems="center" gap={1}>
 							<Chip label="Set 2" />
 							<SportsSoccerIcon />
 						</Box>
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								<span style={{ color: "#ADAAAA" }}>
-									{matches[0].sets[1].blackScore}
-								</span>
+								<span style={{ color: "#ADAAAA" }}>{matches[0].sets[1].blackScore}</span>
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Crni
@@ -97,9 +72,7 @@ function LandingTerminResults() {
 						<Divider orientation="vertical" flexItem />
 						<Box>
 							<Typography variant="subtitle1" textAlign="center">
-								<span style={{ color: "#ADAAAA" }}>
-									{matches[0].sets[1].whiteScore}
-								</span>
+								<span style={{ color: "#ADAAAA" }}>{matches[0].sets[1].whiteScore}</span>
 							</Typography>
 							<Typography variant="body1" textAlign="center">
 								Bijeli
@@ -117,11 +90,7 @@ function LandingTerminResults() {
 						border: "2px solid #344551",
 					}}
 				>
-					<Typography
-						variant="body1"
-						textAlign="center"
-						color="#95CFFF"
-					>
+					<Typography variant="body1" textAlign="center" color="#95CFFF">
 						Konačni rezultat
 					</Typography>
 					<CardContent
@@ -134,34 +103,18 @@ function LandingTerminResults() {
 						}}
 					>
 						<Box>
-							<Typography
-								variant="subtitle1"
-								textAlign="center"
-								color="#95CFFF"
-							>
+							<Typography variant="subtitle1" textAlign="center" color="#95CFFF">
 								{blackTotal}
 							</Typography>
-							<Typography
-								variant="body1"
-								textAlign="center"
-								color="#95CFFF"
-							>
+							<Typography variant="body1" textAlign="center" color="#95CFFF">
 								Crni
 							</Typography>
 						</Box>
-						<Typography
-							variant="subtitle2"
-							textAlign="center"
-							color="#ADAAAA"
-						>
+						<Typography variant="subtitle2" textAlign="center" color="#ADAAAA">
 							:
 						</Typography>
 						<Box>
-							<Typography
-								variant="subtitle1"
-								textAlign="center"
-								color="#ADAAAA"
-							>
+							<Typography variant="subtitle1" textAlign="center" color="#ADAAAA">
 								{whiteTotal}
 							</Typography>
 							<Typography variant="body1" textAlign="center">
@@ -169,11 +122,7 @@ function LandingTerminResults() {
 							</Typography>
 						</Box>
 					</CardContent>
-					<Typography
-						variant="body1"
-						textAlign="center"
-						color="#95CFFF"
-					>
+					<Typography variant="body1" textAlign="center" color="#95CFFF">
 						Pobjeda: Crni
 					</Typography>
 				</Card>

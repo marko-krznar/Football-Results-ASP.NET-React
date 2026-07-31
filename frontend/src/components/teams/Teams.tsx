@@ -1,14 +1,5 @@
-import {
-	Avatar,
-	Box,
-	Typography,
-	Container,
-	Stack,
-	Divider,
-	CircularProgress,
-	Alert,
-} from "@mui/material";
-import { useGetTeamMembersQuery } from "../../redux-toolkit/api/teamMembersApi";
+import { Avatar, Box, Typography, Container, Stack, Divider, CircularProgress, Alert } from "@mui/material";
+import { useGetTeamMembersQuery } from "../../redux/api/teamMembersApi";
 import type { SerializedError } from "@reduxjs/toolkit";
 
 export default function Teams() {
@@ -27,26 +18,18 @@ export default function Teams() {
 
 	return (
 		<Container maxWidth="xl">
-			<Stack
-				direction="row"
-				alignItems="flex-start"
-				gap={2}
-				paddingBlock={4}
-			>
+			<Stack direction="row" alignItems="flex-start" gap={2} paddingBlock={4}>
 				{error && (
 					<Alert sx={{ width: "100%" }} severity="error">
 						{"status" in error && error.status
 							? typeof error.data === "string"
 								? error.data
 								: `Error: ${error.status}`
-							: (error as SerializedError).message ||
-							  "An unknown error occurred."}
+							: (error as SerializedError).message || "An unknown error occurred."}
 					</Alert>
 				)}
 				{(blackPlayersIsLoading || whitePlayersIsLoading) && !error && (
-					<Box
-						sx={{ width: "100%", textAlign: "center", padding: 4 }}
-					>
+					<Box sx={{ width: "100%", textAlign: "center", padding: 4 }}>
 						<CircularProgress aria-label="Loading…" />
 					</Box>
 				)}
@@ -71,20 +54,9 @@ export default function Teams() {
 							</Box>
 							{blackPlayers &&
 								blackPlayers.map((player) => (
-									<Stack
-										key={player.id}
-										alignItems="center"
-										gap={1}
-										paddingInline={2}
-										flexGrow={1}
-									>
-										<Avatar>
-											{player.playerName.charAt(0)}
-										</Avatar>
-										<Typography
-											variant="body1"
-											align="center"
-										>
+									<Stack key={player.id} alignItems="center" gap={1} paddingInline={2} flexGrow={1}>
+										<Avatar>{player.playerName.charAt(0)}</Avatar>
+										<Typography variant="body1" align="center">
 											{player.playerName}
 										</Typography>
 									</Stack>
@@ -110,20 +82,9 @@ export default function Teams() {
 							</Box>
 							{whitePlayers &&
 								whitePlayers.map((player) => (
-									<Stack
-										key={player.id}
-										alignItems="center"
-										gap={1}
-										paddingInline={2}
-										flexGrow={1}
-									>
-										<Avatar>
-											{player.playerName.charAt(0)}
-										</Avatar>
-										<Typography
-											variant="body1"
-											align="center"
-										>
+									<Stack key={player.id} alignItems="center" gap={1} paddingInline={2} flexGrow={1}>
+										<Avatar>{player.playerName.charAt(0)}</Avatar>
+										<Typography variant="body1" align="center">
 											{player.playerName}
 										</Typography>
 									</Stack>

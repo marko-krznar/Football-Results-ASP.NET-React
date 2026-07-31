@@ -1,5 +1,5 @@
 import { Typography, Box, CardContent, Card, Container } from "@mui/material";
-import { useAppSelector } from "../../redux-toolkit/hooks";
+import { useAppSelector } from "../../redux/hooks";
 import MatchesIntro from "./MatchesIntro";
 import MatchesItem from "./MatchesItem";
 import AddMatch from "./AddMatch";
@@ -29,54 +29,23 @@ export default function Matches() {
 					>
 						<CardContent>
 							<Typography variant="subtitle2" textAlign="center">
-								<span style={{ color: "#95CFFF" }}>
-									Sveukupno
-								</span>
+								<span style={{ color: "#95CFFF" }}>Sveukupno</span>
 							</Typography>
-							<Box
-								display="flex"
-								justifyContent="center"
-								alignItems="center"
-								gap={4}
-							>
-								<Box
-									display="flex"
-									flexDirection="column"
-									justifyContent="center"
-									gap={2}
-								>
-									<Typography
-										variant="subtitle1"
-										fontWeight="bold"
-										textAlign="center"
-									>
+							<Box display="flex" justifyContent="center" alignItems="center" gap={4}>
+								<Box display="flex" flexDirection="column" justifyContent="center" gap={2}>
+									<Typography variant="subtitle1" fontWeight="bold" textAlign="center">
 										{matches[0].blackScore}
 									</Typography>
-									<Typography
-										variant="body1"
-										textAlign="center"
-									>
+									<Typography variant="body1" textAlign="center">
 										Crni
 									</Typography>
 								</Box>
 								<Typography variant="body1">-</Typography>
-								<Box
-									display="flex"
-									flexDirection="column"
-									justifyContent="center"
-									gap={2}
-								>
-									<Typography
-										variant="subtitle1"
-										fontWeight="bold"
-										textAlign="center"
-									>
+								<Box display="flex" flexDirection="column" justifyContent="center" gap={2}>
+									<Typography variant="subtitle1" fontWeight="bold" textAlign="center">
 										{matches[0].whiteScore}
 									</Typography>
-									<Typography
-										variant="body1"
-										textAlign="center"
-									>
+									<Typography variant="body1" textAlign="center">
 										Bijeli
 									</Typography>
 								</Box>
