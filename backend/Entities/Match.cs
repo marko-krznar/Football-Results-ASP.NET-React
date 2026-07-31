@@ -9,6 +9,8 @@ public class Match
     public int SeasonId { get; set; }
     public int FirstTeamId { get; set; }
     public int SecondTeamId { get; set; }
+    public string? Location { get; set; }
+    public string? Note { get; set; }
 
     public Season? Season { get; set; }
     public Team? FirstTeam { get; set; }

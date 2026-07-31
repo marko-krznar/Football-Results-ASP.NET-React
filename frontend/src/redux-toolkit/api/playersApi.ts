@@ -8,7 +8,7 @@ export interface Player {
 export const playersApi = createApi({
 	reducerPath: "playersApi",
 	baseQuery: fetchBaseQuery({ 
-		baseUrl: "https://localhost:7057/api",
+		baseUrl: "/api",
 		// po potrebi dodaj credentials: 'include' za cookie podršku
 		prepareHeaders: (headers) => {
 			return headers;

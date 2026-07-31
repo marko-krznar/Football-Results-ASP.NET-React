@@ -2,6 +2,7 @@ import { Typography, Box, CardContent, Card, Container } from "@mui/material";
 import { useAppSelector } from "../../redux-toolkit/hooks";
 import MatchesIntro from "./MatchesIntro";
 import MatchesItem from "./MatchesItem";
+import AddMatch from "./AddMatch";
 
 export default function Matches() {
 	const matches = useAppSelector((state) => state.matches.data);
@@ -95,6 +96,7 @@ export default function Matches() {
 					))}
 				</div>
 			</Box>
+			<AddMatch />
 		</Container>
 	);
 }

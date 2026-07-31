@@ -2,7 +2,7 @@ using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.Controlers;
+namespace backend.Controllers;
 
 [Route("api/matches/{matchId}/sets")]
 [ApiController]
@@ -13,8 +13,15 @@ public class SetsController(ISetsService setsService) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetSets(int matchId)
     {
-        var sets = await _setsService.GetSets(matchId);
-        return Ok(sets);
+        try
+        {
+            var sets = await _setsService.GetSets(matchId);
+            return Ok(sets);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 
     [HttpPut]

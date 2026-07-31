@@ -43,8 +43,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

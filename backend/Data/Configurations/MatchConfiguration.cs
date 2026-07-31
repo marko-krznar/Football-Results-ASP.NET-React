@@ -33,6 +33,14 @@ public class MatchConfiguration : IEntityTypeConfiguration<Match>
             .HasColumnName("second_team_id")
             .IsRequired();
 
+        builder.Property(e => e.Location)
+            .HasColumnName("location")
+            .HasMaxLength(200);
+
+        builder.Property(e => e.Note)
+            .HasColumnName("note")
+            .HasMaxLength(500);
+
         builder.HasOne(e => e.Season)
             .WithMany()
             .HasForeignKey(e => e.SeasonId)

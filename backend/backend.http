@@ -1,31 +1,149 @@
 @backend_HostAddress = http://localhost:5220
 
-### 1. Get all match sessions (with sets and players)
+### Seasons
+
+### GET all seasons
+GET {{backend_HostAddress}}/api/seasons
+Accept: application/json
+
+### POST create season
+POST {{backend_HostAddress}}/api/seasons
+Content-Type: application/json
+
+{
+  "year": 2025,
+  "type": "Autumn",
+  "startDate": "2025-09-01",
+  "endDate": "2025-12-31"
+}
+
+###
+
+### Players
+
+### GET all players
+GET {{backend_HostAddress}}/api/players
+Accept: application/json
+
+###
+
+### Teams
+
+### GET all teams
+GET {{backend_HostAddress}}/api/teams
+Accept: application/json
+
+### POST create team
+POST {{backend_HostAddress}}/api/teams
+Content-Type: application/json
+
+{
+  "name": "Bijeli",
+  "seasonId": 1,
+  "captainId": 1
+}
+
+###
+
+### Team Members
+
+### GET team members
+GET {{backend_HostAddress}}/api/teams/1/members
+Accept: application/json
+
+### POST add team members
+POST {{backend_HostAddress}}/api/teams/1/members
+Content-Type: application/json
+
+{
+  "playerIds": [1, 2, 3]
+}
+
+###
+
+### Matches
+
+### GET all matches
 GET {{backend_HostAddress}}/api/matches
 Accept: application/json
 
-### 2. Get all white team players
-GET {{backend_HostAddress}}/team/white
+### GET match by ID
+GET {{backend_HostAddress}}/api/matches/1
 Accept: application/json
 
-### 3. Get all black team players
-GET {{backend_HostAddress}}/team/black
+### GET matches formatted for display
+GET {{backend_HostAddress}}/api/matches/display
 Accept: application/json
 
-# Controler calls
-
-### 4. Controller players white
-GET {{backend_HostAddress}}/api/Players/white
+### GET specific match formatted for display
+GET {{backend_HostAddress}}/api/matches/1/display
 Accept: application/json
 
-### 4. Controller players black
-GET {{backend_HostAddress}}/api/Players/black
+### POST create match (basic)
+POST {{backend_HostAddress}}/api/matches
+Content-Type: application/json
+
+{
+  "seasonId": 1,
+  "date": "2025-10-15",
+  "firstTeamId": 1,
+  "secondTeamId": 2,
+  "location": "Teren A",
+  "note": ""
+}
+
+### POST create match with details
+POST {{backend_HostAddress}}/api/matches/full
+Content-Type: application/json
+
+{
+  "seasonId": 1,
+  "date": "2025-10-15",
+  "firstTeamId": 1,
+  "secondTeamId": 2,
+  "location": "Teren A",
+  "note": "",
+  "sets": [
+    { "setNumber": 1, "firstTeamGoals": 3, "secondTeamGoals": 1 },
+    { "setNumber": 2, "firstTeamGoals": 2, "secondTeamGoals": 4 }
+  ],
+  "firstTeamPlayerIds": [1, 2],
+  "secondTeamPlayerIds": [3, 4]
+}
+
+###
+
+### Sets
+
+### GET sets for match
+GET {{backend_HostAddress}}/api/matches/1/sets
 Accept: application/json
 
-### 4. Controller matches
-GET {{backend_HostAddress}}/api/Match/matches
+### PUT add or update set
+PUT {{backend_HostAddress}}/api/matches/1/sets
+Content-Type: application/json
+
+{
+  "setNumber": 1,
+  "firstTeamGoals": 3,
+  "secondTeamGoals": 2
+}
+
+###
+
+### Match Players
+
+### GET match players
+GET {{backend_HostAddress}}/api/matches/1/players
 Accept: application/json
 
-### 4. Controller latest-match
-GET {{backend_HostAddress}}/api/Match/latest-match
-Accept: application/json
+### PUT set match players
+PUT {{backend_HostAddress}}/api/matches/1/players
+Content-Type: application/json
+
+{
+  "teamId": 1,
+  "playerIds": [1, 2, 3]
+}
+
+###

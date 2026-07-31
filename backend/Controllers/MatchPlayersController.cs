@@ -2,7 +2,7 @@ using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.Controlers;
+namespace backend.Controllers;
 
 [Route("api/matches/{matchId}/players")]
 [ApiController]
@@ -13,8 +13,15 @@ public class MatchPlayersController(IMatchPlayersService matchPlayersService) : 
     [HttpGet]
     public async Task<IActionResult> GetMatchPlayers(int matchId)
     {
-        var players = await _matchPlayersService.GetMatchPlayers(matchId);
-        return Ok(players);
+        try
+        {
+            var players = await _matchPlayersService.GetMatchPlayers(matchId);
+            return Ok(players);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 
     [HttpPut]

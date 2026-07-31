@@ -2,7 +2,7 @@ using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.Controlers;
+namespace backend.Controllers;
 
 [Route("api/teams")]
 [ApiController]

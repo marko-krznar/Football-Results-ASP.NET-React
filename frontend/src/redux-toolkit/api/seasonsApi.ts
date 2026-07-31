@@ -18,7 +18,7 @@ export interface CreateSeason {
 
 export const seasonsApi = createApi({
 	reducerPath: "seasonsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "https://localhost:7057/api" }),
+	baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
 	tagTypes: ["Seasons"],
 	endpoints: (builder) => ({
 		getSeasons: builder.query<Season[], void>({

@@ -2,7 +2,7 @@ using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.Controlers;
+namespace backend.Controllers;
 
 [Route("api/teams/{teamId}/members")]
 [ApiController]
@@ -13,8 +13,15 @@ public class TeamMembersController(ITeamMembersService teamMembersService) : Con
     [HttpGet]
     public async Task<IActionResult> GetTeamMembers(int teamId)
     {
-        var members = await _teamMembersService.GetTeamMembers(teamId);
-        return Ok(members);
+        try
+        {
+            var members = await _teamMembersService.GetTeamMembers(teamId);
+            return Ok(members);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 
     [HttpPost]

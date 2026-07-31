@@ -24,7 +24,7 @@ export interface CreateTeam {
 
 export const teamsApi = createApi({
 	reducerPath: "teamsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "https://localhost:7057/api" }),
+	baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
 	tagTypes: ["Teams"],
 	endpoints: (builder) => ({
 		getTeams: builder.query<TeamNew[], void>({
