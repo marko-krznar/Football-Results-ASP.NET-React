@@ -26,6 +26,7 @@ import { useGetSeasonsQuery } from "../../redux/api/seasonsApi";
 import { useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useAddMatchWithDetailsMutation } from "../../redux/api/matchesApi";
 import { useGetTeamMembersQuery } from "../../redux/api/teamMembersApi";
+import { getCurrentDate } from "../../utils/matchUtils";
 
 interface SetRow {
 	setNumber: number;
@@ -46,29 +47,13 @@ export default function AddMatch() {
 	const { data: teamsList, isLoading: teamsLoading } = useGetTeamsQuery();
 	const [addMatchWithDetails, { isLoading: isSaving }] = useAddMatchWithDetailsMutation();
 
-	const [selectedSeason, setSelectedSeason] = useState<string>("");
-	const [date, setDate] = useState<string>("");
-	const [sets, setSets] = useState<SetRow[]>([{ setNumber: 1, firstTeamGoals: 0, secondTeamGoals: 0 }]);
-	const [firstTeamPlayerIds, setFirstTeamPlayerIds] = useState<number[]>([]);
-	const [secondTeamPlayerIds, setSecondTeamPlayerIds] = useState<number[]>([]);
-	const [successMsg, setSuccessMsg] = useState<string>("");
-	const [formError, setFormError] = useState<string>("");
-
 	// Uvijek postoje samo Bijeli i Crni - dohvati ih automatski, korisnik ih ne bira
 	const firstTeam = teamsList?.find((team) => team.name === "Bijeli");
 	const secondTeam = teamsList?.find((team) => team.name === "Crni");
 
-	const firstTeamId = firstTeam ? String(firstTeam.id) : "";
-	const secondTeamId = secondTeam ? String(secondTeam.id) : "";
+	const firstTeamId = firstTeam && String(firstTeam.id);
+	const secondTeamId = secondTeam && String(secondTeam.id);
 
-	const handleSeasonChange = (value: string) => {
-		setSelectedSeason(value);
-		setFirstTeamPlayerIds([]);
-		setSecondTeamPlayerIds([]);
-	};
-
-	// Igrače nudimo samo iz sastava odabrane ekipe (team_members) - isto
-	// pravilo koje backend validira, pa korisnik ne može ni odabrati krivo
 	const { data: firstTeamMembersRaw, isLoading: firstTeamMembersLoading } = useGetTeamMembersQuery(
 		Number(firstTeamId)
 	);
@@ -76,9 +61,24 @@ export default function AddMatch() {
 		Number(secondTeamId)
 	);
 
-	// Zaštita: ako backend/baza vrati duplicirane retke za istog igrača
-	// (isti playerId dvaput), makni duplikate prije renderiranja - inače
-	// React puca na "two children with the same key"
+	const [selectedSeason, setSelectedSeason] = useState<string>(seasonsList ? String(seasonsList[0].id) : "");
+	const [date, setDate] = useState<string>(getCurrentDate());
+	const [sets, setSets] = useState<SetRow[]>([{ setNumber: 1, firstTeamGoals: 0, secondTeamGoals: 0 }]);
+	const [firstTeamPlayerIds, setFirstTeamPlayerIds] = useState<number[]>(
+		firstTeamMembersRaw ? firstTeamMembersRaw.map((player) => player.playerId) : []
+	);
+	const [secondTeamPlayerIds, setSecondTeamPlayerIds] = useState<number[]>(
+		secondTeamMembersRaw ? secondTeamMembersRaw.map((player) => player.playerId) : []
+	);
+	const [successMsg, setSuccessMsg] = useState<string>("");
+	const [formError, setFormError] = useState<string>("");
+
+	const handleSeasonChange = (value: string) => {
+		setSelectedSeason(value);
+		setFirstTeamPlayerIds([]);
+		setSecondTeamPlayerIds([]);
+	};
+
 	const dedupeByPlayerId = (members: { playerId: number; playerName: string }[] | undefined) => {
 		if (!members) return members;
 		const seen = new Set<number>();
@@ -253,7 +253,6 @@ export default function AddMatch() {
 						type="date"
 						value={date}
 						onChange={(e) => setDate(e.target.value)}
-						InputLabelProps={{ shrink: true }}
 						fullWidth
 					/>
 

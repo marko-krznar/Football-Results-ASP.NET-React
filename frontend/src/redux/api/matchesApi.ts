@@ -49,7 +49,7 @@ export const matchesApi = createApi({
 	tagTypes: ["Matches"],
 	endpoints: (builder) => ({
 		getMatches: builder.query<Match[], void>({
-			query: () => "/matches",
+			query: () => "/matches/display",
 			providesTags: ["Matches"],
 		}),
 		getMatchById: builder.query<Match, number>({
@@ -64,10 +64,7 @@ export const matchesApi = createApi({
 			}),
 			invalidatesTags: ["Matches"],
 		}),
-		addMatchWithDetails: builder.mutation<
-			Match,
-			CreateMatchWithDetailsRequest
-		>({
+		addMatchWithDetails: builder.mutation<Match, CreateMatchWithDetailsRequest>({
 			query: (body) => ({
 				url: "/matches/full",
 				method: "POST",
@@ -78,9 +75,5 @@ export const matchesApi = createApi({
 	}),
 });
 
-export const {
-	useGetMatchesQuery,
-	useGetMatchByIdQuery,
-	useAddMatchMutation,
-	useAddMatchWithDetailsMutation,
-} = matchesApi;
+export const { useGetMatchesQuery, useGetMatchByIdQuery, useAddMatchMutation, useAddMatchWithDetailsMutation } =
+	matchesApi;
