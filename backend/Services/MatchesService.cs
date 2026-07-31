@@ -310,4 +310,13 @@ public class MatchesService(AppDbContext context) : IMatchesService
             }
         };
     }
+
+    public async Task DeleteMatch(int id)
+    {
+        var match = await _context.Matches.FindAsync(id)
+            ?? throw new ArgumentException("Match not found.");
+
+        _context.Matches.Remove(match);
+        await _context.SaveChangesAsync();
+    }
 }

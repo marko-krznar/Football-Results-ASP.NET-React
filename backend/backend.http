@@ -59,6 +59,10 @@ Content-Type: application/json
   "playerIds": [1, 2, 3]
 }
 
+### DELETE match by ID
+DELETE {{backend_HostAddress}}/api/matches/1
+Accept: application/json
+
 ###
 
 ### Matches

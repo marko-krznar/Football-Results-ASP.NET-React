@@ -97,4 +97,22 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
             return StatusCode(500, new { message = ex.Message });
         }
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteMatch(int id)
+    {
+        try
+        {
+            await _matchesService.DeleteMatch(id);
+            return NoContent();
+        }
+        catch (ArgumentException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
 }
