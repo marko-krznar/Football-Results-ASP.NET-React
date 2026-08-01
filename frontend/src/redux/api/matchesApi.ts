@@ -72,8 +72,24 @@ export const matchesApi = createApi({
 			}),
 			invalidatesTags: ["Matches"],
 		}),
+		removeMatch: builder.mutation<void, { matchId: number }>({
+			query: ({ matchId }) => {
+				console.log("Match ID:", matchId);
+
+				return {
+					url: `/matches/${matchId}`,
+					method: "DELETE",
+				};
+			},
+			invalidatesTags: ["Matches"],
+		}),
 	}),
 });
 
-export const { useGetMatchesQuery, useGetMatchByIdQuery, useAddMatchMutation, useAddMatchWithDetailsMutation } =
-	matchesApi;
+export const {
+	useGetMatchesQuery,
+	useGetMatchByIdQuery,
+	useAddMatchMutation,
+	useAddMatchWithDetailsMutation,
+	useRemoveMatchMutation,
+} = matchesApi;

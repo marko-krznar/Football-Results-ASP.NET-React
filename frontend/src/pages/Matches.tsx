@@ -10,16 +10,19 @@ import {
 	TableBody,
 	TableCell,
 	TableRow,
+	IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MatchesIntro from "../components/matches/MatchesIntro";
 import { useAppSelector } from "../redux/hooks";
 import MatchesItem from "../components/matches/MatchesItem";
 import AddMatch from "../components/matches/AddMatch";
-import { useGetMatchesQuery } from "../redux/api/matchesApi";
+import { useGetMatchesQuery, useRemoveMatchMutation } from "../redux/api/matchesApi";
 
 export default function Matches() {
 	const matches = useAppSelector((state) => state.matches.data);
 	const { data } = useGetMatchesQuery();
+	const [removeMatch] = useRemoveMatchMutation();
 
 	console.log("data", data);
 
@@ -137,6 +140,17 @@ export default function Matches() {
 												<Typography>{match.blackScore}</Typography>
 												<Typography>{match.whiteScore}</Typography>
 											</TableCell> */}
+
+											{/* Column 6: Summary */}
+											<TableCell style={{ width: "1rem" }}>
+												<IconButton
+													aria-label="delete"
+													size="large"
+													onClick={() => removeMatch({ matchId: match.id })}
+												>
+													<DeleteIcon fontSize="inherit" color="error" />
+												</IconButton>
+											</TableCell>
 										</TableRow>
 									))}
 								</TableBody>
