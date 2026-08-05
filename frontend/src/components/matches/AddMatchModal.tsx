@@ -37,7 +37,7 @@ interface AddMatchProps {
 	onClose: () => void;
 }
 
-export default function AddMatch({ open, onClose }: AddMatchProps) {
+export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 	const { data: seasonsList, isLoading: seasonsLoading } = useGetSeasonsQuery();
 	const { data: teamsList, isLoading: teamsLoading } = useGetTeamsQuery();
 	const [addMatchWithDetails, { isLoading: isSaving }] = useAddMatchWithDetailsMutation();

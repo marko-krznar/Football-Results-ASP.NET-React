@@ -22,9 +22,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import MatchesIntro from "../components/matches/MatchesIntro";
 import { useAppSelector } from "../redux/hooks";
 import { useState } from "react";
-import AddMatch from "../components/matches/AddMatch";
 import { useGetMatchesQuery, useRemoveMatchMutation } from "../redux/api/matchesApi";
 import EditMatchModal from "../components/matches/EditMatchModal";
+import AddMatchModal from "../components/matches/AddMatchModal";
 
 export default function Matches() {
 	const matches = useAppSelector((state) => state.matches.data);
@@ -184,7 +184,7 @@ export default function Matches() {
 					)}
 				</Box>
 			</Box>
-			<AddMatch open={addModalOpen} onClose={() => setAddModalOpen(false)} />
+			<AddMatchModal open={addModalOpen} onClose={() => setAddModalOpen(false)} />
 			<EditMatchModal
 				open={editModalOpen}
 				matchId={editingMatchId}

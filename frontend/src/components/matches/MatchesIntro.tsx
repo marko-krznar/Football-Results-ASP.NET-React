@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
-import AddMatch from "./AddMatch";
+import AddMatch from "./AddMatchModal";
 import { Stack } from "@mui/material";
 
 function MatchesIntro() {
@@ -41,4 +41,3 @@ function MatchesIntro() {
 }
 
 export default MatchesIntro;
-
