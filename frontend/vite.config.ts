@@ -11,7 +11,23 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/login': {
+        target: 'https://localhost:7057',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/logout': {
+        target: 'https://localhost:7057',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/manage': {
+        target: 'https://localhost:7057',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 })
+
 
