@@ -1,0 +1,14 @@
+services:
+    - name: HPD_Superliga_backend
+      type: web
+      env: docker
+      healthCheckPath: /healthz
+      plan: free
+
+    - name: React-Football-Results
+      type: web
+      runtime: static
+      rootDir: frontend
+      buildCommand: npm install && npm run build
+      staticPublishPath: dist/frontend
+      plan: free
