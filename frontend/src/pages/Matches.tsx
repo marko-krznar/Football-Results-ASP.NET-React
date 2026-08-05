@@ -4,7 +4,6 @@ import {
 	CardContent,
 	Card,
 	Container,
-	Divider,
 	TableContainer,
 	Table,
 	TableBody,
@@ -32,6 +31,7 @@ export default function Matches() {
 	const { data } = useGetMatchesQuery();
 	const [removeMatch] = useRemoveMatchMutation();
 	const [editModalOpen, setEditModalOpen] = useState(false);
+	const [addModalOpen, setAddModalOpen] = useState(false);
 	const [editingMatchId, setEditingMatchId] = useState<number | null>(null);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [deletingMatchId, setDeletingMatchId] = useState<number | null>(null);
@@ -83,13 +83,12 @@ export default function Matches() {
 					</Card>
 				</div>
 				<Box sx={{ mb: 6, mt: 6 }}>
-					<Typography variant="h1" component="p" textTransform={"uppercase"}>
-						Pravi podaci
-					</Typography>
 					{data && (
 						<TableContainer>
 							<Table aria-label="match table">
 								<TableBody>
+									{/* TODO add type */}
+									{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 									{data.map((match: any) => (
 										<TableRow>
 											{/* Column 1: Summary */}
@@ -184,22 +183,8 @@ export default function Matches() {
 						</TableContainer>
 					)}
 				</Box>
-				<Divider />
-				{/*
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "column",
-						marginTop: "2rem",
-					}}
-				>
-					{matches.map((match) => (
-						<MatchesItem key={match.id} match={match} />
-					))}
-				</div>
-				*/}
 			</Box>
-			<AddMatch />
+			<AddMatch open={addModalOpen} onClose={() => setAddModalOpen(false)} />
 			<EditMatchModal
 				open={editModalOpen}
 				matchId={editingMatchId}
@@ -217,12 +202,11 @@ export default function Matches() {
 				aria-labelledby="delete-dialog-title"
 				aria-describedby="delete-dialog-description"
 			>
-				<DialogTitle id="delete-dialog-title">
-					{"Potvrda brisanja"}
-				</DialogTitle>
+				<DialogTitle id="delete-dialog-title">{"Potvrda brisanja"}</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="delete-dialog-description">
-						Jeste li sigurni da želite sigurno obrisati podatke o ovoj utakmici? Ova akcija se ne može poništiti.
+						Jeste li sigurni da želite sigurno obrisati podatke o ovoj utakmici? Ova akcija se ne može
+						poništiti.
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>

@@ -2,26 +2,24 @@ import {
 	Alert,
 	Box,
 	Button,
-	Chip,
 	CircularProgress,
 	Divider,
-	FormControl,
 	IconButton,
-	InputLabel,
-	ListItemText,
-	MenuItem,
-	OutlinedInput,
-	Select,
 	Stack,
 	TextField,
 	Typography,
-	type SelectChangeEvent,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogActions,
+	Checkbox,
+	FormControlLabel,
+	MenuItem,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { useMemo, useState, type FormEvent } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import { useMemo, useState } from "react";
 import { useGetSeasonsQuery } from "../../redux/api/seasonsApi";
 import { useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useAddMatchWithDetailsMutation } from "../../redux/api/matchesApi";
@@ -34,15 +32,12 @@ interface SetRow {
 	secondTeamGoals: number;
 }
 
-const MenuProps = {
-	slotProps: {
-		paper: {
-			style: { maxHeight: 48 * 4.5 + 8, width: 280 },
-		},
-	},
-};
+interface AddMatchProps {
+	open: boolean;
+	onClose: () => void;
+}
 
-export default function AddMatch() {
+export default function AddMatch({ open, onClose }: AddMatchProps) {
 	const { data: seasonsList, isLoading: seasonsLoading } = useGetSeasonsQuery();
 	const { data: teamsList, isLoading: teamsLoading } = useGetTeamsQuery();
 	const [addMatchWithDetails, { isLoading: isSaving }] = useAddMatchWithDetailsMutation();
@@ -54,12 +49,8 @@ export default function AddMatch() {
 	const firstTeamId = firstTeam && String(firstTeam.id);
 	const secondTeamId = secondTeam && String(secondTeam.id);
 
-	const { data: firstTeamMembersRaw, isLoading: firstTeamMembersLoading } = useGetTeamMembersQuery(
-		Number(firstTeamId)
-	);
-	const { data: secondTeamMembersRaw, isLoading: secondTeamMembersLoading } = useGetTeamMembersQuery(
-		Number(secondTeamId)
-	);
+	const { data: firstTeamMembersRaw } = useGetTeamMembersQuery(Number(firstTeamId));
+	const { data: secondTeamMembersRaw } = useGetTeamMembersQuery(Number(secondTeamId));
 
 	const [selectedSeason, setSelectedSeason] = useState<string>(seasonsList ? String(seasonsList[0].id) : "");
 	const [date, setDate] = useState<string>(getCurrentDate());
@@ -114,25 +105,11 @@ export default function AddMatch() {
 		setSets((prev) => prev.filter((_, i) => i !== index));
 	};
 
-	const handleFirstPlayersChange = (event: SelectChangeEvent<number[]>) => {
-		const { value } = event.target;
-		setFirstTeamPlayerIds(typeof value === "string" ? value.split(",").map(Number) : value);
-	};
-
-	const handleSecondPlayersChange = (event: SelectChangeEvent<number[]>) => {
-		const { value } = event.target;
-		setSecondTeamPlayerIds(typeof value === "string" ? value.split(",").map(Number) : value);
-	};
-
 	const handleSelectAllFirstTeam = () => setFirstTeamPlayerIds(firstTeamMembers?.map((m) => m.playerId) ?? []);
 	const handleClearFirstTeam = () => setFirstTeamPlayerIds([]);
-	const handleRemoveFirstTeamPlayer = (id: number) =>
-		setFirstTeamPlayerIds((prev) => prev.filter((pid) => pid !== id));
 
 	const handleSelectAllSecondTeam = () => setSecondTeamPlayerIds(secondTeamMembers?.map((m) => m.playerId) ?? []);
 	const handleClearSecondTeam = () => setSecondTeamPlayerIds([]);
-	const handleRemoveSecondTeamPlayer = (id: number) =>
-		setSecondTeamPlayerIds((prev) => prev.filter((pid) => pid !== id));
 
 	const resetForm = () => {
 		setSets([{ setNumber: 1, firstTeamGoals: 0, secondTeamGoals: 0 }]);
@@ -140,7 +117,9 @@ export default function AddMatch() {
 		setSecondTeamPlayerIds([]);
 	};
 
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	// TODO add type
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		setFormError("");
 		setSuccessMsg("");
@@ -171,45 +150,32 @@ export default function AddMatch() {
 
 			setSuccessMsg("Utakmica je uspješno spremljena!");
 			resetForm();
+			setTimeout(() => {
+				onClose();
+				setSuccessMsg("");
+			}, 1000);
 		} catch (err: unknown) {
 			const apiError = err as { data?: { message?: string } };
 			setFormError(apiError?.data?.message || "Greška pri spremanju utakmice.");
 		}
 	};
 
-	const renderPlayerChips = (
-		selected: number[],
-		members: { playerId: number; playerName: string }[] | undefined,
-		onRemove: (id: number) => void
-	) => (
-		<Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-			{selected.map((id) => {
-				const player = members?.find((m) => m.playerId === id);
-				return (
-					<Chip
-						key={id}
-						label={player?.playerName ?? id}
-						size="small"
-						onDelete={() => onRemove(id)}
-						// spriječi da klik na X otvori/zatvori Select (klik bi inače "propao" na input ispod)
-						onMouseDown={(e) => e.stopPropagation()}
-					/>
-				);
-			})}
-		</Box>
-	);
-
 	return (
-		<Stack spacing={4}>
-			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}>
-				Dodaj utakmicu
-			</Typography>
+		<Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+			<DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", pr: 2 }}>
+				<Typography variant="h5" sx={{ fontWeight: "bold" }}>
+					Dodaj utakmicu
+				</Typography>
+				<IconButton onClick={onClose} aria-label="Zatvori">
+					<CloseIcon />
+				</IconButton>
+			</DialogTitle>
 
-			{successMsg && <Alert severity="success">{successMsg}</Alert>}
-			{formError && <Alert severity="error">{formError}</Alert>}
-
-			<Box component="form" onSubmit={handleSubmit}>
+			<DialogContent dividers>
 				<Stack spacing={3}>
+					{successMsg && <Alert severity="success">{successMsg}</Alert>}
+					{formError && <Alert severity="error">{formError}</Alert>}
+
 					<TextField
 						select
 						label="Sezona"
@@ -217,6 +183,7 @@ export default function AddMatch() {
 						onChange={(e) => handleSeasonChange(e.target.value)}
 						disabled={seasonsLoading}
 						helperText="Odaberi sezonu"
+						fullWidth
 					>
 						{seasonsList?.map((season) => (
 							<MenuItem key={season.id} value={season.id}>
@@ -224,23 +191,6 @@ export default function AddMatch() {
 							</MenuItem>
 						))}
 					</TextField>
-
-					<Stack direction="row" spacing={2}>
-						<TextField
-							label="Prva ekipa"
-							value={teamsLoading ? "Učitavanje…" : firstTeam?.name ?? "—"}
-							InputProps={{ readOnly: true }}
-							disabled
-							fullWidth
-						/>
-						<TextField
-							label="Druga ekipa"
-							value={teamsLoading ? "Učitavanje…" : secondTeam?.name ?? "—"}
-							InputProps={{ readOnly: true }}
-							disabled
-							fullWidth
-						/>
-					</Stack>
 
 					{!teamsLoading && selectedSeason && (!firstTeam || !secondTeam) && (
 						<Alert severity="warning">
@@ -258,9 +208,7 @@ export default function AddMatch() {
 
 					<Divider />
 
-					<Typography variant="h6" sx={{ color: "#fff" }}>
-						Setovi
-					</Typography>
+					<Typography variant="h6">Setovi</Typography>
 					<Stack spacing={2}>
 						{sets.map((set, index) => (
 							<Stack direction="row" spacing={2} alignItems="center" key={index}>
@@ -273,7 +221,7 @@ export default function AddMatch() {
 									sx={{ width: 120 }}
 								/>
 								<TextField
-									label={`Golovi ${firstTeam?.name}`}
+									label={`Golovi ${firstTeam?.name ?? "Bijeli"}`}
 									type="number"
 									value={set.firstTeamGoals}
 									onChange={(e) =>
@@ -283,7 +231,7 @@ export default function AddMatch() {
 									fullWidth
 								/>
 								<TextField
-									label={`Golovi ${secondTeam?.name}`}
+									label={`Golovi ${secondTeam?.name ?? "Crni"}`}
 									type="number"
 									value={set.secondTeamGoals}
 									onChange={(e) =>
@@ -313,119 +261,125 @@ export default function AddMatch() {
 
 					<Divider />
 
-					<Typography variant="h6" sx={{ color: "#fff" }}>
-						Igrači
-					</Typography>
-					<Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-						<Stack sx={{ width: "100%" }} spacing={1}>
-							<FormControl sx={{ width: "100%" }} disabled={!firstTeam || firstTeamMembersLoading}>
-								<InputLabel id="first-team-players-label">
-									Igrači - {firstTeam?.name ?? "prva ekipa"}
-								</InputLabel>
-								<Select
-									labelId="first-team-players-label"
-									multiple
-									value={firstTeamPlayerIds}
-									onChange={handleFirstPlayersChange}
-									input={<OutlinedInput label={`Igrači - ${firstTeam?.name ?? "prva ekipa"}`} />}
-									renderValue={(selected) =>
-										renderPlayerChips(selected, firstTeamMembers, handleRemoveFirstTeamPlayer)
-									}
-									MenuProps={MenuProps}
-								>
-									{firstTeamMembers?.map((member) => {
-										const isSelected = firstTeamPlayerIds.includes(member.playerId);
-										const SelectionIcon = isSelected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
-
-										return (
-											<MenuItem key={member.playerId} value={member.playerId}>
-												<SelectionIcon fontSize="small" style={{ marginRight: 8 }} />
-												<ListItemText primary={member.playerName} />
-											</MenuItem>
-										);
-									})}
-								</Select>
-							</FormControl>
-							<Stack direction="row" spacing={1}>
-								<Button
-									size="small"
-									onClick={handleSelectAllFirstTeam}
-									disabled={!firstTeamMembers?.length}
-								>
-									Odaberi sve
-								</Button>
-								<Button
-									size="small"
-									color="inherit"
-									onClick={handleClearFirstTeam}
-									disabled={!firstTeamPlayerIds.length}
-								>
-									Očisti
-								</Button>
+					<Typography variant="h6">Igrači</Typography>
+					<Stack direction={"column"} spacing={4}>
+						<Box sx={{ flex: 1 }}>
+							<Stack
+								direction="row"
+								spacing={1}
+								alignItems="center"
+								justifyContent="space-between"
+								sx={{ mb: 1 }}
+							>
+								<Typography sx={{ fontWeight: "medium" }}>
+									Igrači - {firstTeam?.name ?? "Bijeli"}
+								</Typography>
+								<Box>
+									<Button
+										size="small"
+										onClick={handleSelectAllFirstTeam}
+										disabled={!firstTeamMembers?.length}
+									>
+										Odaberi sve
+									</Button>
+									<Button
+										size="small"
+										color="inherit"
+										onClick={handleClearFirstTeam}
+										disabled={!firstTeamPlayerIds.length}
+									>
+										Očisti
+									</Button>
+								</Box>
 							</Stack>
-						</Stack>
+							{firstTeamMembers && (
+								<Box>
+									{firstTeamMembers.map((member) => (
+										<FormControlLabel
+											key={member.playerId}
+											control={
+												<Checkbox
+													checked={firstTeamPlayerIds.includes(member.playerId)}
+													onChange={() => {
+														setFirstTeamPlayerIds((prev) =>
+															prev.includes(member.playerId)
+																? prev.filter((id) => id !== member.playerId)
+																: [...prev, member.playerId]
+														);
+													}}
+												/>
+											}
+											label={<Typography variant="body2">{member.playerName}</Typography>}
+										/>
+									))}
+								</Box>
+							)}
+						</Box>
 
-						<Stack sx={{ width: "100%" }} spacing={1}>
-							<FormControl sx={{ width: "100%" }} disabled={!secondTeam || secondTeamMembersLoading}>
-								<InputLabel id="second-team-players-label">
-									Igrači - {secondTeam?.name ?? "druga ekipa"}
-								</InputLabel>
-								<Select
-									labelId="second-team-players-label"
-									multiple
-									value={secondTeamPlayerIds}
-									onChange={handleSecondPlayersChange}
-									input={<OutlinedInput label={`Igrači - ${secondTeam?.name ?? "druga ekipa"}`} />}
-									renderValue={(selected) =>
-										renderPlayerChips(selected, secondTeamMembers, handleRemoveSecondTeamPlayer)
-									}
-									MenuProps={MenuProps}
-								>
-									{secondTeamMembers?.map((member) => {
-										const isSelected = secondTeamPlayerIds.includes(member.playerId);
-										const SelectionIcon = isSelected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
-
-										return (
-											<MenuItem key={member.playerId} value={member.playerId}>
-												<SelectionIcon fontSize="small" style={{ marginRight: 8 }} />
-												<ListItemText primary={member.playerName} />
-											</MenuItem>
-										);
-									})}
-								</Select>
-							</FormControl>
-							<Stack direction="row" spacing={1}>
-								<Button
-									size="small"
-									onClick={handleSelectAllSecondTeam}
-									disabled={!secondTeamMembers?.length}
-								>
-									Odaberi sve
-								</Button>
-								<Button
-									size="small"
-									color="inherit"
-									onClick={handleClearSecondTeam}
-									disabled={!secondTeamPlayerIds.length}
-								>
-									Očisti
-								</Button>
+						<Box sx={{ flex: 1 }}>
+							<Stack
+								direction="row"
+								spacing={1}
+								alignItems="center"
+								justifyContent="space-between"
+								sx={{ mb: 1 }}
+							>
+								<Typography sx={{ fontWeight: "medium" }}>
+									Igrači - {secondTeam?.name ?? "Crni"}
+								</Typography>
+								<Box>
+									<Button
+										size="small"
+										onClick={handleSelectAllSecondTeam}
+										disabled={!secondTeamMembers?.length}
+									>
+										Odaberi sve
+									</Button>
+									<Button
+										size="small"
+										color="inherit"
+										onClick={handleClearSecondTeam}
+										disabled={!secondTeamPlayerIds.length}
+									>
+										Očisti
+									</Button>
+								</Box>
 							</Stack>
-						</Stack>
+							{secondTeamMembers && (
+								<Box>
+									{secondTeamMembers.map((member) => (
+										<FormControlLabel
+											key={member.playerId}
+											control={
+												<Checkbox
+													checked={secondTeamPlayerIds.includes(member.playerId)}
+													onChange={() => {
+														setSecondTeamPlayerIds((prev) =>
+															prev.includes(member.playerId)
+																? prev.filter((id) => id !== member.playerId)
+																: [...prev, member.playerId]
+														);
+													}}
+												/>
+											}
+											label={<Typography variant="body2">{member.playerName}</Typography>}
+										/>
+									))}
+								</Box>
+							)}
+						</Box>
 					</Stack>
-
-					<Button
-						type="submit"
-						variant="contained"
-						color="primary"
-						size="large"
-						disabled={isSaving}
-						sx={{ mt: 2 }}
-					>
-						{isSaving ? <CircularProgress size={24} /> : "Spremi utakmicu"}
-					</Button>
 				</Stack>
-			</Box>
-		</Stack>
+			</DialogContent>
+
+			<DialogActions sx={{ p: 2 }}>
+				<Button onClick={onClose} variant="outlined">
+					Odustani
+				</Button>
+				<Button variant="contained" color="primary" disabled={isSaving} onClick={handleSubmit}>
+					{isSaving ? <CircularProgress size={24} /> : "Spremi utakmicu"}
+				</Button>
+			</DialogActions>
+		</Dialog>
 	);
 }
