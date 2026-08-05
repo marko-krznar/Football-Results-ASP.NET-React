@@ -1,5 +1,5 @@
 # Use the official .NET SDK image for building the app
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy only the backend project file and restore to leverage Docker layer caching
@@ -14,7 +14,7 @@ WORKDIR /src/backend
 RUN dotnet publish backend.csproj -c Release -o /app/publish
 
 # Use the official ASP.NET runtime image for running the app
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "backend.dll"]
