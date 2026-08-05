@@ -1,5 +1,6 @@
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -24,6 +25,7 @@ public class MatchPlayersController(IMatchPlayersService matchPlayersService) : 
         }
     }
 
+    [Authorize]
     [HttpPut]
     public async Task<IActionResult> SetMatchPlayers(int matchId, [FromBody] SetMatchPlayersDto dto)
     {
@@ -38,6 +40,7 @@ public class MatchPlayersController(IMatchPlayersService matchPlayersService) : 
         }
     }
 
+    [Authorize]
     [HttpDelete("{playerId}")]
     public async Task<IActionResult> RemoveMatchPlayer(int matchId, int playerId)
     {

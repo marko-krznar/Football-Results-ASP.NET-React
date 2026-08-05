@@ -1,5 +1,6 @@
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -17,6 +18,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
         return Ok(teams);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> AddTeam([FromBody] CreateTeamDto dto)
     {

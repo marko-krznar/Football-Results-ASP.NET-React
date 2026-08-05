@@ -5,9 +5,12 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { Card, CardContent, Stack } from "@mui/material";
 import AddMatchModal from "./AddMatchModal";
+import { useGetMeQuery } from "../../redux/api/authApi";
 
 function MatchesIntro({ totalBlack, totalWhite }: { totalBlack: number; totalWhite: number }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const { data: user } = useGetMeQuery();
+	const isAuthenticated = !!user;
 
 	return (
 		<>
@@ -22,9 +25,11 @@ function MatchesIntro({ totalBlack, totalWhite }: { totalBlack: number; totalWhi
 						uključujući točne datume, rezultate po setovima, konačne ishode te popise igrača koji su
 						sudjelovali u svakom dvoboju.
 					</Typography>
-					<Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsModalOpen(true)}>
-						Dodaj termin
-					</Button>
+					{isAuthenticated && (
+						<Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsModalOpen(true)}>
+							Dodaj termin
+						</Button>
+					)}
 				</Stack>
 				<Box>
 					<Card sx={{ padding: "4rem !important" }}>

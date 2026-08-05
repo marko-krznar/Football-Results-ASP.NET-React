@@ -1,5 +1,6 @@
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -38,6 +39,7 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> AddMatch([FromBody] CreateMatchDto dto)
     {
@@ -52,6 +54,7 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpPost("full")]
     public async Task<IActionResult> AddMatchWithDetails([FromBody] CreateMatchWithDetailsDto dto)
     {
@@ -98,6 +101,7 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMatch(int id)
     {
@@ -116,6 +120,7 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMatch(int id, [FromBody] UpdateMatchDto dto)
     {
@@ -134,6 +139,7 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpPut("{id}/full")]
     public async Task<IActionResult> UpdateMatchWithDetails(int id, [FromBody] UpdateMatchWithDetailsDto dto)
     {

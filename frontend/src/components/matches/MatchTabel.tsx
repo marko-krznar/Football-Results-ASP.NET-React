@@ -14,6 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import dayjs from "dayjs";
 import "dayjs/locale/hr";
 import { useTheme } from "@mui/material/styles";
+import { useGetMeQuery } from "../../redux/api/authApi";
 
 export interface MatchTeam {
 	teamId: number;
@@ -51,6 +52,8 @@ export default function MatchTabel({
 	setEditModalOpen,
 }: MatchTableProps) {
 	const theme = useTheme();
+	const { data: user } = useGetMeQuery();
+	const isAuthenticated = !!user;
 
 	return (
 		<TableContainer>
@@ -107,38 +110,42 @@ export default function MatchTabel({
 										<Typography>{match.blackScore}</Typography>
 										<Typography>{match.whiteScore}</Typography>
 									</TableCell> */}
-							<TableCell style={{ width: "1rem" }}>
-								<IconButton
-									sx={{
-										borderRadius: "4px",
-										background: theme.palette.divider,
-									}}
-									aria-label="edit"
-									size="small"
-									onClick={() => {
-										setEditingMatchId(match.id);
-										setEditModalOpen(true);
-									}}
-								>
-									<EditIcon fontSize="inherit" />
-								</IconButton>
-							</TableCell>
-							<TableCell style={{ width: "1rem" }}>
-								<IconButton
-									sx={{
-										borderRadius: "4px",
-										background: theme.palette.divider,
-									}}
-									aria-label="delete"
-									size="small"
-									onClick={() => {
-										setDeletingMatchId(match.id);
-										setDeleteDialogOpen(true);
-									}}
-								>
-									<DeleteIcon fontSize="inherit" color="error" />
-								</IconButton>
-							</TableCell>
+							{isAuthenticated && (
+								<TableCell style={{ width: "1rem" }}>
+									<IconButton
+										sx={{
+											borderRadius: "4px",
+											background: theme.palette.divider,
+										}}
+										aria-label="edit"
+										size="small"
+										onClick={() => {
+											setEditingMatchId(match.id);
+											setEditModalOpen(true);
+										}}
+									>
+										<EditIcon fontSize="inherit" />
+									</IconButton>
+								</TableCell>
+							)}
+							{isAuthenticated && (
+								<TableCell style={{ width: "1rem" }}>
+									<IconButton
+										sx={{
+											borderRadius: "4px",
+											background: theme.palette.divider,
+										}}
+										aria-label="delete"
+										size="small"
+										onClick={() => {
+											setDeletingMatchId(match.id);
+											setDeleteDialogOpen(true);
+										}}
+									>
+										<DeleteIcon fontSize="inherit" color="error" />
+									</IconButton>
+								</TableCell>
+							)}
 						</TableRow>
 					))}
 				</TableBody>

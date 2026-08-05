@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ namespace backend.Controllers;
 
 [Route("api/roles")]
 [ApiController]
+[Authorize]
 public class RolesController(
     RoleManager<IdentityRole> roleManager,
     UserManager<IdentityUser> userManager) : ControllerBase

@@ -1,5 +1,6 @@
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -24,6 +25,7 @@ public class SetsController(ISetsService setsService) : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpPut]
     public async Task<IActionResult> AddOrUpdateSet(int matchId, [FromBody] UpsertSetDto dto)
     {
@@ -38,6 +40,7 @@ public class SetsController(ISetsService setsService) : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpDelete("{setNumber}")]
     public async Task<IActionResult> DeleteSet(int matchId, int setNumber)
     {

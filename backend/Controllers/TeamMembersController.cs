@@ -1,5 +1,6 @@
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -24,6 +25,7 @@ public class TeamMembersController(ITeamMembersService teamMembersService) : Con
         }
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> AddTeamMembers(int teamId, [FromBody] AddTeamMembersDto dto)
     {
@@ -38,6 +40,7 @@ public class TeamMembersController(ITeamMembersService teamMembersService) : Con
         }
     }
 
+    [Authorize]
     [HttpDelete("{playerId}")]
     public async Task<IActionResult> RemoveTeamMember(int teamId, int playerId)
     {

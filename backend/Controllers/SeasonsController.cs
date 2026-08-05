@@ -1,5 +1,6 @@
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -17,6 +18,7 @@ public class SeasonsController(ISeasonsService seasonsService) : ControllerBase
         return Ok(seasons);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> AddSeason([FromBody] CreateSeasonDto dto)
     {
