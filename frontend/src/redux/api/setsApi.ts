@@ -23,14 +23,12 @@ export interface DeleteSetRequest {
 // NAPOMENA: prilagodi baseUrl istom onome koji koristiš u teamsApi/playersApi
 export const setsApi = createApi({
 	reducerPath: "setsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api` }),
 	tagTypes: ["Sets"],
 	endpoints: (builder) => ({
 		getSets: builder.query<Set[], number>({
 			query: (matchId) => `/matches/${matchId}/sets`,
-			providesTags: (_result, _error, matchId) => [
-				{ type: "Sets", id: matchId },
-			],
+			providesTags: (_result, _error, matchId) => [{ type: "Sets", id: matchId }],
 		}),
 		upsertSet: builder.mutation<Set, UpsertSetRequest>({
 			query: ({ matchId, ...body }) => ({
@@ -38,21 +36,16 @@ export const setsApi = createApi({
 				method: "PUT",
 				body,
 			}),
-			invalidatesTags: (_result, _error, { matchId }) => [
-				{ type: "Sets", id: matchId },
-			],
+			invalidatesTags: (_result, _error, { matchId }) => [{ type: "Sets", id: matchId }],
 		}),
 		deleteSet: builder.mutation<void, DeleteSetRequest>({
 			query: ({ matchId, setNumber }) => ({
 				url: `/matches/${matchId}/sets/${setNumber}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: (_result, _error, { matchId }) => [
-				{ type: "Sets", id: matchId },
-			],
+			invalidatesTags: (_result, _error, { matchId }) => [{ type: "Sets", id: matchId }],
 		}),
 	}),
 });
 
-export const { useGetSetsQuery, useUpsertSetMutation, useDeleteSetMutation } =
-	setsApi;
+export const { useGetSetsQuery, useUpsertSetMutation, useDeleteSetMutation } = setsApi;

@@ -66,7 +66,8 @@ export interface UpdateMatchWithDetailsRequest {
 // NAPOMENA: prilagodi baseUrl istom onome koji koristiš u teamsApi/playersApi
 export const matchesApi = createApi({
 	reducerPath: "matchesApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
+	// baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api` }),
 	tagTypes: ["Matches"],
 	endpoints: (builder) => ({
 		getMatches: builder.query<Match[], void>({

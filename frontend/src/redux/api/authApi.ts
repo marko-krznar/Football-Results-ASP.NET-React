@@ -14,7 +14,7 @@ export interface UserInfo {
 export const authApi = createApi({
 	reducerPath: "authApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: "/",
+		baseUrl: import.meta.env.VITE_API_URL,
 		credentials: "include",
 	}),
 	tagTypes: ["Auth"],

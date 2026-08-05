@@ -14,14 +14,12 @@ export interface AddTeamMembersRequest {
 
 export const teamMembersApi = createApi({
 	reducerPath: "teamMembersApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api` }),
 	tagTypes: ["TeamMembers"],
 	endpoints: (builder) => ({
 		getTeamMembers: builder.query<TeamMember[], number>({
 			query: (teamId) => `/teams/${teamId}/members`,
-			providesTags: (_result, _error, teamId) => [
-				{ type: "TeamMembers", id: teamId },
-			],
+			providesTags: (_result, _error, teamId) => [{ type: "TeamMembers", id: teamId }],
 		}),
 		addTeamMembers: builder.mutation<TeamMember[], AddTeamMembersRequest>({
 			query: ({ teamId, playerIds }) => ({
@@ -29,27 +27,16 @@ export const teamMembersApi = createApi({
 				method: "POST",
 				body: { playerIds },
 			}),
-			invalidatesTags: (_result, _error, { teamId }) => [
-				{ type: "TeamMembers", id: teamId },
-			],
+			invalidatesTags: (_result, _error, { teamId }) => [{ type: "TeamMembers", id: teamId }],
 		}),
-		removeTeamMember: builder.mutation<
-			void,
-			{ teamId: number; playerId: number }
-		>({
+		removeTeamMember: builder.mutation<void, { teamId: number; playerId: number }>({
 			query: ({ teamId, playerId }) => ({
 				url: `/teams/${teamId}/members/${playerId}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: (_result, _error, { teamId }) => [
-				{ type: "TeamMembers", id: teamId },
-			],
+			invalidatesTags: (_result, _error, { teamId }) => [{ type: "TeamMembers", id: teamId }],
 		}),
 	}),
 });
 
-export const {
-	useGetTeamMembersQuery,
-	useAddTeamMembersMutation,
-	useRemoveTeamMemberMutation,
-} = teamMembersApi;
+export const { useGetTeamMembersQuery, useAddTeamMembersMutation, useRemoveTeamMemberMutation } = teamMembersApi;

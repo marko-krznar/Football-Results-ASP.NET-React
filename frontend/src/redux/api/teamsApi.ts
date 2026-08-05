@@ -24,7 +24,7 @@ export interface CreateTeam {
 
 export const teamsApi = createApi({
 	reducerPath: "teamsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api` }),
 	tagTypes: ["Teams"],
 	endpoints: (builder) => ({
 		getTeams: builder.query<TeamNew[], void>({
