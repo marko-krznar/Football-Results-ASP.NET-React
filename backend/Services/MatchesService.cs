@@ -319,4 +319,123 @@ public class MatchesService(AppDbContext context) : IMatchesService
         _context.Matches.Remove(match);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<MatchDto> UpdateMatch(int id, UpdateMatchDto dto)
+    {
+        var match = await _context.Matches
+            .Include(m => m.Season)
+            .Include(m => m.FirstTeam)
+            .Include(m => m.SecondTeam)
+            .Include(m => m.Sets)
+            .FirstOrDefaultAsync(m => m.Id == id)
+            ?? throw new ArgumentException("Match not found.");
+
+        match.MatchDate = dto.Date;
+        match.Location = dto.Location;
+        match.Note = dto.Note;
+
+        await _context.SaveChangesAsync();
+        return ToDto(match);
+    }
+
+    public async Task<MatchDto> UpdateMatchWithDetails(int id, UpdateMatchWithDetailsDto dto)
+    {
+        var match = await _context.Matches
+            .Include(m => m.Season)
+            .Include(m => m.FirstTeam)
+            .Include(m => m.SecondTeam)
+            .Include(m => m.Sets)
+            .Include(m => m.MatchPlayers)
+            .FirstOrDefaultAsync(m => m.Id == id)
+            ?? throw new ArgumentException("Match not found.");
+
+        // Validacije
+        var setNumbers = dto.Sets.Select(s => s.SetNumber).ToList();
+        if (setNumbers.Distinct().Count() != setNumbers.Count)
+        {
+            throw new ArgumentException("Duplicate set numbers are not allowed.");
+        }
+
+        var firstTeamPlayerIds = dto.FirstTeamPlayerIds.Distinct().ToList();
+        var secondTeamPlayerIds = dto.SecondTeamPlayerIds.Distinct().ToList();
+        var preklapanje = firstTeamPlayerIds.Intersect(secondTeamPlayerIds).ToList();
+        if (preklapanje.Count > 0)
+        {
+            throw new ArgumentException($"Players cannot play for both teams: {string.Join(", ", preklapanje)}.");
+        }
+
+        var sviIgraciId = firstTeamPlayerIds.Concat(secondTeamPlayerIds).Distinct().ToList();
+        var postojeciIgraci = await _context.Players
+            .Where(p => sviIgraciId.Contains(p.Id))
+            .Select(p => p.Id)
+            .ToListAsync();
+        var nepostojeci = sviIgraciId.Except(postojeciIgraci).ToList();
+        if (nepostojeci.Count > 0)
+        {
+            throw new ArgumentException($"Players not found: {string.Join(", ", nepostojeci)}.");
+        }
+
+        // Igrači moraju biti u sastavu odabranih ekipa
+        var clanoviPrveEkipe = await _context.TeamMembers
+            .Where(tm => tm.TeamId == match.FirstTeamId)
+            .Select(tm => tm.PlayerId)
+            .ToListAsync();
+        var nisuClanoviPrve = firstTeamPlayerIds.Except(clanoviPrveEkipe).ToList();
+        if (nisuClanoviPrve.Count > 0)
+        {
+            throw new ArgumentException($"Players are not members of the first team: {string.Join(", ", nisuClanoviPrve)}.");
+        }
+
+        var clanoviDrugeEkipe = await _context.TeamMembers
+            .Where(tm => tm.TeamId == match.SecondTeamId)
+            .Select(tm => tm.PlayerId)
+            .ToListAsync();
+        var nisuClanoviDruge = secondTeamPlayerIds.Except(clanoviDrugeEkipe).ToList();
+        if (nisuClanoviDruge.Count > 0)
+        {
+            throw new ArgumentException($"Players are not members of the second team: {string.Join(", ", nisuClanoviDruge)}.");
+        }
+
+        // 1. Ažuriranje osnovnih podataka
+        match.MatchDate = dto.Date;
+        match.Location = dto.Location;
+        match.Note = dto.Note;
+
+        // 2. Ažuriranje setova (obriši stare i dodaj nove)
+        _context.Sets.RemoveRange(match.Sets);
+        foreach (var s in dto.Sets)
+        {
+            _context.Sets.Add(new Set
+            {
+                MatchId = match.Id,
+                SetNumber = s.SetNumber,
+                FirstTeamGoals = s.FirstTeamGoals,
+                SecondTeamGoals = s.SecondTeamGoals
+            });
+        }
+
+        // 3. Ažuriranje igrača (obriši stare i dodaj nove)
+        _context.MatchPlayers.RemoveRange(match.MatchPlayers);
+        foreach (var playerId in firstTeamPlayerIds)
+        {
+            _context.MatchPlayers.Add(new MatchPlayer
+            {
+                MatchId = match.Id,
+                TeamId = match.FirstTeamId,
+                PlayerId = playerId
+            });
+        }
+        foreach (var playerId in secondTeamPlayerIds)
+        {
+            _context.MatchPlayers.Add(new MatchPlayer
+            {
+                MatchId = match.Id,
+                TeamId = match.SecondTeamId,
+                PlayerId = playerId
+            });
+        }
+
+        await _context.SaveChangesAsync();
+        return await GetMatchById(match.Id);
+    }
 }

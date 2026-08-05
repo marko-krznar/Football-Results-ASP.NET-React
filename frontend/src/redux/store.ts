@@ -5,6 +5,8 @@ import { seasonsApi } from "./api/seasonsApi";
 import { teamsApi } from "./api/teamsApi";
 import { teamMembersApi } from "./api/teamMembersApi";
 import { matchesApi } from "./api/matchesApi";
+import { setsApi } from "./api/setsApi";
+import { matchPlayersApi } from "./api/matchPlayersApi";
 
 export const store = configureStore({
 	reducer: {
@@ -14,6 +16,8 @@ export const store = configureStore({
 		[teamsApi.reducerPath]: teamsApi.reducer,
 		[teamMembersApi.reducerPath]: teamMembersApi.reducer,
 		[matchesApi.reducerPath]: matchesApi.reducer,
+		[setsApi.reducerPath]: setsApi.reducer,
+		[matchPlayersApi.reducerPath]: matchPlayersApi.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware()
@@ -21,7 +25,9 @@ export const store = configureStore({
 			.concat(seasonsApi.middleware)
 			.concat(teamsApi.middleware)
 			.concat(teamMembersApi.middleware)
-			.concat(matchesApi.middleware),
+			.concat(matchesApi.middleware)
+			.concat(setsApi.middleware)
+			.concat(matchPlayersApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

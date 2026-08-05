@@ -115,6 +115,31 @@ Content-Type: application/json
   "secondTeamPlayerIds": [3, 4]
 }
 
+### PUT update match basics
+PUT {{backend_HostAddress}}/api/matches/1
+Content-Type: application/json
+
+{
+  "date": "2025-10-16",
+  "location": "Teren B",
+  "note": "Ažurirana bilješka"
+}
+
+### PUT update match with details
+PUT {{backend_HostAddress}}/api/matches/1/full
+Content-Type: application/json
+
+{
+  "date": "2025-10-16",
+  "location": "Teren B",
+  "note": "Ažurirana bilješka",
+  "sets": [
+    { "setNumber": 1, "firstTeamGoals": 4, "secondTeamGoals": 2 }
+  ],
+  "firstTeamPlayerIds": [1, 2],
+  "secondTeamPlayerIds": [3, 4]
+}
+
 ###
 
 ### Sets

@@ -40,3 +40,20 @@ public class CreateMatchWithDetailsDto
     public List<int> FirstTeamPlayerIds { get; set; } = [];
     public List<int> SecondTeamPlayerIds { get; set; } = [];
 }
+
+public class UpdateMatchDto
+{
+    public required DateOnly Date { get; set; }
+    public string? Location { get; set; }
+    public string? Note { get; set; }
+}
+
+public class UpdateMatchWithDetailsDto
+{
+    public required DateOnly Date { get; set; }
+    public string? Location { get; set; }
+    public string? Note { get; set; }
+    public List<UpsertSetDto> Sets { get; set; } = [];
+    public List<int> FirstTeamPlayerIds { get; set; } = [];
+    public List<int> SecondTeamPlayerIds { get; set; } = [];
+}

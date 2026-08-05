@@ -11,4 +11,6 @@ public interface IMatchesService
     Task<MatchDisplayDto> GetMatchDisplay(int id);
     Task<List<MatchDisplayDto>> GetAllMatchesDisplay();
     Task DeleteMatch(int id);
+    Task<MatchDto> UpdateMatch(int id, UpdateMatchDto dto);
+    Task<MatchDto> UpdateMatchWithDetails(int id, UpdateMatchWithDetailsDto dto);
 }

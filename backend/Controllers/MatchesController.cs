@@ -115,4 +115,40 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
             return StatusCode(500, new { message = ex.Message });
         }
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateMatch(int id, [FromBody] UpdateMatchDto dto)
+    {
+        try
+        {
+            var match = await _matchesService.UpdateMatch(id, dto);
+            return Ok(match);
+        }
+        catch (ArgumentException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [HttpPut("{id}/full")]
+    public async Task<IActionResult> UpdateMatchWithDetails(int id, [FromBody] UpdateMatchWithDetailsDto dto)
+    {
+        try
+        {
+            var match = await _matchesService.UpdateMatchWithDetails(id, dto);
+            return Ok(match);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
 }

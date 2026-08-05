@@ -11,20 +11,30 @@ import {
 	TableCell,
 	TableRow,
 	IconButton,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
+	Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import MatchesIntro from "../components/matches/MatchesIntro";
 import { useAppSelector } from "../redux/hooks";
-import MatchesItem from "../components/matches/MatchesItem";
+import { useState } from "react";
 import AddMatch from "../components/matches/AddMatch";
 import { useGetMatchesQuery, useRemoveMatchMutation } from "../redux/api/matchesApi";
+import EditMatchModal from "../components/matches/EditMatchModal";
 
 export default function Matches() {
 	const matches = useAppSelector((state) => state.matches.data);
 	const { data } = useGetMatchesQuery();
 	const [removeMatch] = useRemoveMatchMutation();
-
-	console.log("data", data);
+	const [editModalOpen, setEditModalOpen] = useState(false);
+	const [editingMatchId, setEditingMatchId] = useState<number | null>(null);
+	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+	const [deletingMatchId, setDeletingMatchId] = useState<number | null>(null);
 
 	return (
 		<Container maxWidth="xl">
@@ -141,14 +151,30 @@ export default function Matches() {
 												<Typography>{match.whiteScore}</Typography>
 											</TableCell> */}
 
-											{/* Column 6: Summary */}
+											{/* Column 6: Delete */}
 											<TableCell style={{ width: "1rem" }}>
 												<IconButton
 													aria-label="delete"
 													size="large"
-													onClick={() => removeMatch({ matchId: match.id })}
+													onClick={() => {
+														setDeletingMatchId(match.id);
+														setDeleteDialogOpen(true);
+													}}
 												>
 													<DeleteIcon fontSize="inherit" color="error" />
+												</IconButton>
+											</TableCell>
+											{/* Column 6: Edit */}
+											<TableCell style={{ width: "1rem" }}>
+												<IconButton
+													aria-label="edit"
+													size="large"
+													onClick={() => {
+														setEditingMatchId(match.id);
+														setEditModalOpen(true);
+													}}
+												>
+													<EditIcon fontSize="inherit" />
 												</IconButton>
 											</TableCell>
 										</TableRow>
@@ -159,6 +185,7 @@ export default function Matches() {
 					)}
 				</Box>
 				<Divider />
+				{/*
 				<div
 					style={{
 						display: "flex",
@@ -170,8 +197,58 @@ export default function Matches() {
 						<MatchesItem key={match.id} match={match} />
 					))}
 				</div>
+				*/}
 			</Box>
 			<AddMatch />
+			<EditMatchModal
+				open={editModalOpen}
+				matchId={editingMatchId}
+				onClose={() => {
+					setEditModalOpen(false);
+					setEditingMatchId(null);
+				}}
+			/>
+			<Dialog
+				open={deleteDialogOpen}
+				onClose={() => {
+					setDeleteDialogOpen(false);
+					setDeletingMatchId(null);
+				}}
+				aria-labelledby="delete-dialog-title"
+				aria-describedby="delete-dialog-description"
+			>
+				<DialogTitle id="delete-dialog-title">
+					{"Potvrda brisanja"}
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText id="delete-dialog-description">
+						Jeste li sigurni da želite sigurno obrisati podatke o ovoj utakmici? Ova akcija se ne može poništiti.
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						onClick={() => {
+							setDeleteDialogOpen(false);
+							setDeletingMatchId(null);
+						}}
+					>
+						Odustani
+					</Button>
+					<Button
+						onClick={() => {
+							if (deletingMatchId !== null) {
+								removeMatch({ matchId: deletingMatchId });
+							}
+							setDeleteDialogOpen(false);
+							setDeletingMatchId(null);
+						}}
+						color="error"
+						autoFocus
+					>
+						Obriši
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Container>
 	);
 }

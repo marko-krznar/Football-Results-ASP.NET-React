@@ -42,6 +42,27 @@ export interface CreateMatchWithDetailsRequest {
 	secondTeamPlayerIds: number[];
 }
 
+export interface UpdateMatchRequest {
+	id: number;
+	date: string; // "YYYY-MM-DD"
+	location?: string;
+	note?: string;
+}
+
+export interface UpdateMatchWithDetailsRequest {
+	id: number;
+	date: string; // "YYYY-MM-DD"
+	location?: string;
+	note?: string;
+	sets: {
+		setNumber: number;
+		firstTeamGoals: number;
+		secondTeamGoals: number;
+	}[];
+	firstTeamPlayerIds: number[];
+	secondTeamPlayerIds: number[];
+}
+
 // NAPOMENA: prilagodi baseUrl istom onome koji koristiš u teamsApi/playersApi
 export const matchesApi = createApi({
 	reducerPath: "matchesApi",
@@ -83,6 +104,22 @@ export const matchesApi = createApi({
 			},
 			invalidatesTags: ["Matches"],
 		}),
+		updateMatch: builder.mutation<Match, UpdateMatchRequest>({
+			query: ({ id, ...body }) => ({
+				url: `/matches/${id}`,
+				method: "PUT",
+				body,
+			}),
+			invalidatesTags: ["Matches"],
+		}),
+		updateMatchWithDetails: builder.mutation<Match, UpdateMatchWithDetailsRequest>({
+			query: ({ id, ...body }) => ({
+				url: `/matches/${id}/full`,
+				method: "PUT",
+				body,
+			}),
+			invalidatesTags: ["Matches"],
+		}),
 	}),
 });
 
@@ -92,4 +129,6 @@ export const {
 	useAddMatchMutation,
 	useAddMatchWithDetailsMutation,
 	useRemoveMatchMutation,
+	useUpdateMatchMutation,
+	useUpdateMatchWithDetailsMutation,
 } = matchesApi;
