@@ -209,8 +209,13 @@ public class MatchesService(AppDbContext context) : IMatchesService
 
     private static MatchDto ToDto(Match m)
     {
-        var firstTeamSetsWon = m.Sets.Count(s => s.FirstTeamGoals > s.SecondTeamGoals);
-        var secondTeamSetsWon = m.Sets.Count(s => s.SecondTeamGoals > s.FirstTeamGoals);
+        var firstTeamSetsWon = m.Sets.Count(s => 
+            s.FirstTeamGoals >= 6 && 
+            s.FirstTeamGoals - s.SecondTeamGoals >= 2);
+
+        var secondTeamSetsWon = m.Sets.Count(s => 
+            s.SecondTeamGoals >= 6 && 
+            s.SecondTeamGoals - s.FirstTeamGoals >= 2);
 
         return new MatchDto
         {
@@ -276,8 +281,12 @@ public class MatchesService(AppDbContext context) : IMatchesService
             .ToList();
 
         // Osvojeni setovi
-        var firstTeamSetsWon = sortedSets.Count(s => s.FirstTeamGoals > s.SecondTeamGoals);
-        var secondTeamSetsWon = sortedSets.Count(s => s.SecondTeamGoals > s.FirstTeamGoals);
+        var firstTeamSetsWon = sortedSets.Count(s => 
+            s.FirstTeamGoals >= 6 && 
+            s.FirstTeamGoals - s.SecondTeamGoals >= 2);
+        var secondTeamSetsWon = sortedSets.Count(s => 
+            s.SecondTeamGoals >= 6 && 
+            s.SecondTeamGoals - s.FirstTeamGoals >= 2);
 
         // Ukupni golovi
         var firstTeamTotalGoals = sortedSets.Sum(s => s.FirstTeamGoals);
