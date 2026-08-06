@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router";
 import App from "./App";
-import Landing from "./components/Landing";
+import Landing from "./pages/Landing";
 import Teams from "./components/teams/Teams";
-import Seasons from "./components/seasons/Seasons";
 import Admin from "./pages/Admin";
 import Matches from "./pages/Matches";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Seasons from "./pages/Seasons";
 
 export const router = createBrowserRouter([
 	{
@@ -45,4 +45,3 @@ export const router = createBrowserRouter([
 		],
 	},
 ]);
-
