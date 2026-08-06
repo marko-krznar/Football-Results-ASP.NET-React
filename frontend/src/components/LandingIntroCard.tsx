@@ -1,5 +1,6 @@
 import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
 import { useAppSelector } from "../redux/hooks";
+import dayjs from "dayjs";
 
 function LandingIntroCard() {
 	const matches = useAppSelector((state) => state.matches.data);
@@ -28,7 +29,9 @@ function LandingIntroCard() {
 					</Box> */}
 					<Box>
 						<Typography variant="body1">Posljednji termin</Typography>
-						<Typography variant="subtitle2">{matches[0].date}</Typography>
+						<Typography variant="subtitle2">
+							{dayjs(matches[0].date).locale("hr").format("DD.MM.YYYY.")}
+						</Typography>
 					</Box>
 				</Box>
 			</CardContent>
