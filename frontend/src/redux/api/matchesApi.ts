@@ -15,6 +15,23 @@ export interface Match {
 	secondTeamSetsWon: number;
 	firstTeamTotalGoals: number;
 	secondTeamTotalGoals: number;
+	totalSets: number;
+	firstTeam: {
+		teamId: number;
+		teamName: string;
+		playerNames: string[];
+		goalsPerSet: number[];
+		setsWon: number;
+		totalGoals: number;
+	};
+	secondTeam: {
+		teamId: number;
+		teamName: string;
+		playerNames: string[];
+		goalsPerSet: number[];
+		setsWon: number;
+		totalGoals: number;
+	};
 }
 
 export interface CreateMatchRequest {
@@ -78,6 +95,10 @@ export const matchesApi = createApi({
 			query: (id) => `/matches/${id}`,
 			providesTags: (_result, _error, id) => [{ type: "Matches", id }],
 		}),
+		getLatestMatch: builder.query<Match, void>({
+			query: () => "/matches/latest-match-details",
+			providesTags: ["Matches"],
+		}),
 		addMatch: builder.mutation<Match, CreateMatchRequest>({
 			query: (body) => ({
 				url: "/matches",
@@ -127,6 +148,7 @@ export const matchesApi = createApi({
 export const {
 	useGetMatchesQuery,
 	useGetMatchByIdQuery,
+	useGetLatestMatchQuery,
 	useAddMatchMutation,
 	useAddMatchWithDetailsMutation,
 	useRemoveMatchMutation,

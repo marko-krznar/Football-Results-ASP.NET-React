@@ -1,8 +1,9 @@
-import { Avatar, Box, Typography, Container, Stack, Divider, CircularProgress, Alert } from "@mui/material";
+import { Avatar, Box, Typography, Container, Stack, Divider, CircularProgress, Alert, useTheme } from "@mui/material";
 import { useGetTeamMembersQuery } from "../../redux/api/teamMembersApi";
 import type { SerializedError } from "@reduxjs/toolkit";
 
 export default function Teams() {
+	const theme = useTheme();
 	const {
 		data: blackPlayers,
 		isLoading: blackPlayersIsLoading,
@@ -54,7 +55,18 @@ export default function Teams() {
 							</Box>
 							{blackPlayers &&
 								blackPlayers.map((player) => (
-									<Stack key={player.id} alignItems="center" gap={1} paddingInline={2} flexGrow={1}>
+									<Stack
+										key={player.id}
+										alignItems="center"
+										gap={1}
+										width={200}
+										flexShrink={1}
+										sx={{
+											backgroundColor: theme.palette.grey[900],
+										}}
+										paddingY={2}
+										borderRadius={2}
+									>
 										<Avatar>{player.playerName.charAt(0)}</Avatar>
 										<Typography variant="body1" align="center">
 											{player.playerName}
@@ -82,7 +94,18 @@ export default function Teams() {
 							</Box>
 							{whitePlayers &&
 								whitePlayers.map((player) => (
-									<Stack key={player.id} alignItems="center" gap={1} paddingInline={2} flexGrow={1}>
+									<Stack
+										key={player.id}
+										alignItems="center"
+										gap={1}
+										width={200}
+										flexShrink={1}
+										sx={{
+											backgroundColor: theme.palette.grey[900],
+										}}
+										paddingY={2}
+										borderRadius={2}
+									>
 										<Avatar>{player.playerName.charAt(0)}</Avatar>
 										<Typography variant="body1" align="center">
 											{player.playerName}
