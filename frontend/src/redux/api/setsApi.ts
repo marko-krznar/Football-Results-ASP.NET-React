@@ -23,7 +23,7 @@ export interface DeleteSetRequest {
 // NAPOMENA: prilagodi baseUrl istom onome koji koristiš u teamsApi/playersApi
 export const setsApi = createApi({
 	reducerPath: "setsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api` }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api`, credentials: "include" }),
 	tagTypes: ["Sets"],
 	endpoints: (builder) => ({
 		getSets: builder.query<Set[], number>({

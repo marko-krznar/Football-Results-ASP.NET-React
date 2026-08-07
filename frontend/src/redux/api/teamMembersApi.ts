@@ -14,7 +14,7 @@ export interface AddTeamMembersRequest {
 
 export const teamMembersApi = createApi({
 	reducerPath: "teamMembersApi",
-	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api` }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api`, credentials: "include" }),
 	tagTypes: ["TeamMembers"],
 	endpoints: (builder) => ({
 		getTeamMembers: builder.query<TeamMember[], number>({

@@ -9,7 +9,6 @@ export const playersApi = createApi({
 	reducerPath: "playersApi",
 	baseQuery: fetchBaseQuery({
 		baseUrl: `${import.meta.env.VITE_API_URL}/api`,
-		// po potrebi dodaj credentials: 'include' za cookie podršku
 		prepareHeaders: (headers) => {
 			return headers;
 		},
