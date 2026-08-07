@@ -9,6 +9,7 @@ public interface IMatchesService
     Task<MatchDto> AddMatch(CreateMatchDto dto);
     Task<MatchDto> AddMatchWithDetails(CreateMatchWithDetailsDto dto);
     Task<MatchDisplayDto> GetMatchDisplay(int id);
+    Task<MatchDisplayDto> GetLatestMatchDetails();
     Task<List<MatchDisplayDto>> GetAllMatchesDisplay();
     Task DeleteMatch(int id);
     Task<MatchDto> UpdateMatch(int id, UpdateMatchDto dto);

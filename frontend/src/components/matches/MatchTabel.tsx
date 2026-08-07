@@ -91,13 +91,13 @@ export default function MatchTabel({
 							</TableCell>
 							<TableCell style={{ width: "10rem" }}>
 								<Stack spacing={2} direction={"row"}>
-									{match.secondTeam.goalsPerSet.map((goal) => (
-										<Typography>{goal}</Typography>
+									{match.secondTeam.goalsPerSet.map((goal, index) => (
+										<Typography key={index}>{goal}</Typography>
 									))}
 								</Stack>
 								<Stack spacing={2} direction={"row"}>
-									{match.firstTeam.goalsPerSet.map((goal) => (
-										<Typography>{goal}</Typography>
+									{match.firstTeam.goalsPerSet.map((goal, index) => (
+										<Typography key={index}>{goal}</Typography>
 									))}
 								</Stack>
 							</TableCell>

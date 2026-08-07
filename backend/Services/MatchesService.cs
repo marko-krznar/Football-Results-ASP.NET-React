@@ -250,6 +250,21 @@ public class MatchesService(AppDbContext context) : IMatchesService
         return ToDisplayDto(match);
     }
 
+    public async Task<MatchDisplayDto> GetLatestMatchDetails()
+    {
+        var match = await _context.Matches
+            .Include(m => m.FirstTeam)
+            .Include(m => m.SecondTeam)
+            .Include(m => m.Sets)
+            .Include(m => m.MatchPlayers)
+                .ThenInclude(mp => mp.Player)
+            .OrderByDescending(m => m.MatchDate)
+            .FirstOrDefaultAsync()
+            ?? throw new ArgumentException("Match not found.");
+
+        return ToDisplayDto(match);
+    }
+
     public async Task<List<MatchDisplayDto>> GetAllMatchesDisplay()
     {
         var matches = await _context.Matches
