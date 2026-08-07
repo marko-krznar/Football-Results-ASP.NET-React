@@ -11,7 +11,11 @@ function LandingSquadsCard({
 
 	return (
 		<Card sx={{ flex: 1 }}>
-			<CardContent sx={{ flexDirection: "row" }}>
+			<CardContent
+				sx={{
+					flexDirection: { xs: "column", md: "row" },
+				}}
+			>
 				<Stack alignItems={"center"} gap={4} flexBasis={"50%"}>
 					<Typography variant="subtitle2">Crni</Typography>
 					<Stack direction="row" justifyContent="center" flexWrap="wrap" gap={2}>
@@ -56,7 +60,13 @@ function LandingSquadsCard({
 						})}
 					</Stack>
 				</Stack>
-				<Divider orientation="vertical" flexItem />
+				<Divider
+					orientation="vertical"
+					flexItem
+					sx={{
+						display: { xs: "none", md: "block" },
+					}}
+				/>
 				<Stack alignItems={"center"} gap={4} flexBasis={"50%"}>
 					<Typography variant="subtitle2">Bijeli</Typography>
 					<Stack direction="row" justifyContent="center" flexWrap="wrap" gap={2}>

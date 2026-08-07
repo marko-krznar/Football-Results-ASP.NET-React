@@ -20,7 +20,13 @@ function LandingTerminResults({
 				<Typography variant="h3">Zadnji odigrani termin</Typography>
 				<Typography variant="body1">Analiza setova i konačan ishod</Typography>
 			</Stack>
-			<Stack direction="row" spacing={4}>
+			<Stack
+				spacing={4}
+				sx={{
+					flexDirection: { xs: "column", md: "row" },
+					gap: 4,
+				}}
+			>
 				{[...Array(totalSets)].map((_, index) => (
 					<Card key={index} sx={{ flexGrow: 1 }}>
 						<CardContent

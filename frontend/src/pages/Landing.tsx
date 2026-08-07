@@ -23,7 +23,15 @@ export default function Landing() {
 					flexGrow: 1,
 				}}
 			>
-				<Box display="flex" flexDirection="row" gap={4} flexGrow={1} overflow="hidden">
+				<Box
+					display="flex"
+					gap={4}
+					flexGrow={1}
+					overflow="hidden"
+					sx={{
+						flexDirection: { xs: "column", md: "row" },
+					}}
+				>
 					<LandingIntroCard matchDate={data?.date} />
 					<LandingTotalResultCard />
 				</Box>
