@@ -10,8 +10,18 @@ function LandingIntroCard({ matchDate }: { matchDate?: string }) {
 		>
 			<CardContent>
 				<Typography variant="body1">Aktivna sezona: proljeće 2026.</Typography>
-				<Typography variant="h1" fontWeight="bold">
-					HPD PRSTEN <span style={{ color: "#95CFFF" }}>SUPERLIGA</span>
+				<Typography
+					variant="h1"
+					fontWeight="bold"
+					sx={{
+						fontSize: {
+							xs: "2.5rem",
+							sm: "3rem",
+							md: "4rem",
+						},
+					}}
+				>
+					HPD PRSTEN <span style={{ color: "primary.light" }}>SUPERLIGA</span>
 				</Typography>
 				<Typography variant="body1">
 					Praćenje rezultata, statistika i dinamike igre u realnom vremenu.
