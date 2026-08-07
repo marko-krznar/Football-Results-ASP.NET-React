@@ -25,7 +25,7 @@ public class SetsController(ISetsService setsService) : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPut]
     public async Task<IActionResult> AddOrUpdateSet(int matchId, [FromBody] UpsertSetDto dto)
     {
@@ -40,7 +40,7 @@ public class SetsController(ISetsService setsService) : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{setNumber}")]
     public async Task<IActionResult> DeleteSet(int matchId, int setNumber)
     {

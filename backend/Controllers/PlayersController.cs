@@ -18,7 +18,7 @@ public class PlayersController(IPlayersService playersService) : ControllerBase
         return Ok(players);
     }
 
-    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddPlayer([FromBody] CreatePlayerDto dto)
     {

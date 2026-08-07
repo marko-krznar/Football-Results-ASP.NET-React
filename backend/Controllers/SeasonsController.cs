@@ -18,7 +18,7 @@ public class SeasonsController(ISeasonsService seasonsService) : ControllerBase
         return Ok(seasons);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddSeason([FromBody] CreateSeasonDto dto)
     {
