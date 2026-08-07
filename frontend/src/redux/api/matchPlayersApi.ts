@@ -23,7 +23,7 @@ export interface RemoveMatchPlayerRequest {
 export const matchPlayersApi = createApi({
 	reducerPath: "matchPlayersApi",
 	// baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api` }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api`, credentials: "include" }),
 	tagTypes: ["MatchPlayers"],
 	endpoints: (builder) => ({
 		getMatchPlayers: builder.query<MatchPlayer[], number>({
