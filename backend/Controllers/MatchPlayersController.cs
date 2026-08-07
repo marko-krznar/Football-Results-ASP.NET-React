@@ -25,7 +25,7 @@ public class MatchPlayersController(IMatchPlayersService matchPlayersService) : 
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPut]
     public async Task<IActionResult> SetMatchPlayers(int matchId, [FromBody] SetMatchPlayersDto dto)
     {
@@ -40,7 +40,7 @@ public class MatchPlayersController(IMatchPlayersService matchPlayersService) : 
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{playerId}")]
     public async Task<IActionResult> RemoveMatchPlayer(int matchId, int playerId)
     {

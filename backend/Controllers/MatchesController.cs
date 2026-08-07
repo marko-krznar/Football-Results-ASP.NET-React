@@ -39,7 +39,7 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddMatch([FromBody] CreateMatchDto dto)
     {
@@ -54,7 +54,7 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost("full")]
     public async Task<IActionResult> AddMatchWithDetails([FromBody] CreateMatchWithDetailsDto dto)
     {
@@ -138,7 +138,7 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMatch(int id, [FromBody] UpdateMatchDto dto)
     {
@@ -157,7 +157,7 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}/full")]
     public async Task<IActionResult> UpdateMatchWithDetails(int id, [FromBody] UpdateMatchWithDetailsDto dto)
     {

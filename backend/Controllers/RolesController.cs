@@ -7,7 +7,6 @@ namespace backend.Controllers;
 
 [Route("api/roles")]
 [ApiController]
-[Authorize]
 public class RolesController(
     RoleManager<IdentityRole> roleManager,
     UserManager<IdentityUser> userManager) : ControllerBase
@@ -15,6 +14,7 @@ public class RolesController(
     private readonly RoleManager<IdentityRole> _roleManager = roleManager;
     private readonly UserManager<IdentityUser> _userManager = userManager;
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetRoles()
     {
@@ -22,6 +22,7 @@ public class RolesController(
         return Ok(roles);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CreateRole([FromBody] CreateRoleDto dto)
     {
@@ -45,6 +46,7 @@ public class RolesController(
         return BadRequest(result.Errors);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("assign")]
     public async Task<IActionResult> AssignRole([FromBody] AssignRoleDto dto)
     {

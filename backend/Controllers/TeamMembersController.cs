@@ -25,7 +25,7 @@ public class TeamMembersController(ITeamMembersService teamMembersService) : Con
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddTeamMembers(int teamId, [FromBody] AddTeamMembersDto dto)
     {
@@ -40,7 +40,7 @@ public class TeamMembersController(ITeamMembersService teamMembersService) : Con
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{playerId}")]
     public async Task<IActionResult> RemoveTeamMember(int teamId, int playerId)
     {

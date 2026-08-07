@@ -18,7 +18,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
         return Ok(teams);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddTeam([FromBody] CreateTeamDto dto)
     {
