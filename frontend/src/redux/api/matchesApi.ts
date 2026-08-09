@@ -80,10 +80,20 @@ export interface UpdateMatchWithDetailsRequest {
 	secondTeamPlayerIds: number[];
 }
 
-// NAPOMENA: prilagodi baseUrl istom onome koji koristiš u teamsApi/playersApi
+export interface Team {
+	teamId: number;
+	teamName: string;
+	totalSetsWon: number;
+}
+
+export interface SeasonSummary {
+	seasonId: number;
+	firstTeam: Team;
+	secondTeam: Team;
+}
+
 export const matchesApi = createApi({
 	reducerPath: "matchesApi",
-	// baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
 	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api`, credentials: "include" }),
 	tagTypes: ["Matches"],
 	endpoints: (builder) => ({
@@ -115,7 +125,7 @@ export const matchesApi = createApi({
 			}),
 			invalidatesTags: ["Matches"],
 		}),
-		getTotalSeasonScore: builder.query<Match, number>({
+		getTotalSeasonScore: builder.query<SeasonSummary, number>({
 			query: (id) => `/matches/season/${id}/score`,
 			providesTags: (_result, _error, id) => [{ type: "Matches", id }],
 		}),

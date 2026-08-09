@@ -9,7 +9,6 @@ import {
 	Button,
 } from "@mui/material";
 import MatchesIntro from "../components/matches/MatchesIntro";
-import { useAppSelector } from "../redux/hooks";
 import { useState } from "react";
 import { useGetMatchesQuery, useGetTotalSeasonScoreQuery, useRemoveMatchMutation } from "../redux/api/matchesApi";
 import EditMatchModal from "../components/matches/EditMatchModal";
@@ -17,7 +16,6 @@ import AddMatchModal from "../components/matches/AddMatchModal";
 import MatchTabel from "../components/matches/MatchTabel";
 
 export default function Matches() {
-	const matches = useAppSelector((state) => state.matches.data);
 	const { data } = useGetMatchesQuery();
 	const { data: totalSeasonScore } = useGetTotalSeasonScoreQuery(1);
 	const [removeMatch] = useRemoveMatchMutation();
