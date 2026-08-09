@@ -1,5 +1,5 @@
 import { Box, Container, Stack } from "@mui/material";
-import { useGetLatestMatchQuery } from "../redux/api/matchesApi";
+import { useGetLatestMatchQuery, useGetTotalSeasonScoreQuery } from "../redux/api/matchesApi";
 import LandingIntroCard from "../components/landing/LandingIntroCard";
 import LandingSquadsCard from "../components/landing/LandingSquadsCard";
 import LandingTerminResults from "../components/landing/LandingTerminResults";
@@ -7,6 +7,7 @@ import LandingTotalResultCard from "../components/landing/LandingTotalResultCard
 
 export default function Landing() {
 	const { data } = useGetLatestMatchQuery();
+	const { data: totalSeasonScoreQuery } = useGetTotalSeasonScoreQuery(1); //TODO replace with real season id
 
 	return (
 		<Container maxWidth="xl">
@@ -33,7 +34,12 @@ export default function Landing() {
 					}}
 				>
 					<LandingIntroCard matchDate={data?.date} />
-					<LandingTotalResultCard />
+					{totalSeasonScoreQuery && (
+						<LandingTotalResultCard
+							firstTeam={totalSeasonScoreQuery.firstTeam}
+							secondTeam={totalSeasonScoreQuery.secondTeam}
+						/>
+					)}
 				</Box>
 				{/* <Typography variant="h2" align="center">
 				ŠD Hotanj Velesajam

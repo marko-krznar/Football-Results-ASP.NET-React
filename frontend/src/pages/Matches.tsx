@@ -11,7 +11,7 @@ import {
 import MatchesIntro from "../components/matches/MatchesIntro";
 import { useAppSelector } from "../redux/hooks";
 import { useState } from "react";
-import { useGetMatchesQuery, useRemoveMatchMutation } from "../redux/api/matchesApi";
+import { useGetMatchesQuery, useGetTotalSeasonScoreQuery, useRemoveMatchMutation } from "../redux/api/matchesApi";
 import EditMatchModal from "../components/matches/EditMatchModal";
 import AddMatchModal from "../components/matches/AddMatchModal";
 import MatchTabel from "../components/matches/MatchTabel";
@@ -19,12 +19,15 @@ import MatchTabel from "../components/matches/MatchTabel";
 export default function Matches() {
 	const matches = useAppSelector((state) => state.matches.data);
 	const { data } = useGetMatchesQuery();
+	const { data: totalSeasonScore } = useGetTotalSeasonScoreQuery(1);
 	const [removeMatch] = useRemoveMatchMutation();
 	const [editModalOpen, setEditModalOpen] = useState(false);
 	const [addModalOpen, setAddModalOpen] = useState(false);
 	const [editingMatchId, setEditingMatchId] = useState<number | null>(null);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [deletingMatchId, setDeletingMatchId] = useState<number | null>(null);
+
+	console.log("totalSeasonScore", totalSeasonScore);
 
 	return (
 		<Container maxWidth="xl">
@@ -33,7 +36,14 @@ export default function Matches() {
 					paddingBlock: 4,
 				}}
 			>
-				<MatchesIntro totalBlack={matches[0].blackScore} totalWhite={matches[0].whiteScore} />
+				{totalSeasonScore && (
+					<MatchesIntro
+						firstTeamName={totalSeasonScore?.firstTeam.teamName}
+						firstTotalSetsWon={totalSeasonScore?.firstTeam.totalSetsWon}
+						secondTeamName={totalSeasonScore?.secondTeam.teamName}
+						secondTotalSetsWon={totalSeasonScore?.secondTeam.totalSetsWon}
+					/>
+				)}
 				{data && (
 					<MatchTabel
 						data={data}

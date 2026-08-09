@@ -7,10 +7,25 @@ import { Card, CardContent, Stack } from "@mui/material";
 import AddMatchModal from "./AddMatchModal";
 import { useGetMeQuery } from "../../redux/api/authApi";
 
-function MatchesIntro({ totalBlack, totalWhite }: { totalBlack: number; totalWhite: number }) {
+export interface TotalResult {
+	firstTeamName: string;
+	firstTotalSetsWon: number;
+	secondTeamName: string;
+	secondTotalSetsWon: number;
+}
+
+function MatchesIntro({ firstTeamName, firstTotalSetsWon, secondTeamName, secondTotalSetsWon }: TotalResult) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { data: user } = useGetMeQuery();
 	const isAuthenticated = !!user;
+
+	console.log(
+		"firstTeamName, firstTotalSetsWon, secondTeamName, secondTotalSetsWon",
+		firstTeamName,
+		firstTotalSetsWon,
+		secondTeamName,
+		secondTotalSetsWon
+	);
 
 	return (
 		<>
@@ -40,19 +55,19 @@ function MatchesIntro({ totalBlack, totalWhite }: { totalBlack: number; totalWhi
 							<Box display="flex" justifyContent="center" alignItems="center" gap={4}>
 								<Box display="flex" flexDirection="column" justifyContent="center" gap={2}>
 									<Typography variant="subtitle1" fontWeight="bold" textAlign="center">
-										{totalBlack}
+										{secondTotalSetsWon}
 									</Typography>
 									<Typography variant="body1" textAlign="center">
-										Crni
+										{secondTeamName}
 									</Typography>
 								</Box>
 								<Typography variant="body1">-</Typography>
 								<Box display="flex" flexDirection="column" justifyContent="center" gap={2}>
 									<Typography variant="subtitle1" fontWeight="bold" textAlign="center">
-										{totalWhite}
+										{firstTotalSetsWon}
 									</Typography>
 									<Typography variant="body1" textAlign="center">
-										Bijeli
+										{firstTeamName}
 									</Typography>
 								</Box>
 							</Box>

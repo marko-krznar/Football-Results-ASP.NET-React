@@ -1,9 +1,17 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import { useAppSelector } from "../../redux/hooks";
 
-function LandingTotalResultCard() {
-	const matches = useAppSelector((state) => state.matches.data);
+export interface LandingTotalResultTeamProps {
+	teamId: number;
+	teamName: string;
+	totalSetsWon: number;
+}
 
+export interface LandingTotalResultCardProps {
+	firstTeam: LandingTotalResultTeamProps;
+	secondTeam: LandingTotalResultTeamProps;
+}
+
+function LandingTotalResultCard({ firstTeam, secondTeam }: LandingTotalResultCardProps) {
 	return (
 		<Card
 			sx={{
@@ -22,19 +30,19 @@ function LandingTotalResultCard() {
 				<Box display="flex" justifyContent="center" alignItems="center" gap={4}>
 					<Box display="flex" flexDirection="column" justifyContent="center" gap={2}>
 						<Typography variant="subtitle1" fontWeight="bold" textAlign="center">
-							{matches[0].blackScore}
+							{secondTeam.totalSetsWon}
 						</Typography>
 						<Typography variant="body1" textAlign="center">
-							Crni
+							{secondTeam.teamName}
 						</Typography>
 					</Box>
 					<Typography variant="body1">-</Typography>
 					<Box display="flex" flexDirection="column" justifyContent="center" gap={2}>
 						<Typography variant="subtitle1" fontWeight="bold" textAlign="center">
-							{matches[0].whiteScore}
+							{firstTeam.totalSetsWon}
 						</Typography>
 						<Typography variant="body1" textAlign="center">
-							Bijeli
+							{firstTeam.teamName}
 						</Typography>
 					</Box>
 				</Box>

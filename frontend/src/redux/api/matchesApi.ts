@@ -115,6 +115,10 @@ export const matchesApi = createApi({
 			}),
 			invalidatesTags: ["Matches"],
 		}),
+		getTotalSeasonScore: builder.query<Match, number>({
+			query: (id) => `/matches/season/${id}/score`,
+			providesTags: (_result, _error, id) => [{ type: "Matches", id }],
+		}),
 		removeMatch: builder.mutation<void, { matchId: number }>({
 			query: ({ matchId }) => {
 				console.log("Match ID:", matchId);
@@ -151,6 +155,7 @@ export const {
 	useGetLatestMatchQuery,
 	useAddMatchMutation,
 	useAddMatchWithDetailsMutation,
+	useGetTotalSeasonScoreQuery,
 	useRemoveMatchMutation,
 	useUpdateMatchMutation,
 	useUpdateMatchWithDetailsMutation,

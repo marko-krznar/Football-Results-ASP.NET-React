@@ -119,7 +119,26 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
         }
     }
 
-    [Authorize]
+
+    [HttpGet("season/{seasonId}/score")]
+    public async Task<IActionResult> GetSeasonScore(int seasonId)
+    {
+        try
+        {
+            var score = await _matchesService.GetSeasonScore(seasonId);
+            return Ok(score);
+        }
+        catch (ArgumentException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMatch(int id)
     {
