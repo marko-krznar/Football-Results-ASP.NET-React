@@ -52,55 +52,59 @@ export default function Matches() {
 					/>
 				)}
 			</Box>
-			<AddMatchModal open={addModalOpen} onClose={() => setAddModalOpen(false)} />
-			<EditMatchModal
-				open={editModalOpen}
-				matchId={editingMatchId}
-				onClose={() => {
-					setEditModalOpen(false);
-					setEditingMatchId(null);
-				}}
-			/>
-			<Dialog
-				open={deleteDialogOpen}
-				onClose={() => {
-					setDeleteDialogOpen(false);
-					setDeletingMatchId(null);
-				}}
-				aria-labelledby="delete-dialog-title"
-				aria-describedby="delete-dialog-description"
-			>
-				<DialogTitle id="delete-dialog-title">{"Potvrda brisanja"}</DialogTitle>
-				<DialogContent>
-					<DialogContentText id="delete-dialog-description">
-						Jeste li sigurni da želite sigurno obrisati podatke o ovoj utakmici? Ova akcija se ne može
-						poništiti.
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button
-						onClick={() => {
-							setDeleteDialogOpen(false);
-							setDeletingMatchId(null);
-						}}
-					>
-						Odustani
-					</Button>
-					<Button
-						onClick={() => {
-							if (deletingMatchId !== null) {
-								removeMatch({ matchId: deletingMatchId });
-							}
-							setDeleteDialogOpen(false);
-							setDeletingMatchId(null);
-						}}
-						color="error"
-						autoFocus
-					>
-						Obriši
-					</Button>
-				</DialogActions>
-			</Dialog>
+			{addModalOpen && <AddMatchModal open={addModalOpen} onClose={() => setAddModalOpen(false)} />}
+			{editModalOpen && (
+				<EditMatchModal
+					open={editModalOpen}
+					matchId={editingMatchId}
+					onClose={() => {
+						setEditModalOpen(false);
+						setEditingMatchId(null);
+					}}
+				/>
+			)}
+			{deleteDialogOpen && (
+				<Dialog
+					open={deleteDialogOpen}
+					onClose={() => {
+						setDeleteDialogOpen(false);
+						setDeletingMatchId(null);
+					}}
+					aria-labelledby="delete-dialog-title"
+					aria-describedby="delete-dialog-description"
+				>
+					<DialogTitle id="delete-dialog-title">{"Potvrda brisanja"}</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="delete-dialog-description">
+							Jeste li sigurni da želite sigurno obrisati podatke o ovoj utakmici? Ova akcija se ne može
+							poništiti.
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={() => {
+								setDeleteDialogOpen(false);
+								setDeletingMatchId(null);
+							}}
+						>
+							Odustani
+						</Button>
+						<Button
+							onClick={() => {
+								if (deletingMatchId !== null) {
+									removeMatch({ matchId: deletingMatchId });
+								}
+								setDeleteDialogOpen(false);
+								setDeletingMatchId(null);
+							}}
+							color="error"
+							autoFocus
+						>
+							Obriši
+						</Button>
+					</DialogActions>
+				</Dialog>
+			)}
 		</Container>
 	);
 }

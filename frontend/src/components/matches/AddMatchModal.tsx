@@ -49,8 +49,12 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 	const firstTeamId = firstTeam && String(firstTeam.id);
 	const secondTeamId = secondTeam && String(secondTeam.id);
 
-	const { data: firstTeamMembersRaw } = useGetTeamMembersQuery(Number(firstTeamId));
-	const { data: secondTeamMembersRaw } = useGetTeamMembersQuery(Number(secondTeamId));
+	const { data: firstTeamMembersRaw } = useGetTeamMembersQuery(Number(firstTeamId), {
+		skip: !firstTeamId || Number.isNaN(Number(firstTeamId)),
+	});
+	const { data: secondTeamMembersRaw } = useGetTeamMembersQuery(Number(secondTeamId), {
+		skip: !secondTeamId || Number.isNaN(Number(secondTeamId)),
+	});
 
 	const [selectedSeason, setSelectedSeason] = useState<string>(seasonsList ? String(seasonsList[0].id) : "");
 	const [date, setDate] = useState<string>(getCurrentDate());

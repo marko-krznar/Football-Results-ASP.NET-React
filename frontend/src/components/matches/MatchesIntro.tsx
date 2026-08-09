@@ -19,17 +19,14 @@ function MatchesIntro({ firstTeamName, firstTotalSetsWon, secondTeamName, second
 	const { data: user } = useGetMeQuery();
 	const isAuthenticated = !!user;
 
-	console.log(
-		"firstTeamName, firstTotalSetsWon, secondTeamName, secondTotalSetsWon",
-		firstTeamName,
-		firstTotalSetsWon,
-		secondTeamName,
-		secondTotalSetsWon
-	);
-
 	return (
 		<>
-			<Stack direction={"row"} spacing={8}>
+			<Stack
+				spacing={8}
+				sx={{
+					flexDirection: { xs: "column", md: "row" },
+				}}
+			>
 				<Stack spacing={2} alignItems={"flex-start"}>
 					<Typography variant="subtitle2" color={"textPrimary"}>
 						Statistika za sezonu 2026 proljeće
@@ -75,7 +72,7 @@ function MatchesIntro({ firstTeamName, firstTotalSetsWon, secondTeamName, second
 					</Card>
 				</Box>
 			</Stack>
-			<AddMatchModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+			{isModalOpen && <AddMatchModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />}
 		</>
 	);
 }
