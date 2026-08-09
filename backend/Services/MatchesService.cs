@@ -335,6 +335,67 @@ public class MatchesService(AppDbContext context) : IMatchesService
         };
     }
 
+    public async Task<SeasonScoreDto> GetSeasonScore(int seasonId)
+    {
+        var matches = await _context.Matches
+            .Include(m => m.FirstTeam)
+            .Include(m => m.SecondTeam)
+            .Include(m => m.Sets)
+            .Where(m => m.SeasonId == seasonId)
+            .ToListAsync();
+
+        if (matches.Count == 0)
+        {
+            throw new ArgumentException("No matches found for the specified season.");
+        }
+
+        var firstTeamId = matches.First().FirstTeamId;
+        var firstTeamName = matches.First().FirstTeam?.Name ?? string.Empty;
+
+        var secondTeamId = matches.First().SecondTeamId;
+        var secondTeamName = matches.First().SecondTeam?.Name ?? string.Empty;
+
+        int team1Sets = 0;
+        int team2Sets = 0;
+
+        foreach (var match in matches)
+        {
+            foreach (var set in match.Sets)
+            {
+                bool isFirstTeamWinner = set.FirstTeamGoals >= 6 && set.FirstTeamGoals - set.SecondTeamGoals >= 2;
+                bool isSecondTeamWinner = set.SecondTeamGoals >= 6 && set.SecondTeamGoals - set.FirstTeamGoals >= 2;
+
+                if (isFirstTeamWinner)
+                {
+                    if (match.FirstTeamId == firstTeamId) team1Sets++;
+                    else team2Sets++;
+                }
+                else if (isSecondTeamWinner)
+                {
+                    if (match.SecondTeamId == secondTeamId) team2Sets++;
+                    else team1Sets++;
+                }
+            }
+        }
+
+        return new SeasonScoreDto
+        {
+            SeasonId = seasonId,
+            FirstTeam = new SeasonTeamScoreDto
+            {
+                TeamId = firstTeamId,
+                TeamName = firstTeamName,
+                TotalSetsWon = team1Sets
+            },
+            SecondTeam = new SeasonTeamScoreDto
+            {
+                TeamId = secondTeamId,
+                TeamName = secondTeamName,
+                TotalSetsWon = team2Sets
+            }
+        };
+    }
+
     public async Task DeleteMatch(int id)
     {
         var match = await _context.Matches.FindAsync(id)

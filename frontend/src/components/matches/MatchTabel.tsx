@@ -56,8 +56,8 @@ export default function MatchTabel({
 	const isAuthenticated = !!user;
 
 	return (
-		<TableContainer>
-			<Table aria-label="match table">
+		<TableContainer sx={{ width: "100%", overflowX: "auto" }}>
+			<Table aria-label="match table" sx={{ minWidth: 800 }}>
 				<TableBody>
 					{data.map((match: Match) => (
 						<TableRow key={match.id}>

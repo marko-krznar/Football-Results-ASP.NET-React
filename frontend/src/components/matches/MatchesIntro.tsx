@@ -7,14 +7,26 @@ import { Card, CardContent, Stack } from "@mui/material";
 import AddMatchModal from "./AddMatchModal";
 import { useGetMeQuery } from "../../redux/api/authApi";
 
-function MatchesIntro({ totalBlack, totalWhite }: { totalBlack: number; totalWhite: number }) {
+export interface TotalResult {
+	firstTeamName: string;
+	firstTotalSetsWon: number;
+	secondTeamName: string;
+	secondTotalSetsWon: number;
+}
+
+function MatchesIntro({ firstTeamName, firstTotalSetsWon, secondTeamName, secondTotalSetsWon }: TotalResult) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { data: user } = useGetMeQuery();
 	const isAuthenticated = !!user;
 
 	return (
 		<>
-			<Stack direction={"row"} spacing={8}>
+			<Stack
+				spacing={8}
+				sx={{
+					flexDirection: { xs: "column", md: "row" },
+				}}
+			>
 				<Stack spacing={2} alignItems={"flex-start"}>
 					<Typography variant="subtitle2" color={"textPrimary"}>
 						Statistika za sezonu 2026 proljeće
@@ -40,19 +52,19 @@ function MatchesIntro({ totalBlack, totalWhite }: { totalBlack: number; totalWhi
 							<Box display="flex" justifyContent="center" alignItems="center" gap={4}>
 								<Box display="flex" flexDirection="column" justifyContent="center" gap={2}>
 									<Typography variant="subtitle1" fontWeight="bold" textAlign="center">
-										{totalBlack}
+										{secondTotalSetsWon}
 									</Typography>
 									<Typography variant="body1" textAlign="center">
-										Crni
+										{secondTeamName}
 									</Typography>
 								</Box>
 								<Typography variant="body1">-</Typography>
 								<Box display="flex" flexDirection="column" justifyContent="center" gap={2}>
 									<Typography variant="subtitle1" fontWeight="bold" textAlign="center">
-										{totalWhite}
+										{firstTotalSetsWon}
 									</Typography>
 									<Typography variant="body1" textAlign="center">
-										Bijeli
+										{firstTeamName}
 									</Typography>
 								</Box>
 							</Box>
@@ -60,7 +72,7 @@ function MatchesIntro({ totalBlack, totalWhite }: { totalBlack: number; totalWhi
 					</Card>
 				</Box>
 			</Stack>
-			<AddMatchModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+			{isModalOpen && <AddMatchModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />}
 		</>
 	);
 }
