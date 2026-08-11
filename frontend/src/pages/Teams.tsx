@@ -1,9 +1,9 @@
-import { Avatar, Box, Typography, Container, Stack, Divider, CircularProgress, Alert, useTheme } from "@mui/material";
-import { useGetTeamMembersQuery } from "../../redux/api/teamMembersApi";
+import { Box, Typography, Container, Stack, Divider, CircularProgress, Alert } from "@mui/material";
+import { useGetTeamMembersQuery } from "../redux/api/teamMembersApi";
 import type { SerializedError } from "@reduxjs/toolkit";
+import PlayerCard from "../components/teams/PlayerCard";
 
 export default function Teams() {
-	const theme = useTheme();
 	const {
 		data: blackPlayers,
 		isLoading: blackPlayersIsLoading,
@@ -19,7 +19,14 @@ export default function Teams() {
 
 	return (
 		<Container maxWidth="xl">
-			<Stack direction="row" alignItems="flex-start" gap={2} paddingBlock={4}>
+			<Stack
+				alignItems="flex-start"
+				gap={2}
+				paddingBlock={4}
+				sx={{
+					flexDirection: { xs: "column", md: "row" },
+				}}
+			>
 				{error && (
 					<Alert sx={{ width: "100%" }} severity="error">
 						{"status" in error && error.status
@@ -44,8 +51,8 @@ export default function Teams() {
 								justifyContent: "flex-start",
 								flexWrap: "wrap",
 								gap: 4,
-								paddingBlock: 4,
-								paddingRight: 4,
+								paddingBlock: { xs: 0, md: 4 },
+								paddingRight: { xs: 0, md: 4 },
 							}}
 						>
 							<Box sx={{ width: "100%" }}>
@@ -55,23 +62,7 @@ export default function Teams() {
 							</Box>
 							{blackPlayers &&
 								blackPlayers.map((player) => (
-									<Stack
-										key={player.id}
-										alignItems="center"
-										gap={1}
-										width={200}
-										flexShrink={1}
-										sx={{
-											backgroundColor: theme.palette.grey[900],
-										}}
-										paddingY={2}
-										borderRadius={2}
-									>
-										<Avatar>{player.playerName.charAt(0)}</Avatar>
-										<Typography variant="body1" align="center">
-											{player.playerName}
-										</Typography>
-									</Stack>
+									<PlayerCard key={player.id} player={player} />
 								))}
 						</Box>
 						<Divider orientation="vertical" flexItem />
@@ -83,8 +74,8 @@ export default function Teams() {
 								justifyContent: "flex-start",
 								flexWrap: "wrap",
 								gap: 4,
-								paddingBlock: 4,
-								paddingLeft: 4,
+								paddingBlock: { xs: 0, md: 4 },
+								paddingLeft: { xs: 0, md: 4 },
 							}}
 						>
 							<Box sx={{ width: "100%" }}>
@@ -94,23 +85,7 @@ export default function Teams() {
 							</Box>
 							{whitePlayers &&
 								whitePlayers.map((player) => (
-									<Stack
-										key={player.id}
-										alignItems="center"
-										gap={1}
-										width={200}
-										flexShrink={1}
-										sx={{
-											backgroundColor: theme.palette.grey[900],
-										}}
-										paddingY={2}
-										borderRadius={2}
-									>
-										<Avatar>{player.playerName.charAt(0)}</Avatar>
-										<Typography variant="body1" align="center">
-											{player.playerName}
-										</Typography>
-									</Stack>
+									<PlayerCard key={player.id} player={player} />
 								))}
 						</Box>
 					</>

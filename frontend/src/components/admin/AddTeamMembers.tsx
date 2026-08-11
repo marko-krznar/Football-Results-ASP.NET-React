@@ -1,6 +1,9 @@
 import {
+	Alert,
 	Box,
 	Button,
+	Card,
+	CardContent,
 	CircularProgress,
 	FormControl,
 	InputLabel,
@@ -29,15 +32,8 @@ export default function AddTeamMembers() {
 	const [formError, setFormError] = useState<string>("");
 	const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
 	const [personName, setPersonName] = React.useState<number[]>([]);
-
-	console.log(playersList, isLoading, error);
-	console.log(teamsList, teamsListIsLoading, teamsListError);
-
 	const handleSubmit = async (e: React.SubmitEvent) => {
 		e.preventDefault();
-		console.log("teamId:" + selectedTeam, "playerIds:" + personName);
-		console.log(selectedTeam === null);
-		console.log(personName.length === 0);
 		if (selectedTeam === null || personName.length === 0) return;
 
 		try {
@@ -60,80 +56,96 @@ export default function AddTeamMembers() {
 	};
 	return (
 		<Stack spacing={4}>
-			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}>
-				Upravljanje članovim tima
+			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: "1.5rem !important" }}>
+				Upravljanje članovima tima
 			</Typography>
 
-			{isAdding && <CircularProgress size={30} />}
-			{successMsg && <h1>{successMsg}</h1>}
-			{formError && <h1>{formError}</h1>}
-			{teamsList && (
-				<Box component="form" flexDirection="column" sx={{ display: "flex", gap: 2 }} onSubmit={handleSubmit}>
-					<TextField
-						id="outlined-select-currency"
-						select
-						label="Odaberi tim"
-						fullWidth
-						value={selectedTeam}
-						onChange={(e) => setSelectedTeam(Number(e.target.value))}
-					>
-						{teamsList.map((player) => (
-							<MenuItem key={player.id} value={player.id}>
-								{player.name}
-							</MenuItem>
-						))}
-					</TextField>
-					<FormControl fullWidth>
-						<InputLabel id="demo-multiple-checkbox-label">Igrači</InputLabel>
-						<Select
-							labelId="demo-multiple-checkbox-label"
-							id="demo-multiple-checkbox"
-							multiple
-							value={personName}
-							onChange={handlePlayersChange}
-							input={<OutlinedInput label="Tag" />}
-							renderValue={(selected) =>
-								playersList
-									?.filter((p) => selected.includes(p.id))
-									.map((p) => p.name)
-									.join(", ")
-							}
-						>
-							{playersList &&
-								playersList.map((player) => {
-									const selected = personName.includes(player.id);
-									const SelectionIcon = selected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
+			<Card variant="outlined" sx={{ background: "#1E1F1E", borderColor: "#2E302F" }}>
+				<CardContent>
+					<Typography variant="h6" gutterBottom sx={{ color: "#fff", mb: 3 }}>
+						Dodaj članove u tim
+					</Typography>
 
-									return (
+					{formError && (
+						<Alert severity="error" sx={{ mb: 2 }}>
+							{formError}
+						</Alert>
+					)}
+					{successMsg && (
+						<Alert severity="success" sx={{ mb: 2 }}>
+							{successMsg}
+						</Alert>
+					)}
+
+					{teamsList && (
+						<Box component="form" onSubmit={handleSubmit}>
+							<Stack spacing={3}>
+								<TextField
+									id="outlined-select-currency"
+									select
+									label="Odaberi tim"
+									fullWidth
+									value={selectedTeam || ""}
+									onChange={(e) => setSelectedTeam(Number(e.target.value))}
+								>
+									{teamsList.map((player) => (
 										<MenuItem key={player.id} value={player.id}>
-											<SelectionIcon
-												fontSize="small"
-												style={{
-													marginRight: 8,
-													padding: 9,
-													boxSizing: "content-box",
-												}}
-											/>
-											<ListItemText primary={player.name} />
+											{player.name}
 										</MenuItem>
-									);
-								})}
-						</Select>
-					</FormControl>
-					<Stack spacing={3}>
-						<Button
-							type="submit"
-							variant="contained"
-							color="primary"
-							size="large"
-							disabled={isAdding}
-							sx={{ mt: 2 }}
-						>
-							{isAdding ? <CircularProgress size={24} /> : "Spremi Članove"}
-						</Button>
-					</Stack>
-				</Box>
-			)}
+									))}
+								</TextField>
+								<FormControl fullWidth>
+									<InputLabel id="demo-multiple-checkbox-label">Igrači</InputLabel>
+									<Select
+										labelId="demo-multiple-checkbox-label"
+										id="demo-multiple-checkbox"
+										multiple
+										value={personName}
+										onChange={handlePlayersChange}
+										input={<OutlinedInput label="Igrači" />}
+										renderValue={(selected) =>
+											playersList
+												?.filter((p) => selected.includes(p.id))
+												.map((p) => p.name)
+												.join(", ")
+										}
+									>
+										{playersList &&
+											playersList.map((player) => {
+												const selected = personName.includes(player.id);
+												const SelectionIcon = selected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
+
+												return (
+													<MenuItem key={player.id} value={player.id}>
+														<SelectionIcon
+															fontSize="small"
+															style={{
+																marginRight: 8,
+																padding: 9,
+																boxSizing: "content-box",
+															}}
+														/>
+														<ListItemText primary={player.name} />
+													</MenuItem>
+												);
+											})}
+									</Select>
+								</FormControl>
+								<Button
+									type="submit"
+									variant="contained"
+									color="primary"
+									size="large"
+									disabled={isAdding}
+									sx={{ mt: 2 }}
+								>
+									{isAdding ? <CircularProgress size={24} /> : "Spremi Članove"}
+								</Button>
+							</Stack>
+						</Box>
+					)}
+				</CardContent>
+			</Card>
 		</Stack>
 	);
 }
