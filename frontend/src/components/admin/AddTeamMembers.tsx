@@ -26,8 +26,8 @@ import { useAddTeamMembersMutation } from "../../redux/api/teamMembersApi";
 
 export default function AddTeamMembers() {
 	const [addTeamMembers, { isLoading: isAdding }] = useAddTeamMembersMutation();
-	const { data: playersList, isLoading, error } = useGetPlayersQuery();
-	const { data: teamsList, isLoading: teamsListIsLoading, error: teamsListError } = useGetTeamsQuery();
+	const { data: playersList } = useGetPlayersQuery();
+	const { data: teamsList } = useGetTeamsQuery();
 	const [successMsg, setSuccessMsg] = useState<string>("");
 	const [formError, setFormError] = useState<string>("");
 	const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
