@@ -1,14 +1,13 @@
 import { Alert, Box, Button, Card, CardContent, CircularProgress, MenuItem, Stack, TextField, Typography } from "@mui/material";
-import { useAddTeamMutation, useGetTeamsQuery } from "../../redux/api/teamsApi";
+import { useAddTeamMutation } from "../../redux/api/teamsApi";
 import { useState } from "react";
 import { useGetPlayersQuery } from "../../redux/api/playersApi";
 import { useGetSeasonsQuery } from "../../redux/api/seasonsApi";
 
 export default function AddTeam() {
 	const [addTeam, { isLoading: isAdding }] = useAddTeamMutation();
-	const { data: playersList, isLoading, error } = useGetPlayersQuery();
-	const { data: seasonsList, isLoading: seasonsListIsLoading, error: seasonsListError } = useGetSeasonsQuery();
-	const { data: teamsList, isLoading: teamsListIsLoading, error: teamsListError } = useGetTeamsQuery();
+	const { data: playersList } = useGetPlayersQuery();
+	const { data: seasonsList } = useGetSeasonsQuery();
 	const [successMsg, setSuccessMsg] = useState<string>("");
 	const [formError, setFormError] = useState<string>("");
 	const [selectedTeam, setSelectedTeam] = useState("");
