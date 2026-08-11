@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import App from "./App";
 import Landing from "./pages/Landing";
-import Teams from "./components/teams/Teams";
+import Teams from "./pages/Teams";
 import Admin from "./pages/Admin";
 import Matches from "./pages/Matches";
 import LoginPage from "./pages/LoginPage";

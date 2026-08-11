@@ -56,7 +56,7 @@ export default function AddSeason() {
 
 	return (
 		<Stack spacing={4}>
-			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}>
+			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: "1.5rem !important" }}>
 				Upravljanje Sezonama
 			</Typography>
 			{/* Form Card */}

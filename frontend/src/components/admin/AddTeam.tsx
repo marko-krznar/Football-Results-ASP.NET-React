@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, CardContent, CircularProgress, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useAddTeamMutation, useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useState } from "react";
 import { useGetPlayersQuery } from "../../redux/api/playersApi";
@@ -14,11 +14,6 @@ export default function AddTeam() {
 	const [selectedTeam, setSelectedTeam] = useState("");
 	const [selectedSeason, setSelectedSeason] = useState("");
 	const [selectedCaptain, setSelectedCaptain] = useState("");
-
-	console.log(playersList, isLoading, error);
-	console.log(seasonsList, seasonsListIsLoading, seasonsListError);
-	console.log(teamsList, teamsListIsLoading, teamsListError);
-
 	const teamName = [
 		{
 			value: "bijeli",
@@ -49,73 +44,92 @@ export default function AddTeam() {
 	};
 	return (
 		<Stack spacing={4}>
-			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: 4 }}>
+			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: "1.5rem !important" }}>
 				Upravljanje timovima
 			</Typography>
 
-			{isAdding && <CircularProgress size={30} />}
-			{successMsg && <h1>{successMsg}</h1>}
-			{formError && <h1>{formError}</h1>}
-			<Box component="form" onSubmit={handleSubmit}>
-				<TextField
-					id="outlined-select-team-name"
-					select
-					label="Tim"
-					value={selectedTeam}
-					onChange={(e) => setSelectedTeam(e.target.value)}
-					helperText="Odaberi boju tima"
-				>
-					{teamName.map((option) => (
-						<MenuItem key={option.value} value={option.label}>
-							{option.label}
-						</MenuItem>
-					))}
-				</TextField>
-				{seasonsList && (
-					<TextField
-						id="outlined-select-season"
-						select
-						label="Sezona"
-						value={selectedSeason}
-						onChange={(e) => setSelectedSeason(e.target.value)}
-						helperText="Odaberi sezonu"
-					>
-						{seasonsList.map((seasson) => (
-							<MenuItem key={seasson.id} value={seasson.id}>
-								{seasson.name}
-							</MenuItem>
-						))}
-					</TextField>
-				)}
-				{playersList && (
-					<TextField
-						id="outlined-select-currency"
-						select
-						label="Kapetan"
-						value={selectedCaptain}
-						onChange={(e) => setSelectedCaptain(e.target.value)}
-						helperText="Odaberi kapetana"
-					>
-						{playersList.map((player) => (
-							<MenuItem key={player.id} value={player.id}>
-								{player.name}
-							</MenuItem>
-						))}
-					</TextField>
-				)}
-				<Stack spacing={3}>
-					<Button
-						type="submit"
-						variant="contained"
-						color="primary"
-						size="large"
-						disabled={isAdding}
-						sx={{ mt: 2 }}
-					>
-						{isAdding ? <CircularProgress size={24} /> : "Spremi Tim"}
-					</Button>
-				</Stack>
-			</Box>
+			<Card variant="outlined" sx={{ background: "#1E1F1E", borderColor: "#2E302F" }}>
+				<CardContent>
+					<Typography variant="h6" gutterBottom sx={{ color: "#fff", mb: 3 }}>
+						Dodaj novi tim
+					</Typography>
+
+					{formError && (
+						<Alert severity="error" sx={{ mb: 2 }}>
+							{formError}
+						</Alert>
+					)}
+					{successMsg && (
+						<Alert severity="success" sx={{ mb: 2 }}>
+							{successMsg}
+						</Alert>
+					)}
+
+					<Box component="form" onSubmit={handleSubmit}>
+						<Stack spacing={3}>
+							<TextField
+								id="outlined-select-team-name"
+								select
+								label="Tim"
+								value={selectedTeam}
+								onChange={(e) => setSelectedTeam(e.target.value)}
+								helperText="Odaberi boju tima"
+								fullWidth
+							>
+								{teamName.map((option) => (
+									<MenuItem key={option.value} value={option.label}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+							{seasonsList && (
+								<TextField
+									id="outlined-select-season"
+									select
+									label="Sezona"
+									value={selectedSeason}
+									onChange={(e) => setSelectedSeason(e.target.value)}
+									helperText="Odaberi sezonu"
+									fullWidth
+								>
+									{seasonsList.map((seasson) => (
+										<MenuItem key={seasson.id} value={seasson.id}>
+											{seasson.name}
+										</MenuItem>
+									))}
+								</TextField>
+							)}
+							{playersList && (
+								<TextField
+									id="outlined-select-currency"
+									select
+									label="Kapetan"
+									value={selectedCaptain}
+									onChange={(e) => setSelectedCaptain(e.target.value)}
+									helperText="Odaberi kapetana"
+									fullWidth
+								>
+									{playersList.map((player) => (
+										<MenuItem key={player.id} value={player.id}>
+											{player.name}
+										</MenuItem>
+									))}
+								</TextField>
+							)}
+							<Button
+								type="submit"
+								variant="contained"
+								color="primary"
+								size="large"
+								disabled={isAdding}
+								sx={{ mt: 2 }}
+							>
+								{isAdding ? <CircularProgress size={24} /> : "Spremi Tim"}
+							</Button>
+						</Stack>
+					</Box>
+				</CardContent>
+			</Card>
 		</Stack>
 	);
 }
