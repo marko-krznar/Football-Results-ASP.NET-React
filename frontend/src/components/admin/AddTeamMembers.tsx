@@ -6,13 +6,16 @@ import {
 	CardContent,
 	CircularProgress,
 	FormControl,
+	FormControlLabel,
+	FormLabel,
 	InputLabel,
 	ListItemText,
 	MenuItem,
 	OutlinedInput,
+	Radio,
+	RadioGroup,
 	Select,
 	Stack,
-	TextField,
 	Typography,
 	type SelectChangeEvent,
 } from "@mui/material";
@@ -80,20 +83,38 @@ export default function AddTeamMembers() {
 					{teamsList && (
 						<Box component="form" onSubmit={handleSubmit}>
 							<Stack spacing={3}>
-								<TextField
-									id="outlined-select-currency"
-									select
-									label="Odaberi tim"
-									fullWidth
-									value={selectedTeam || ""}
-									onChange={(e) => setSelectedTeam(Number(e.target.value))}
-								>
-									{teamsList.map((player) => (
-										<MenuItem key={player.id} value={player.id}>
-											{player.name}
-										</MenuItem>
-									))}
-								</TextField>
+								<FormControl component="fieldset">
+									<FormLabel
+										id="team-select-label"
+										sx={{ color: "rgba(255, 255, 255, 0.7)", "&.Mui-focused": { color: "#fff" } }}
+									>
+										Odaberi tim
+									</FormLabel>
+									<RadioGroup
+										row
+										aria-labelledby="team-select-label"
+										name="team-select"
+										value={selectedTeam ?? ""}
+										onChange={(e) => setSelectedTeam(Number(e.target.value))}
+									>
+										{teamsList.map((team) => (
+											<FormControlLabel
+												key={team.id}
+												value={team.id}
+												control={
+													<Radio
+														sx={{
+															color: "rgba(255, 255, 255, 0.7)",
+															"&.Mui-checked": { color: "#fff" },
+														}}
+													/>
+												}
+												label={team.name}
+												sx={{ color: "#fff" }}
+											/>
+										))}
+									</RadioGroup>
+								</FormControl>
 								<FormControl fullWidth>
 									<InputLabel id="demo-multiple-checkbox-label">Igrači</InputLabel>
 									<Select
@@ -113,7 +134,9 @@ export default function AddTeamMembers() {
 										{playersList &&
 											playersList.map((player) => {
 												const selected = personName.includes(player.id);
-												const SelectionIcon = selected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
+												const SelectionIcon = selected
+													? CheckBoxIcon
+													: CheckBoxOutlineBlankIcon;
 
 												return (
 													<MenuItem key={player.id} value={player.id}>

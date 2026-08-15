@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, CardContent, CircularProgress, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, CardContent, CircularProgress, FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Stack, TextField, Typography } from "@mui/material";
 import { useAddTeamMutation } from "../../redux/api/teamsApi";
 import { useState } from "react";
 import { useGetPlayersQuery } from "../../redux/api/playersApi";
@@ -66,21 +66,28 @@ export default function AddTeam() {
 
 					<Box component="form" onSubmit={handleSubmit}>
 						<Stack spacing={3}>
-							<TextField
-								id="outlined-select-team-name"
-								select
-								label="Tim"
-								value={selectedTeam}
-								onChange={(e) => setSelectedTeam(e.target.value)}
-								helperText="Odaberi boju tima"
-								fullWidth
-							>
-								{teamName.map((option) => (
-									<MenuItem key={option.value} value={option.label}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
+							<FormControl component="fieldset">
+								<FormLabel id="team-color-label" sx={{ color: "rgba(255, 255, 255, 0.7)", "&.Mui-focused": { color: "#fff" } }}>
+									Tim
+								</FormLabel>
+								<RadioGroup
+									row
+									aria-labelledby="team-color-label"
+									name="team-color"
+									value={selectedTeam}
+									onChange={(e) => setSelectedTeam(e.target.value)}
+								>
+									{teamName.map((option) => (
+										<FormControlLabel
+											key={option.value}
+											value={option.label}
+											control={<Radio sx={{ color: "rgba(255, 255, 255, 0.7)", "&.Mui-checked": { color: "#fff" } }} />}
+											label={option.label}
+											sx={{ color: "#fff" }}
+										/>
+									))}
+								</RadioGroup>
+							</FormControl>
 							{seasonsList && (
 								<TextField
 									id="outlined-select-season"
