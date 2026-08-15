@@ -4,23 +4,19 @@ import {
 	Button,
 	Card,
 	CardContent,
+	Checkbox,
 	CircularProgress,
 	FormControl,
-	InputLabel,
-	ListItemText,
-	MenuItem,
-	OutlinedInput,
-	Select,
+	FormControlLabel,
+	FormLabel,
+	Radio,
+	RadioGroup,
 	Stack,
-	TextField,
 	Typography,
-	type SelectChangeEvent,
 } from "@mui/material";
 import { useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useState } from "react";
 import { useGetPlayersQuery } from "../../redux/api/playersApi";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import React from "react";
 import { useAddTeamMembersMutation } from "../../redux/api/teamMembersApi";
 
@@ -49,11 +45,6 @@ export default function AddTeamMembers() {
 			setFormError(apiError?.data?.message || "Greška pri dodavanju tima.");
 		}
 	};
-
-	const handlePlayersChange = (event: SelectChangeEvent<number[]>) => {
-		const { value } = event.target;
-		setPersonName(typeof value === "string" ? value.split(",").map(Number) : value);
-	};
 	return (
 		<Stack spacing={4}>
 			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: "1.5rem !important" }}>
@@ -80,57 +71,105 @@ export default function AddTeamMembers() {
 					{teamsList && (
 						<Box component="form" onSubmit={handleSubmit}>
 							<Stack spacing={3}>
-								<TextField
-									id="outlined-select-currency"
-									select
-									label="Odaberi tim"
-									fullWidth
-									value={selectedTeam || ""}
-									onChange={(e) => setSelectedTeam(Number(e.target.value))}
-								>
-									{teamsList.map((player) => (
-										<MenuItem key={player.id} value={player.id}>
-											{player.name}
-										</MenuItem>
-									))}
-								</TextField>
-								<FormControl fullWidth>
-									<InputLabel id="demo-multiple-checkbox-label">Igrači</InputLabel>
-									<Select
-										labelId="demo-multiple-checkbox-label"
-										id="demo-multiple-checkbox"
-										multiple
-										value={personName}
-										onChange={handlePlayersChange}
-										input={<OutlinedInput label="Igrači" />}
-										renderValue={(selected) =>
-											playersList
-												?.filter((p) => selected.includes(p.id))
-												.map((p) => p.name)
-												.join(", ")
-										}
+								<FormControl component="fieldset">
+									<FormLabel
+										id="team-select-label"
+										sx={{ color: "rgba(255, 255, 255, 0.7)", "&.Mui-focused": { color: "#fff" } }}
 									>
-										{playersList &&
-											playersList.map((player) => {
-												const selected = personName.includes(player.id);
-												const SelectionIcon = selected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
-
-												return (
-													<MenuItem key={player.id} value={player.id}>
-														<SelectionIcon
-															fontSize="small"
-															style={{
-																marginRight: 8,
-																padding: 9,
-																boxSizing: "content-box",
+										Odaberi tim
+									</FormLabel>
+									<RadioGroup
+										row
+										aria-labelledby="team-select-label"
+										name="team-select"
+										value={selectedTeam ?? ""}
+										onChange={(e) => setSelectedTeam(Number(e.target.value))}
+									>
+										{teamsList.map((team) => (
+											<FormControlLabel
+												key={team.id}
+												value={team.id}
+												control={
+													<Radio
+														sx={{
+															color: "rgba(255, 255, 255, 0.7)",
+															"&.Mui-checked": { color: "#fff" },
+														}}
+													/>
+												}
+												label={team.name}
+												sx={{ color: "#fff" }}
+											/>
+										))}
+									</RadioGroup>
+								</FormControl>
+								<Box sx={{ mt: 1 }}>
+									<Stack
+										direction="row"
+										spacing={1}
+										alignItems="center"
+										justifyContent="space-between"
+										sx={{ mb: 1 }}
+									>
+										<Typography sx={{ fontWeight: "medium", color: "#fff" }}>
+											Igrači
+										</Typography>
+										<Box>
+											<Button
+												size="small"
+												onClick={() => setPersonName(playersList?.map((p) => p.id) ?? [])}
+												disabled={!playersList?.length}
+												sx={{ color: "#fff" }}
+											>
+												Odaberi sve
+											</Button>
+											<Button
+												size="small"
+												color="inherit"
+												onClick={() => setPersonName([])}
+												disabled={!personName.length}
+												sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+											>
+												Očisti
+											</Button>
+										</Box>
+									</Stack>
+									{playersList && (
+										<Box
+											sx={{
+												display: "flex",
+												flexDirection: "column",
+												p: 1,
+												border: "1px solid #2E302F",
+												borderRadius: 1,
+												background: "#121212",
+											}}
+										>
+											{playersList.map((player) => (
+												<FormControlLabel
+													key={player.id}
+													control={
+														<Checkbox
+															checked={personName.includes(player.id)}
+															onChange={() => {
+																setPersonName((prev) =>
+																	prev.includes(player.id)
+																		? prev.filter((id) => id !== player.id)
+																		: [...prev, player.id]
+																);
+															}}
+															sx={{
+																color: "rgba(255, 255, 255, 0.7)",
+																"&.Mui-checked": { color: "#fff" },
 															}}
 														/>
-														<ListItemText primary={player.name} />
-													</MenuItem>
-												);
-											})}
-									</Select>
-								</FormControl>
+													}
+													label={<Typography variant="body2" sx={{ color: "#fff" }}>{player.name}</Typography>}
+												/>
+											))}
+										</Box>
+									)}
+								</Box>
 								<Button
 									type="submit"
 									variant="contained"

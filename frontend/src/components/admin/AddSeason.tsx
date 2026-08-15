@@ -5,49 +5,70 @@ import {
 	Card,
 	CardContent,
 	CircularProgress,
-	MenuItem,
+	createTheme,
+	FormControl,
+	FormControlLabel,
+	FormLabel,
+	Radio,
+	RadioGroup,
 	Stack,
-	TextField,
+	ThemeProvider,
 	Typography,
+	useTheme,
 } from "@mui/material";
 import { useState } from "react";
 import { useAddSeasonMutation } from "../../redux/api/seasonsApi";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs, { Dayjs } from "dayjs";
 
 export default function AddSeason() {
+	const outerTheme = useTheme();
+	const pickerTheme = createTheme(outerTheme, {
+		typography: {
+			subtitle1: {
+				fontSize: "1rem",
+				lineHeight: "1.5",
+				fontWeight: "normal",
+			},
+		},
+	});
+
 	const [addSeason, { isLoading: isAdding }] = useAddSeasonMutation();
 
 	const [formError, setFormError] = useState<string>("");
 	const [successMsg, setSuccessMsg] = useState<string>("");
-	const [year, setYear] = useState<number>(new Date().getFullYear());
+	const [yearVal, setYearVal] = useState<Dayjs | null>(dayjs());
 	const [type, setType] = useState<string>("Spring");
-	const [startDate, setStartDate] = useState<string>("");
-	const [endDate, setEndDate] = useState<string>("");
+	const [startDate, setStartDate] = useState<Dayjs | null>(null);
+	const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setFormError("");
 		setSuccessMsg("");
 
-		if (!year || !type || !startDate || !endDate) {
+		if (!yearVal || !type || !startDate || !endDate) {
 			setFormError("Sva polja su obavezna.");
 			return;
 		}
-		if (startDate > endDate) {
+		if (startDate.isAfter(endDate)) {
 			setFormError("Datum završetka mora biti nakon datuma početka.");
 			return;
 		}
 
 		try {
 			await addSeason({
-				year: Number(year),
+				year: yearVal.year(),
 				type,
-				startDate,
-				endDate,
+				startDate: startDate.format("YYYY-MM-DD"),
+				endDate: endDate.format("YYYY-MM-DD"),
 			}).unwrap();
 			setSuccessMsg("Sezona uspješno kreirana!");
 			// Reset fields
-			setStartDate("");
-			setEndDate("");
+			setStartDate(null);
+			setEndDate(null);
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			setFormError(err?.data?.message || "Greška pri dodavanju sezone.");
@@ -78,60 +99,93 @@ export default function AddSeason() {
 					)}
 
 					<Box component="form" onSubmit={handleSubmit}>
-						<Stack spacing={3}>
-							<TextField
-								label="Godina"
-								type="number"
-								value={year}
-								onChange={(e) => setYear(Number(e.target.value))}
-								required
-								fullWidth
-							/>
+						<ThemeProvider theme={pickerTheme}>
+							<LocalizationProvider dateAdapter={AdapterDayjs}>
+								<Stack spacing={3}>
+									<DatePicker
+										label="Godina"
+										views={["year"]}
+										value={yearVal}
+										onChange={(newValue) => setYearVal(newValue)}
+										slotProps={{
+											textField: { required: true, fullWidth: true },
+										}}
+									/>
 
-							<TextField
-								select
-								label="Tip Sezone"
-								value={type}
-								onChange={(e) => setType(e.target.value)}
-								required
-								fullWidth
-							>
-								<MenuItem value="Spring">Proljeće (Spring)</MenuItem>
-								<MenuItem value="Autumn">Jesen (Autumn)</MenuItem>
-							</TextField>
+									<FormControl component="fieldset">
+										<FormLabel
+											id="season-type-label"
+											sx={{
+												color: "rgba(255, 255, 255, 0.7)",
+												"&.Mui-focused": { color: "#fff" },
+											}}
+										>
+											Tip Sezone
+										</FormLabel>
+										<RadioGroup
+											row
+											aria-labelledby="season-type-label"
+											name="season-type"
+											value={type}
+											onChange={(e) => setType(e.target.value)}
+										>
+											<FormControlLabel
+												value="Spring"
+												control={
+													<Radio
+														sx={{
+															color: "rgba(255, 255, 255, 0.7)",
+															"&.Mui-checked": { color: "#fff" },
+														}}
+													/>
+												}
+												label="Proljeće (Spring)"
+												sx={{ color: "#fff" }}
+											/>
+											<FormControlLabel
+												value="Autumn"
+												control={
+													<Radio
+														sx={{
+															color: "rgba(255, 255, 255, 0.7)",
+															"&.Mui-checked": { color: "#fff" },
+														}}
+													/>
+												}
+												label="Jesen (Autumn)"
+												sx={{ color: "#fff" }}
+											/>
+										</RadioGroup>
+									</FormControl>
 
-							<Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-								<TextField
-									label="Datum početka"
-									type="date"
-									value={startDate}
-									onChange={(e) => setStartDate(e.target.value)}
-									InputLabelProps={{ shrink: true }}
-									required
-									fullWidth
-								/>
-								<TextField
-									label="Datum završetka"
-									type="date"
-									value={endDate}
-									onChange={(e) => setEndDate(e.target.value)}
-									InputLabelProps={{ shrink: true }}
-									required
-									fullWidth
-								/>
-							</Stack>
+									<Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+										<DatePicker
+											label="Datum početka"
+											value={startDate}
+											onChange={(newValue) => setStartDate(newValue)}
+											slotProps={{ textField: { required: true, fullWidth: true } }}
+										/>
+										<DatePicker
+											label="Datum završetka"
+											value={endDate}
+											onChange={(newValue) => setEndDate(newValue)}
+											slotProps={{ textField: { required: true, fullWidth: true } }}
+										/>
+									</Stack>
 
-							<Button
-								type="submit"
-								variant="contained"
-								color="primary"
-								size="large"
-								disabled={isAdding}
-								sx={{ mt: 2 }}
-							>
-								{isAdding ? <CircularProgress size={24} /> : "Spremi Sezonu"}
-							</Button>
-						</Stack>
+									<Button
+										type="submit"
+										variant="contained"
+										color="primary"
+										size="large"
+										disabled={isAdding}
+										sx={{ mt: 2 }}
+									>
+										{isAdding ? <CircularProgress size={24} /> : "Spremi Sezonu"}
+									</Button>
+								</Stack>
+							</LocalizationProvider>
+						</ThemeProvider>
 					</Box>
 				</CardContent>
 			</Card>
