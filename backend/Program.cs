@@ -1,4 +1,5 @@
 using backend.Data;
+using backend.Middleware;
 using backend.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ DotEnv.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IPlayersService, PlayersService>();
@@ -55,6 +58,9 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
+
 
 using (var scope = app.Services.CreateScope())
 {

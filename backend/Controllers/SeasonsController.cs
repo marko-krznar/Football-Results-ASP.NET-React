@@ -22,14 +22,7 @@ public class SeasonsController(ISeasonsService seasonsService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddSeason([FromBody] CreateSeasonDto dto)
     {
-        try
-        {
-            var season = await _seasonsService.AddSeason(dto);
-            return CreatedAtAction(nameof(GetSeasons), new { id = season.Id }, season);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var season = await _seasonsService.AddSeason(dto);
+        return CreatedAtAction(nameof(GetSeasons), new { id = season.Id }, season);
     }
 }

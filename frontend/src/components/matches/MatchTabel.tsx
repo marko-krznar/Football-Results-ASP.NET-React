@@ -2,6 +2,7 @@ import {
 	Box,
 	TableContainer,
 	Table,
+	TableHead,
 	TableBody,
 	TableRow,
 	TableCell,
@@ -58,6 +59,20 @@ export default function MatchTabel({
 	return (
 		<TableContainer sx={{ width: "100%", overflowX: "auto" }}>
 			<Table aria-label="match table" sx={{ minWidth: 800 }}>
+				<TableHead>
+					<TableRow>
+						<TableCell style={{ width: "12rem" }} sx={{ fontWeight: "bold" }}>Datum i lokacija</TableCell>
+						<TableCell style={{ width: "6rem" }} sx={{ fontWeight: "bold" }}>Ekipa</TableCell>
+						<TableCell sx={{ fontWeight: "bold" }}>Igrači</TableCell>
+						<TableCell style={{ width: "10rem" }} sx={{ fontWeight: "bold" }}>Po setovima</TableCell>
+						<TableCell style={{ width: "3rem" }} sx={{ fontWeight: "bold" }}>Setovi</TableCell>
+						{isAuthenticated && (
+							<TableCell style={{ width: "2rem" }} colSpan={2} sx={{ fontWeight: "bold" }}>
+								Akcije
+							</TableCell>
+						)}
+					</TableRow>
+				</TableHead>
 				<TableBody>
 					{data.map((match: Match) => (
 						<TableRow key={match.id}>

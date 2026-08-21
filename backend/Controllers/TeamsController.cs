@@ -22,14 +22,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddTeam([FromBody] CreateTeamDto dto)
     {
-        try
-        {
-            var team = await _teamsService.AddTeam(dto);
-            return CreatedAtAction(nameof(GetTeams), new { id = team.Id }, team);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var team = await _teamsService.AddTeam(dto);
+        return CreatedAtAction(nameof(GetTeams), new { id = team.Id }, team);
     }
 }
