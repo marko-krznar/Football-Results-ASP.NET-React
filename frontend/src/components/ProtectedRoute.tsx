@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from "react-router";
-import { useGetMeQuery } from "../redux/api/authApi";
 import { Box, CircularProgress } from "@mui/material";
+import { useCurrentUser } from "../redux/hooks";
 
 export default function ProtectedRoute() {
-	const { isLoading, isError } = useGetMeQuery();
+	const { user, isLoading, isError, isAdmin } = useCurrentUser();
 
 	if (isLoading) {
 		return (
@@ -20,7 +20,7 @@ export default function ProtectedRoute() {
 		);
 	}
 
-	if (isError) {
+	if (isError || !isAdmin) {
 		return <Navigate to="/login" replace />;
 	}
 
