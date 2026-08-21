@@ -131,8 +131,6 @@ export const matchesApi = createApi({
 		}),
 		removeMatch: builder.mutation<void, { matchId: number }>({
 			query: ({ matchId }) => {
-				console.log("Match ID:", matchId);
-
 				return {
 					url: `/matches/${matchId}`,
 					method: "DELETE",

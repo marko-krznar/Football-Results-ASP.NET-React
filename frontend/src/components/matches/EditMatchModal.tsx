@@ -50,8 +50,9 @@ export default function EditMatchModal({ open, matchId, onClose }: EditMatchModa
 	const [sets, setSets] = useState<SetRow[]>([]);
 	const [firstTeamPlayerIds, setFirstTeamPlayerIds] = useState<number[]>([]);
 	const [secondTeamPlayerIds, setSecondTeamPlayerIds] = useState<number[]>([]);
+	// TODO check form error
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [formError, setFormError] = useState("");
-	console.log(formError);
 
 	useEffect(() => {
 		if (match) {
