@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using dotenv.net;
 using Scalar.AspNetCore;
+using Serilog;
 
 DotEnv.Load();
 
@@ -13,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddSerilog((services, lc) => lc
+    .ReadFrom.Configuration(builder.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext());
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IPlayersService, PlayersService>();
@@ -59,7 +64,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
+
 app.UseExceptionHandler();
+
 
 
 using (var scope = app.Services.CreateScope())
