@@ -1,4 +1,5 @@
 import {
+	Alert,
 	Box,
 	Button,
 	Divider,
@@ -50,8 +51,6 @@ export default function EditMatchModal({ open, matchId, onClose }: EditMatchModa
 	const [sets, setSets] = useState<SetRow[]>([]);
 	const [firstTeamPlayerIds, setFirstTeamPlayerIds] = useState<number[]>([]);
 	const [secondTeamPlayerIds, setSecondTeamPlayerIds] = useState<number[]>([]);
-	// TODO check form error
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [formError, setFormError] = useState("");
 
 	useEffect(() => {
@@ -265,13 +264,20 @@ export default function EditMatchModal({ open, matchId, onClose }: EditMatchModa
 					</Stack>
 				</Stack>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={onClose} color="inherit">
-					Odustani
-				</Button>
-				<Button variant="contained" color="primary" onClick={handleSaveChanges}>
-					Spremi promjene
-				</Button>
+			<DialogActions sx={{ flexDirection: "column", alignItems: "stretch", gap: 1 }}>
+				{formError && (
+					<Alert severity="error" onClose={() => setFormError("")}>
+						{formError}
+					</Alert>
+				)}
+				<Stack direction="row" justifyContent="flex-end" spacing={1}>
+					<Button onClick={onClose} color="inherit">
+						Odustani
+					</Button>
+					<Button variant="contained" color="primary" onClick={handleSaveChanges}>
+						Spremi promjene
+					</Button>
+				</Stack>
 			</DialogActions>
 		</Dialog>
 	);
