@@ -1,4 +1,4 @@
-import { Box, Container, Stack } from "@mui/material";
+import { Box, Container, Skeleton, Stack } from "@mui/material";
 import { useGetLatestMatchQuery, useGetTotalSeasonScoreQuery } from "../redux/api/matchesApi";
 import LandingIntroCard from "../components/landing/LandingIntroCard";
 import LandingSquadsCard from "../components/landing/LandingSquadsCard";
@@ -6,8 +6,8 @@ import LandingTerminResults from "../components/landing/LandingTerminResults";
 import LandingTotalResultCard from "../components/landing/LandingTotalResultCard";
 
 export default function Landing() {
-	const { data } = useGetLatestMatchQuery();
-	const { data: totalSeasonScoreQuery } = useGetTotalSeasonScoreQuery(1); //TODO replace with real season id
+	const { data: latestMatch, isLoading: latestMatchLoading } = useGetLatestMatchQuery();
+	const { data: totalSeasonScoreQuery, isLoading: totalSeasonScoreLoading } = useGetTotalSeasonScoreQuery(1); //TODO replace with real season id
 
 	return (
 		<Container maxWidth="xl">
@@ -33,7 +33,12 @@ export default function Landing() {
 						flexDirection: { xs: "column", md: "row" },
 					}}
 				>
-					<LandingIntroCard matchDate={data?.date} />
+					<LandingIntroCard matchDate={latestMatch?.date} />
+					{totalSeasonScoreLoading && (
+						<Box flexGrow={1} flexShrink={1}>
+							<Skeleton variant="rounded" height={"100%"} />
+						</Box>
+					)}
 					{totalSeasonScoreQuery && (
 						<LandingTotalResultCard
 							firstTeam={totalSeasonScoreQuery.firstTeam}
@@ -47,21 +52,26 @@ export default function Landing() {
 			<Typography variant="h3" align="center">
 				Termin ponedjeljkom u 19:00h
 			</Typography> */}
-				<Box width={"100%"}>
-					<LandingTerminResults
-						totalSets={data?.totalSets}
-						firstTeamGoals={data?.firstTeam.goalsPerSet}
-						secondTeamGoals={data?.secondTeam.goalsPerSet}
-						firstSetsWon={data?.firstTeam.setsWon}
-						secondSetsWon={data?.secondTeam.setsWon}
-					/>
-				</Box>
-				<Box>
-					<LandingSquadsCard
-						firstTeamPlayers={data?.firstTeam.playerNames}
-						secondTeamPlayers={data?.secondTeam.playerNames}
-					/>
-				</Box>
+				{latestMatchLoading && <Skeleton variant="rounded" width={"100%"} height={200} />}
+				{latestMatch && (
+					<>
+						<Box width={"100%"}>
+							<LandingTerminResults
+								totalSets={latestMatch.totalSets}
+								firstTeamGoals={latestMatch.firstTeam.goalsPerSet}
+								secondTeamGoals={latestMatch.secondTeam.goalsPerSet}
+								firstSetsWon={latestMatch.firstTeam.setsWon}
+								secondSetsWon={latestMatch.secondTeam.setsWon}
+							/>
+						</Box>
+						<Box>
+							<LandingSquadsCard
+								firstTeamPlayers={latestMatch.firstTeam.playerNames}
+								secondTeamPlayers={latestMatch.secondTeam.playerNames}
+							/>
+						</Box>
+					</>
+				)}
 			</Stack>
 		</Container>
 	);
