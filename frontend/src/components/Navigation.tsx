@@ -142,7 +142,7 @@ export default function Navigation() {
 						{!isLoading && (
 							<>
 								{isAuthenticated ? (
-									<Tooltip title={`Odjava (${user.email})`}>
+									<Tooltip title={`Odjava (${user?.email})`}>
 										<Button
 											id="nav-logout-btn"
 											onClick={handleLogout}
@@ -285,7 +285,7 @@ export default function Navigation() {
 									<ListItemButton onClick={handleLogout}>
 										<LogoutIcon sx={{ mr: 2 }} />
 
-										<ListItemText primary="Odjava" secondary={user.email} />
+										<ListItemText primary="Odjava" secondary={user?.email} />
 									</ListItemButton>
 								</ListItem>
 							) : (

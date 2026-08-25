@@ -3,7 +3,7 @@ import { Box, CircularProgress } from "@mui/material";
 import { useCurrentUser } from "../redux/hooks";
 
 export default function ProtectedRoute() {
-	const { user, isLoading, isError, isAdmin } = useCurrentUser();
+	const { isLoading, isError, isAdmin } = useCurrentUser();
 
 	if (isLoading) {
 		return (

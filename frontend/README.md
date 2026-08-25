@@ -1,38 +1,83 @@
-# Football React Typescript
+# Frontend — Football Results
 
-A static web application for displaying football results and squads, built with React 19, Vite 7, TypeScript 5, and Material UI (MUI).
+React web aplikacija za prikaz rezultata i sastava momčadi, izgrađena s Vite + TypeScript + MUI.
 
-## Project Setup
+## Tech Stack
 
-1.  Navigate to the `frontend` directory:
-    ```bash
-    cd frontend
-    ```
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-3.  Run the development server:
-    ```bash
-    npm run dev
-    ```
-4.  Build for production:
-    ```bash
-    npm run build
-    ```
+| Tehnologija | Verzija | Namjena |
+|---|---|---|
+| React | 19 | UI framework |
+| Vite | 7 | Build tool / dev server |
+| TypeScript | 5 | Type safety |
+| MUI (Material UI) | 7 | Komponente i dizajn sustav |
+| Redux Toolkit | 2 | Globalni state management |
+| React Router | 7 | Klijentski routing |
+| Sass | 1 | CSS predprocesor |
+| Day.js | 1 | Rad s datumima |
 
-## Render Deployment (Static Site)
+## Pokretanje lokalno
 
-To deploy this project on [Render](https://render.com), use the following settings:
+```bash
+# iz korijena projekta
+cd frontend
 
-*   **Root Directory:** `frontend`
-*   **Build Command:** `npm install && npm run build`
-*   **Publish Directory:** `dist`
+# instalacija ovisnosti (koristi package-lock.json)
+npm ci
 
-## Technologies
+# pokretanje razvojnog servera (http://localhost:5173)
+npm run dev
+```
 
-*   React 19
-*   Vite 7
-*   TypeScript 5
-*   MUI 7
-*   Sass
+## Dostupne skripte
+
+| Skripta | Opis |
+|---|---|
+| `npm run dev` | Pokreće Vite dev server s HMR-om |
+| `npm run build` | `tsc -b` + Vite produkcijski build → `dist/` |
+| `npm run lint` | ESLint provjera cijelog projekta |
+| `npm run preview` | Lokalni preview produkcijskog builda |
+
+## Environment varijable
+
+| Datoteka | Koristi se za |
+|---|---|
+| `.env.development` | Lokalni razvoj (`npm run dev`) |
+| `.env.production` | Produkcijski build (`npm run build`) |
+
+## Struktura projekta
+
+```
+frontend/
+├── src/
+│   ├── components/    # Dijeljene UI komponente
+│   ├── pages/         # Route komponente (stranice)
+│   ├── redux/         # Redux store i slices
+│   ├── services/      # API pozivi (fetch)
+│   ├── types/         # TypeScript tipovi i sučelja
+│   └── main.tsx       # Entry point
+├── public/            # Statički aseti
+├── index.html         # HTML predložak
+├── vite.config.ts     # Vite konfiguracija
+├── tsconfig.json      # TypeScript konfiguracija (root)
+├── tsconfig.app.json  # TypeScript konfiguracija (app)
+├── eslint.config.js   # ESLint konfiguracija
+└── .nvmrc             # Zahtijevana Node.js verzija (v24.14.0)
+```
+
+## CI
+
+Na svakom Pull Requestu prema `main` GitHub Actions automatski pokreće:
+
+```
+npm ci → npm run lint → tsc -b --noEmit → npm run build
+```
+
+Merge je blokiran dok svi koraci ne prođu. ✅
+
+## Deployment
+
+Deployana kao **Static Site** na [Render](https://render.com):
+
+- **Root Directory:** `frontend`
+- **Build Command:** `npm install && npm run build`
+- **Publish Directory:** `dist`
