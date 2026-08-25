@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { Card, CardContent, Stack } from "@mui/material";
 import AddMatchModal from "./AddMatchModal";
-import { useGetMeQuery } from "../../redux/api/authApi";
+import { useCurrentUser } from "../../redux/hooks";
 
 export interface TotalResult {
 	firstTeamName: string;
@@ -16,8 +16,7 @@ export interface TotalResult {
 
 function MatchesIntro({ firstTeamName, firstTotalSetsWon, secondTeamName, secondTotalSetsWon }: TotalResult) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const { data: user } = useGetMeQuery();
-	const isAuthenticated = !!user;
+	const { isAuthenticated, isAdmin } = useCurrentUser();
 
 	return (
 		<>
@@ -37,7 +36,7 @@ function MatchesIntro({ firstTeamName, firstTotalSetsWon, secondTeamName, second
 						uključujući točne datume, rezultate po setovima, konačne ishode te popise igrača koji su
 						sudjelovali u svakom dvoboju.
 					</Typography>
-					{isAuthenticated && (
+					{isAuthenticated && isAdmin && (
 						<Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsModalOpen(true)}>
 							Dodaj termin
 						</Button>

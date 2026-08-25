@@ -25,8 +25,6 @@ export default function Matches() {
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [deletingMatchId, setDeletingMatchId] = useState<number | null>(null);
 
-	console.log("totalSeasonScore", totalSeasonScore);
-
 	return (
 		<Container maxWidth="xl">
 			<Box

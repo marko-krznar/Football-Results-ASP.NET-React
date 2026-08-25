@@ -1,15 +1,23 @@
 using backend.Data;
+using backend.Middleware;
 using backend.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using dotenv.net;
 using Scalar.AspNetCore;
+using Serilog;
 
 DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+builder.Services.AddSerilog((services, lc) => lc
+    .ReadFrom.Configuration(builder.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext());
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IPlayersService, PlayersService>();
@@ -19,9 +27,13 @@ builder.Services.AddScoped<ITeamMembersService, TeamMembersService>();
 builder.Services.AddScoped<IMatchPlayersService, MatchPlayersService>();
 builder.Services.AddScoped<IMatchesService, MatchesService>();
 builder.Services.AddScoped<ISetsService, SetsService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>();
 
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
     .AddIdentityCookies();
@@ -56,6 +68,12 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
+
+app.UseExceptionHandler();
+
+
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -84,5 +102,6 @@ app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager) =>
 .RequireAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/healthz");
 
 app.Run();

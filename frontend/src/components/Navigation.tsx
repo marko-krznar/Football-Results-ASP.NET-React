@@ -21,7 +21,8 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link, useNavigate } from "react-router";
-import { useGetMeQuery, useLogoutMutation, authApi } from "../redux/api/authApi";
+import { useLogoutMutation, authApi } from "../redux/api/authApi";
+import { useCurrentUser } from "../redux/hooks";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 
@@ -29,12 +30,10 @@ export default function Navigation() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const { data: user, isLoading } = useGetMeQuery();
+	const { user, isLoading, isAuthenticated, isAdmin } = useCurrentUser();
 	const [logout] = useLogoutMutation();
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-	const isAuthenticated = !!user;
 
 	const handleLogout = async () => {
 		try {
@@ -123,7 +122,7 @@ export default function Navigation() {
 							Sezone
 						</Button>
 
-						{!isLoading && isAuthenticated && (
+						{!isLoading && isAuthenticated && isAdmin && (
 							<Tooltip title="Admin panel">
 								<Button
 									component={Link}
@@ -257,7 +256,7 @@ export default function Navigation() {
 						</ListItemButton>
 					</ListItem>
 
-					{!isLoading && isAuthenticated && (
+					{!isLoading && isAuthenticated && isAdmin && (
 						<>
 							<Divider sx={{ my: 1 }} />
 
