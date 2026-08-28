@@ -200,3 +200,4 @@ mono_crash.*
 
 # Tests
 coverage
+.agents

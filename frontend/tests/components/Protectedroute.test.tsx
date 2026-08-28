@@ -17,9 +17,9 @@ const renderWithRouter = () => {
 		[
 			{
 				element: <ProtectedRoute />,
-				children: [{ path: "/admin", element: <div>Admin sadržaj</div> }],
+				children: [{ path: "/admin", element: <div>Admin content</div> }],
 			},
-			{ path: "/login", element: <div>Login stranica</div> },
+			{ path: "/login", element: <div>Login page</div> },
 		],
 		{ initialEntries: ["/admin"] }
 	);
@@ -32,7 +32,7 @@ describe("ProtectedRoute", () => {
 		vi.clearAllMocks();
 	});
 
-	it("prikazuje spinner dok se korisnik učitava", () => {
+	it("shows a spinner while user is loading", () => {
 		mockedUseCurrentUser.mockReturnValue({
 			user: undefined,
 			isLoading: true,
@@ -44,10 +44,10 @@ describe("ProtectedRoute", () => {
 		renderWithRouter();
 
 		expect(screen.getByRole("progressbar")).toBeInTheDocument();
-		expect(screen.queryByText("Admin sadržaj")).not.toBeInTheDocument();
+		expect(screen.queryByText("Admin content")).not.toBeInTheDocument();
 	});
 
-	it("preusmjerava na /login kad dođe do greške pri dohvatu korisnika", () => {
+	it("redirects to /login when there is an error fetching the user", () => {
 		mockedUseCurrentUser.mockReturnValue({
 			user: undefined,
 			isLoading: false,
@@ -58,10 +58,10 @@ describe("ProtectedRoute", () => {
 
 		renderWithRouter();
 
-		expect(screen.getByText("Login stranica")).toBeInTheDocument();
+		expect(screen.getByText("Login page")).toBeInTheDocument();
 	});
 
-	it("preusmjerava na /login kad korisnik nije admin", () => {
+	it("redirects to /login when user is not an admin", () => {
 		mockedUseCurrentUser.mockReturnValue({
 			user: { email: "user@test.com", isEmailConfirmed: true, claims: {} },
 			isLoading: false,
@@ -72,10 +72,10 @@ describe("ProtectedRoute", () => {
 
 		renderWithRouter();
 
-		expect(screen.getByText("Login stranica")).toBeInTheDocument();
+		expect(screen.getByText("Login page")).toBeInTheDocument();
 	});
 
-	it("renderira zaštićeni sadržaj (Outlet) kad je korisnik admin", () => {
+	it("renders protected content (Outlet) when user is an admin", () => {
 		mockedUseCurrentUser.mockReturnValue({
 			user: { email: "admin@test.com", isEmailConfirmed: true, claims: { isAdmin: "true" } },
 			isLoading: false,
@@ -86,6 +86,6 @@ describe("ProtectedRoute", () => {
 
 		renderWithRouter();
 
-		expect(screen.getByText("Admin sadržaj")).toBeInTheDocument();
+		expect(screen.getByText("Admin content")).toBeInTheDocument();
 	});
 });

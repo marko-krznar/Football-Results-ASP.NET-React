@@ -10,7 +10,7 @@ const mockSets = [
 ];
 
 describe("MatchItemSets", () => {
-	it("prikazuje rezultate svih setova", () => {
+	it("renders scores of all sets", () => {
 		render(<MatchItemSets matchSets={mockSets} />);
 		expect(screen.getByText("6")).toBeInTheDocument();
 		expect(screen.getByText("2")).toBeInTheDocument();
@@ -18,7 +18,7 @@ describe("MatchItemSets", () => {
 		expect(screen.getByText("7")).toBeInTheDocument();
 	});
 
-	it("renderira praznu komponentu za praznu listu", () => {
+	it("renders an empty component for an empty list", () => {
 		const { container } = render(<MatchItemSets matchSets={[]} />);
 		expect(container.firstChild?.childNodes).toHaveLength(0);
 	});

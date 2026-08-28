@@ -14,7 +14,7 @@ describe("useCurrentUser", () => {
 		vi.clearAllMocks();
 	});
 
-	it("vraća isAuthenticated: false i isAdmin: false kad nema korisnika", () => {
+	it("returns isAuthenticated: false and isAdmin: false when there is no user", () => {
 		mockedUseGetMeQuery.mockReturnValue({
 			data: undefined,
 			isLoading: false,
@@ -27,7 +27,7 @@ describe("useCurrentUser", () => {
 		expect(result.current.isAdmin).toBe(false);
 	});
 
-	it("prosljeđuje isLoading i isError iz upita", () => {
+	it("forwards isLoading and isError from the query", () => {
 		mockedUseGetMeQuery.mockReturnValue({
 			data: undefined,
 			isLoading: true,
@@ -40,7 +40,7 @@ describe("useCurrentUser", () => {
 		expect(result.current.isError).toBe(true);
 	});
 
-	it('prepoznaje admina kad je claims.IsAdmin === "true" (veliko I)', () => {
+	it('identifies admin when claims.IsAdmin === "true" (capital I)', () => {
 		mockedUseGetMeQuery.mockReturnValue({
 			data: { email: "a@a.com", isEmailConfirmed: true, claims: { IsAdmin: "true" } },
 			isLoading: false,
@@ -53,7 +53,7 @@ describe("useCurrentUser", () => {
 		expect(result.current.isAdmin).toBe(true);
 	});
 
-	it('prepoznaje admina kad je claims.isAdmin === "true" (malo i)', () => {
+	it('identifies admin when claims.isAdmin === "true" (lowercase i)', () => {
 		mockedUseGetMeQuery.mockReturnValue({
 			data: { email: "a@a.com", isEmailConfirmed: true, claims: { isAdmin: "true" } },
 			isLoading: false,
@@ -65,7 +65,7 @@ describe("useCurrentUser", () => {
 		expect(result.current.isAdmin).toBe(true);
 	});
 
-	it('vraća isAdmin: false kad je claim postavljen na "false"', () => {
+	it('returns isAdmin: false when claim is set to "false"', () => {
 		mockedUseGetMeQuery.mockReturnValue({
 			data: { email: "a@a.com", isEmailConfirmed: true, claims: { isAdmin: "false" } },
 			isLoading: false,
@@ -78,7 +78,7 @@ describe("useCurrentUser", () => {
 		expect(result.current.isAdmin).toBe(false);
 	});
 
-	it("vraća isAdmin: false kad korisnik nema claims objekt", () => {
+	it("returns isAdmin: false when user has no claims object", () => {
 		mockedUseGetMeQuery.mockReturnValue({
 			data: { email: "a@a.com", isEmailConfirmed: true, claims: {} },
 			isLoading: false,
