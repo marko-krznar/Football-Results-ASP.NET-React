@@ -16,3 +16,10 @@ public class CreateTeamDto
     public int SeasonId { get; set; }
     public int CaptainId { get; set; }
 }
+
+public class UpdateTeamDto
+{
+    public required string Name { get; set; }
+    public int SeasonId { get; set; }
+    public int CaptainId { get; set; }
+}

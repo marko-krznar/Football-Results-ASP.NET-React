@@ -3,6 +3,7 @@ import AddSeason from "../components/admin/AddSeason";
 import AddTeam from "../components/admin/AddTeam";
 import AddTeamMembers from "../components/admin/AddTeamMembers";
 import ManagePlayers from "../components/admin/ManagePlayers";
+import ManageTeams from "../components/admin/ManageTeams";
 
 export default function Admin() {
 	return (
@@ -11,6 +12,7 @@ export default function Admin() {
 			<ManagePlayers />
 			<AddSeason />
 			<AddTeam />
+			<ManageTeams />
 			<AddTeamMembers />
 		</Stack>
 	);
