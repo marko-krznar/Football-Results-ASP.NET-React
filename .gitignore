@@ -197,3 +197,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 mono_crash.*
+
+# Tests
+coverage
+.agents
