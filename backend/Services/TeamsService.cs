@@ -63,4 +63,38 @@ public class TeamsService(AppDbContext context) : ITeamsService
             CaptainName = captain.Name
         };
     }
+
+    public async Task<TeamDto> UpdateTeam(int id, UpdateTeamDto dto)
+    {
+        var team = await _context.Teams.FindAsync(id)
+            ?? throw new ArgumentException("Team not found.");
+
+        var season = await _context.Seasons.FindAsync(dto.SeasonId) 
+            ?? throw new ArgumentException("Season not found.");
+
+        var captain = await _context.Players.FindAsync(dto.CaptainId) 
+            ?? throw new ArgumentException("Player (Captain) not found.");
+
+        var teamExists = await _context.Teams.AnyAsync(t => t.Id != id && t.SeasonId == dto.SeasonId && t.Name.ToLower() == dto.Name.ToLower());
+        if (teamExists)
+        {
+            throw new ArgumentException($"Team with name '{dto.Name}' already exists in this season.");
+        }
+
+        team.Name = dto.Name;
+        team.SeasonId = dto.SeasonId;
+        team.CaptainId = dto.CaptainId;
+
+        await _context.SaveChangesAsync();
+
+        return new TeamDto
+        {
+            Id = team.Id,
+            Name = team.Name,
+            SeasonId = team.SeasonId,
+            SeasonName = season.Name,
+            CaptainId = team.CaptainId,
+            CaptainName = captain.Name
+        };
+    }
 }

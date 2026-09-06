@@ -22,6 +22,13 @@ export interface CreateTeam {
 	CaptainId: number;
 }
 
+export interface UpdateTeamRequest {
+	id: number;
+	name: string;
+	SeasonId: number;
+	CaptainId: number;
+}
+
 export const teamsApi = createApi({
 	reducerPath: "teamsApi",
 	baseQuery: fetchBaseQuery({
@@ -42,7 +49,15 @@ export const teamsApi = createApi({
 			}),
 			invalidatesTags: ["Teams"],
 		}),
+		updateTeam: builder.mutation<TeamNew, UpdateTeamRequest>({
+			query: ({ id, ...body }) => ({
+				url: `teams/${id}`,
+				method: "PUT",
+				body,
+			}),
+			invalidatesTags: ["Teams"],
+		}),
 	}),
 });
 
-export const { useGetTeamsQuery, useAddTeamMutation } = teamsApi;
+export const { useGetTeamsQuery, useAddTeamMutation, useUpdateTeamMutation } = teamsApi;

@@ -25,4 +25,12 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
         var team = await _teamsService.AddTeam(dto);
         return CreatedAtAction(nameof(GetTeams), new { id = team.Id }, team);
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateTeam(int id, [FromBody] UpdateTeamDto dto)
+    {
+        var updated = await _teamsService.UpdateTeam(id, dto);
+        return Ok(updated);
+    }
 }
