@@ -97,8 +97,8 @@ export const matchesApi = createApi({
 	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api`, credentials: "include" }),
 	tagTypes: ["Matches"],
 	endpoints: (builder) => ({
-		getMatches: builder.query<Match[], void>({
-			query: () => "/matches/display",
+		getMatches: builder.query<Match[], number | undefined>({
+			query: (seasonId) => (seasonId ? `/matches/display?seasonId=${seasonId}` : "/matches/display"),
 			providesTags: ["Matches"],
 		}),
 		getMatchById: builder.query<Match, number>({

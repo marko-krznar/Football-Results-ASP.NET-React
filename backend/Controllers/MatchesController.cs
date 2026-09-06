@@ -42,9 +42,9 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
     }
 
     [HttpGet("display")]
-    public async Task<IActionResult> GetAllMatchesDisplay()
+    public async Task<IActionResult> GetAllMatchesDisplay([FromQuery] int? seasonId = null)
     {
-        var matches = await _matchesService.GetAllMatchesDisplay();
+        var matches = await _matchesService.GetAllMatchesDisplay(seasonId);
         return Ok(matches);
     }
 

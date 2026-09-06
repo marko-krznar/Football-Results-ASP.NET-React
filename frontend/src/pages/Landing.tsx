@@ -1,13 +1,18 @@
 import { Box, Container, Skeleton, Stack } from "@mui/material";
 import { useGetLatestMatchQuery, useGetTotalSeasonScoreQuery } from "../redux/api/matchesApi";
+import { useSelectedSeason } from "../redux/hooks";
 import LandingIntroCard from "../components/landing/LandingIntroCard";
 import LandingSquadsCard from "../components/landing/LandingSquadsCard";
 import LandingTerminResults from "../components/landing/LandingTerminResults";
 import LandingTotalResultCard from "../components/landing/LandingTotalResultCard";
 
 export default function Landing() {
+	const selectedSeasonId = useSelectedSeason();
 	const { data: latestMatch, isLoading: latestMatchLoading } = useGetLatestMatchQuery();
-	const { data: totalSeasonScoreQuery, isLoading: totalSeasonScoreLoading } = useGetTotalSeasonScoreQuery(1); //TODO replace with real season id
+	const { data: totalSeasonScoreQuery, isLoading: totalSeasonScoreLoading } = useGetTotalSeasonScoreQuery(
+		selectedSeasonId ?? 1,
+		{ skip: !selectedSeasonId }
+	);
 
 	return (
 		<Container maxWidth="xl">

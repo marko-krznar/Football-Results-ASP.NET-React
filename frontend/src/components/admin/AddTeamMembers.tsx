@@ -97,7 +97,7 @@ export default function AddTeamMembers() {
 														}}
 													/>
 												}
-												label={team.name}
+												label={team.seasonName ? `${team.name} (${team.seasonName})` : team.name}
 												sx={{ color: "#fff" }}
 											/>
 										))}

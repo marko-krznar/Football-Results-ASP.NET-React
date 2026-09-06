@@ -25,5 +25,13 @@ public class PlayersController(IPlayersService playersService) : ControllerBase
         var player = await _playersService.AddPlayer(dto);
         return CreatedAtAction(nameof(GetPlayers), new { id = player.Id }, player);
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdatePlayer(int id, [FromBody] UpdatePlayerDto dto)
+    {
+        var updated = await _playersService.UpdatePlayer(id, dto);
+        return Ok(updated);
+    }
 }
 
