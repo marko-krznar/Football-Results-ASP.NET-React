@@ -12,6 +12,9 @@ import {
 	ListItem,
 	ListItemButton,
 	ListItemText,
+	FormControl,
+	Select,
+	MenuItem,
 	Divider,
 } from "@mui/material";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
@@ -22,18 +25,28 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link, useNavigate } from "react-router";
 import { useLogoutMutation, authApi } from "../redux/api/authApi";
-import { useCurrentUser } from "../redux/hooks";
+import { useGetSeasonsQuery } from "../redux/api/seasonsApi";
+import { useCurrentUser, useSelectedSeason } from "../redux/hooks";
+import { setSelectedSeasonId } from "../redux/seasonSlice";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Navigation() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const { user, isLoading, isAuthenticated, isAdmin } = useCurrentUser();
+	const { data: seasons } = useGetSeasonsQuery();
+	const selectedSeasonId = useSelectedSeason();
 	const [logout] = useLogoutMutation();
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+	useEffect(() => {
+		if (selectedSeasonId === null && seasons && seasons.length > 0) {
+			dispatch(setSelectedSeasonId(seasons[0].id));
+		}
+	}, [seasons, selectedSeasonId, dispatch]);
 
 	const handleLogout = async () => {
 		try {
@@ -121,6 +134,31 @@ export default function Navigation() {
 						<Button component={Link} to="/seasons" color="inherit">
 							Sezone
 						</Button>
+
+						{seasons && seasons.length > 0 && (
+							<FormControl size="small" sx={{ minWidth: 140, mx: 1 }}>
+								<Select
+									value={selectedSeasonId ?? ""}
+									onChange={(e) => dispatch(setSelectedSeasonId(Number(e.target.value)))}
+									sx={{
+										color: "inherit",
+										fontSize: "0.875rem",
+										"& .MuiOutlinedInput-notchedOutline": {
+											borderColor: "rgba(255, 255, 255, 0.23)",
+										},
+										"&:hover .MuiOutlinedInput-notchedOutline": {
+											borderColor: "rgba(255, 255, 255, 0.5)",
+										},
+									}}
+								>
+									{seasons.map((season) => (
+										<MenuItem key={season.id} value={season.id}>
+											{season.name}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+						)}
 
 						{!isLoading && isAuthenticated && isAdmin && (
 							<Tooltip title="Admin panel">
@@ -255,6 +293,26 @@ export default function Navigation() {
 							<ListItemText primary="Sezone" />
 						</ListItemButton>
 					</ListItem>
+
+					{seasons && seasons.length > 0 && (
+						<Box sx={{ px: 2, py: 1 }}>
+							<Typography variant="caption" sx={{ color: "text.secondary", mb: 0.5, display: "block" }}>
+								Odaberi sezonu
+							</Typography>
+							<Select
+								fullWidth
+								size="small"
+								value={selectedSeasonId ?? ""}
+								onChange={(e) => dispatch(setSelectedSeasonId(Number(e.target.value)))}
+							>
+								{seasons.map((season) => (
+									<MenuItem key={season.id} value={season.id}>
+										{season.name}
+									</MenuItem>
+								))}
+							</Select>
+						</Box>
+					)}
 
 					{!isLoading && isAuthenticated && isAdmin && (
 						<>

@@ -11,13 +11,18 @@ import {
 import MatchesIntro from "../components/matches/MatchesIntro";
 import { useState } from "react";
 import { useGetMatchesQuery, useGetTotalSeasonScoreQuery, useRemoveMatchMutation } from "../redux/api/matchesApi";
+import { useSelectedSeason } from "../redux/hooks";
 import EditMatchModal from "../components/matches/EditMatchModal";
 import AddMatchModal from "../components/matches/AddMatchModal";
 import MatchTabel from "../components/matches/MatchTabel";
 
 export default function Matches() {
-	const { data } = useGetMatchesQuery();
-	const { data: totalSeasonScore } = useGetTotalSeasonScoreQuery(1);
+	const selectedSeasonId = useSelectedSeason();
+	const { data } = useGetMatchesQuery(selectedSeasonId ?? undefined);
+	const { data: totalSeasonScore } = useGetTotalSeasonScoreQuery(
+		selectedSeasonId ?? 1,
+		{ skip: !selectedSeasonId }
+	);
 	const [removeMatch] = useRemoveMatchMutation();
 	const [editModalOpen, setEditModalOpen] = useState(false);
 	const [addModalOpen, setAddModalOpen] = useState(false);

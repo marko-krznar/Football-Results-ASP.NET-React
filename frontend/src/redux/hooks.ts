@@ -15,3 +15,7 @@ export const useCurrentUser = () => {
 		isAdmin: user?.claims?.IsAdmin === "true" || user?.claims?.isAdmin === "true",
 	};
 };
+
+export const useSelectedSeason = () => {
+	return useAppSelector((state) => state.season.selectedSeasonId);
+};

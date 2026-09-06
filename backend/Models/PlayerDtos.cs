@@ -10,3 +10,8 @@ public class CreatePlayerDto
 {
     public required string Name { get; set; }
 }
+
+public class UpdatePlayerDto
+{
+    public required string Name { get; set; }
+}

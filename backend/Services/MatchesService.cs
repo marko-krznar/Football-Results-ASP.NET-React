@@ -265,14 +265,22 @@ public class MatchesService(AppDbContext context) : IMatchesService
         return ToDisplayDto(match);
     }
 
-    public async Task<List<MatchDisplayDto>> GetAllMatchesDisplay()
+    public async Task<List<MatchDisplayDto>> GetAllMatchesDisplay(int? seasonId = null)
     {
-        var matches = await _context.Matches
+        var query = _context.Matches
             .Include(m => m.FirstTeam)
             .Include(m => m.SecondTeam)
             .Include(m => m.Sets)
             .Include(m => m.MatchPlayers)
                 .ThenInclude(mp => mp.Player)
+            .AsQueryable();
+
+        if (seasonId.HasValue)
+        {
+            query = query.Where(m => m.SeasonId == seasonId.Value);
+        }
+
+        var matches = await query
             .OrderByDescending(m => m.MatchDate)
             .ToListAsync();
 

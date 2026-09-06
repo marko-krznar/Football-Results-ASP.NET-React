@@ -1,19 +1,31 @@
 import { Box, Typography, Container, Stack, Divider, CircularProgress, Alert } from "@mui/material";
 import { useGetTeamMembersQuery } from "../redux/api/teamMembersApi";
+import { useGetTeamsQuery } from "../redux/api/teamsApi";
+import { useSelectedSeason } from "../redux/hooks";
 import type { SerializedError } from "@reduxjs/toolkit";
 import PlayerCard from "../components/teams/PlayerCard";
 
 export default function Teams() {
+	const selectedSeasonId = useSelectedSeason();
+	const { data: teamsList } = useGetTeamsQuery();
+
+	const seasonTeams = teamsList?.filter((t) => !selectedSeasonId || t.seasonId === selectedSeasonId);
+	const blackTeam = seasonTeams?.find((t) => t.name === "Crni") || teamsList?.find((t) => t.name === "Crni");
+	const whiteTeam = seasonTeams?.find((t) => t.name === "Bijeli") || teamsList?.find((t) => t.name === "Bijeli");
+
+	const blackTeamId = blackTeam?.id ?? 2;
+	const whiteTeamId = whiteTeam?.id ?? 1;
+
 	const {
 		data: blackPlayers,
 		isLoading: blackPlayersIsLoading,
 		error: blackPlayersError,
-	} = useGetTeamMembersQuery(2);
+	} = useGetTeamMembersQuery(blackTeamId, { skip: !blackTeamId });
 	const {
 		data: whitePlayers,
 		isLoading: whitePlayersIsLoading,
 		error: whitePlayersError,
-	} = useGetTeamMembersQuery(1);
+	} = useGetTeamMembersQuery(whiteTeamId, { skip: !whiteTeamId });
 
 	const error = blackPlayersError || whitePlayersError;
 

@@ -36,4 +36,19 @@ public class PlayersService(AppDbContext context) : IPlayersService
             Name = player.Name
         };
     }
+
+    public async Task<PlayerDto> UpdatePlayer(int id, UpdatePlayerDto dto)
+    {
+        var player = await _context.Players.FindAsync(id)
+            ?? throw new ArgumentException("Player not found.");
+
+        player.Name = dto.Name;
+        await _context.SaveChangesAsync();
+
+        return new PlayerDto
+        {
+            Id = player.Id,
+            Name = player.Name
+        };
+    }
 }

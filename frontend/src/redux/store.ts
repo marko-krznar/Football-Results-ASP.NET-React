@@ -8,8 +8,11 @@ import { setsApi } from "./api/setsApi";
 import { matchPlayersApi } from "./api/matchPlayersApi";
 import { authApi } from "./api/authApi";
 
+import seasonReducer from "./seasonSlice";
+
 export const store = configureStore({
 	reducer: {
+		season: seasonReducer,
 		[playersApi.reducerPath]: playersApi.reducer,
 		[seasonsApi.reducerPath]: seasonsApi.reducer,
 		[teamsApi.reducerPath]: teamsApi.reducer,
