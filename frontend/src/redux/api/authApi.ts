@@ -35,7 +35,7 @@ export const authApi = createApi({
 			invalidatesTags: ["Auth"],
 		}),
 		getMe: builder.query<UserInfo, void>({
-			query: () => "manage/info",
+			query: () => "manage/user-info",
 			providesTags: ["Auth"],
 		}),
 	}),

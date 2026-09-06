@@ -11,7 +11,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     private readonly IAuthService _authService = authService;
 
     [Authorize]
-    [HttpGet("info")]
+    [HttpGet("user-info")]
     public async Task<IActionResult> GetInfo()
     {
         var userInfo = await _authService.GetUserInfo(User);
