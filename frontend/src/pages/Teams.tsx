@@ -55,51 +55,25 @@ export default function Teams() {
 				)}
 				{(blackPlayers || whitePlayers) && !error && (
 					<>
-						<Box
-							sx={{
-								flex: 1,
-								display: "flex",
-								flexDirection: "row",
-								justifyContent: "flex-start",
-								flexWrap: "wrap",
-								gap: 4,
-								paddingBlock: { xs: 0, md: 4 },
-								paddingRight: { xs: 0, md: 4 },
-							}}
-						>
+						<Stack flexWrap={"wrap"} gap={4} flexGrow={1} direction={"row"} justifyContent={"center"}>
 							<Box sx={{ width: "100%" }}>
 								<Typography variant="subtitle2" align="center">
 									Crni
 								</Typography>
 							</Box>
 							{blackPlayers &&
-								blackPlayers.map((player) => (
-									<PlayerCard key={player.id} player={player} />
-								))}
-						</Box>
+								blackPlayers.map((player) => <PlayerCard key={player.id} player={player} />)}
+						</Stack>
 						<Divider orientation="vertical" flexItem />
-						<Box
-							sx={{
-								flex: 1,
-								display: "flex",
-								flexDirection: "row",
-								justifyContent: "flex-start",
-								flexWrap: "wrap",
-								gap: 4,
-								paddingBlock: { xs: 0, md: 4 },
-								paddingLeft: { xs: 0, md: 4 },
-							}}
-						>
+						<Stack flexWrap={"wrap"} gap={4} flexGrow={1} direction={"row"} justifyContent={"center"}>
 							<Box sx={{ width: "100%" }}>
 								<Typography variant="subtitle2" align="center">
 									Bijeli
 								</Typography>
 							</Box>
 							{whitePlayers &&
-								whitePlayers.map((player) => (
-									<PlayerCard key={player.id} player={player} />
-								))}
-						</Box>
+								whitePlayers.map((player) => <PlayerCard key={player.id} player={player} />)}
+						</Stack>
 					</>
 				)}
 			</Stack>
