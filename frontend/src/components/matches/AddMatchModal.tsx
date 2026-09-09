@@ -25,6 +25,8 @@ import { useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useAddMatchWithDetailsMutation } from "../../redux/api/matchesApi";
 import { useGetTeamMembersQuery } from "../../redux/api/teamMembersApi";
 import { getCurrentDate } from "../../utils/matchUtils";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/store";
 
 interface SetRow {
 	setNumber: number;
@@ -41,10 +43,12 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 	const { data: seasonsList, isLoading: seasonsLoading } = useGetSeasonsQuery();
 	const { data: teamsList, isLoading: teamsLoading } = useGetTeamsQuery();
 	const [addMatchWithDetails, { isLoading: isSaving }] = useAddMatchWithDetailsMutation();
+	const selectedSeasonId = useSelector((state: RootState) => state.season.selectedSeasonId);
 
-	// Uvijek postoje samo Bijeli i Crni - dohvati ih automatski, korisnik ih ne bira
-	const firstTeam = teamsList?.find((team) => team.name === "Bijeli");
-	const secondTeam = teamsList?.find((team) => team.name === "Crni");
+	const firstTeam =
+		teamsList && teamsList.find((team) => team.seasonId === selectedSeasonId && team.name === "Bijeli");
+	const secondTeam =
+		teamsList && teamsList.find((team) => team.seasonId === selectedSeasonId && team.name === "Crni");
 
 	const firstTeamId = firstTeam && String(firstTeam.id);
 	const secondTeamId = secondTeam && String(secondTeam.id);

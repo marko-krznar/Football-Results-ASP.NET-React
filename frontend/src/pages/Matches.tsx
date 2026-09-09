@@ -7,6 +7,7 @@ import {
 	DialogContentText,
 	DialogActions,
 	Button,
+	Stack,
 } from "@mui/material";
 import MatchesIntro from "../components/matches/MatchesIntro";
 import { useState } from "react";
@@ -15,20 +16,22 @@ import { useSelectedSeason } from "../redux/hooks";
 import EditMatchModal from "../components/matches/EditMatchModal";
 import AddMatchModal from "../components/matches/AddMatchModal";
 import MatchTabel from "../components/matches/MatchTabel";
+import MatchesIntroCard from "../components/matches/MatchesIntroCard";
+import { useGetSeasonsQuery } from "../redux/api/seasonsApi";
 
 export default function Matches() {
 	const selectedSeasonId = useSelectedSeason();
-	const { data } = useGetMatchesQuery(selectedSeasonId ?? undefined);
-	const { data: totalSeasonScore } = useGetTotalSeasonScoreQuery(
-		selectedSeasonId ?? 1,
-		{ skip: !selectedSeasonId }
-	);
+	const { data } = useGetMatchesQuery(selectedSeasonId ?? 0, { skip: !selectedSeasonId });
+	const { data: totalSeasonScore } = useGetTotalSeasonScoreQuery(selectedSeasonId ?? 0, { skip: !selectedSeasonId });
+	const { data: seasons } = useGetSeasonsQuery();
 	const [removeMatch] = useRemoveMatchMutation();
 	const [editModalOpen, setEditModalOpen] = useState(false);
 	const [addModalOpen, setAddModalOpen] = useState(false);
 	const [editingMatchId, setEditingMatchId] = useState<number | null>(null);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [deletingMatchId, setDeletingMatchId] = useState<number | null>(null);
+
+	const selectedSeason = seasons && seasons.find((season) => season.id === selectedSeasonId);
 
 	return (
 		<Container maxWidth="xl">
@@ -37,14 +40,17 @@ export default function Matches() {
 					paddingBlock: 4,
 				}}
 			>
-				{totalSeasonScore && (
-					<MatchesIntro
-						firstTeamName={totalSeasonScore?.firstTeam.teamName}
-						firstTotalSetsWon={totalSeasonScore?.firstTeam.totalSetsWon}
-						secondTeamName={totalSeasonScore?.secondTeam.teamName}
-						secondTotalSetsWon={totalSeasonScore?.secondTeam.totalSetsWon}
-					/>
-				)}
+				<Stack direction={"row"} spacing={4}>
+					{selectedSeason && <MatchesIntro season={selectedSeason.name} />}
+					{totalSeasonScore && (
+						<MatchesIntroCard
+							firstTeamName={totalSeasonScore.firstTeam.teamName}
+							firstTotalSetsWon={totalSeasonScore.firstTeam.totalSetsWon}
+							secondTeamName={totalSeasonScore.secondTeam.teamName}
+							secondTotalSetsWon={totalSeasonScore.secondTeam.totalSetsWon}
+						/>
+					)}
+				</Stack>
 				{data && (
 					<MatchTabel
 						data={data}
