@@ -9,6 +9,7 @@ import { matchPlayersApi } from "./api/matchPlayersApi";
 import { authApi } from "./api/authApi";
 
 import seasonReducer from "./seasonSlice";
+import { expensesApi } from "./api/expensesApi";
 
 export const store = configureStore({
 	reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
 		[setsApi.reducerPath]: setsApi.reducer,
 		[matchPlayersApi.reducerPath]: matchPlayersApi.reducer,
 		[authApi.reducerPath]: authApi.reducer,
+		[expensesApi.reducerPath]: expensesApi.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware()
@@ -31,7 +33,8 @@ export const store = configureStore({
 			.concat(matchesApi.middleware)
 			.concat(setsApi.middleware)
 			.concat(matchPlayersApi.middleware)
-			.concat(authApi.middleware),
+			.concat(authApi.middleware)
+			.concat(expensesApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
