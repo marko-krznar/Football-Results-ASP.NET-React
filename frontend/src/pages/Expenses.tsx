@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useGetExpensesQuery, useCreateExpenseMutation } from "../redux/api/expensesApi";
 import {
-	Box,
 	Typography,
 	Table,
 	TableHead,
@@ -11,8 +10,15 @@ import {
 	TableBody,
 	TextField,
 	Button,
-	Paper,
+	Stack,
+	FormControl,
+	FormControlLabel,
+	FormLabel,
+	Radio,
+	RadioGroup,
 } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function Expenses() {
 	const { data: expenses = [], isLoading, isError } = useGetExpensesQuery();
@@ -29,7 +35,7 @@ export default function Expenses() {
 		}));
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.SubmitEvent) => {
 		e.preventDefault();
 		try {
 			await createExpense(newExpense).unwrap();
@@ -41,95 +47,93 @@ export default function Expenses() {
 		}
 	};
 	return (
-		<Box sx={{ p: 3 }}>
-			<Typography variant="h4" gutterBottom>
-				Expenses
-			</Typography>
-
-			{/* Expense List */}
-			<Paper sx={{ mb: 4, p: 2 }}>
-				{isLoading ? (
-					<Typography>Loading…</Typography>
-				) : isError ? (
-					<Typography color="error">Failed to load expenses.</Typography>
-				) : (
-					<Table size="small">
-						<TableHead>
-							<TableRow>
-								<TableCell>ID</TableCell>
-								<TableCell>Option</TableCell>
-								<TableCell>Amount</TableCell>
-								<TableCell>Month</TableCell>
-								<TableCell>Date</TableCell>
-								<TableCell>Description</TableCell>
+		<Stack gap={4} padding={4}>
+			<Typography variant="h4">Troškovi</Typography>
+			{isLoading && <Typography>Loading…</Typography>}
+			{isError && <Typography color="error">Failed to load expenses.</Typography>}
+			{expenses.length === 0 && (
+				<Typography variant="body1" color="textSecondary">
+					Nisu pronađeni troškovi.
+				</Typography>
+			)}
+			{expenses.length > 0 && (
+				<Table size="small">
+					<TableHead>
+						<TableRow>
+							<TableCell>ID</TableCell>
+							<TableCell>Option</TableCell>
+							<TableCell>Amount</TableCell>
+							<TableCell>Date</TableCell>
+							<TableCell>Description</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{expenses.map((exp: any) => (
+							<TableRow key={exp.id}>
+								<TableCell>{exp.id}</TableCell>
+								<TableCell>{exp.option === 0 ? "HPD_PRSTEN" : "OTHER"}</TableCell>
+								<TableCell>{exp.amount}</TableCell>
+								<TableCell>{exp.date}</TableCell>
+								<TableCell>{exp.description}</TableCell>
 							</TableRow>
-						</TableHead>
-						<TableBody>
-							{expenses.map((exp: any) => (
-								<TableRow key={exp.id}>
-									<TableCell>{exp.id}</TableCell>
-									<TableCell>{exp.option === 0 ? "HPD_PRSTEN" : "OTHER"}</TableCell>
-									<TableCell>{exp.amount}</TableCell>
-									<TableCell>{exp.month ?? "-"}</TableCell>
-									<TableCell>{exp.date ?? "-"}</TableCell>
-									<TableCell>{exp.description ?? "-"}</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				)}
-			</Paper>
-
-			{/* Add New Expense Form */}
-			<Box
-				component="form"
-				onSubmit={handleSubmit}
-				sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 400 }}
-			>
-				<TextField
-					select
-					label="Option"
-					name="option"
-					value={newExpense.option}
-					onChange={handleChange}
-					SelectProps={{ native: true }}
-				>
-					<option value={0}>HPD_PRSTEN</option>
-					<option value={1}>OTHER</option>
-				</TextField>
-				<TextField
-					label="Amount"
-					name="amount"
-					type="number"
-					value={newExpense.amount}
-					onChange={handleChange}
-					required
-				/>
-				<TextField
-					label="Month (HPD)"
-					name="month"
-					type="number"
-					value={newExpense.month ?? ""}
-					onChange={handleChange}
-				/>
-				<TextField
-					label="Date (Other)"
-					name="date"
-					type="date"
-					value={newExpense.date ?? ""}
-					onChange={handleChange}
-				/>
-				<TextField
-					label="Description"
-					name="description"
-					value={newExpense.description ?? ""}
-					onChange={handleChange}
-				/>
-				{errorMsg && <Typography color="error">{errorMsg}</Typography>}
-				<Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-					Add Expense
-				</Button>
-			</Box>
-		</Box>
+						))}
+					</TableBody>
+				</Table>
+			)}
+			<Stack gap={2}>
+				<Typography variant="h5" component="p">
+					Upiši nove troškove
+				</Typography>
+				<Stack gap={2} component="form" onSubmit={handleSubmit}>
+					<FormControl fullWidth>
+						<FormLabel id="expense-option">Vrsta troška</FormLabel>
+						<RadioGroup
+							row
+							aria-labelledby="expense-option"
+							name="expense-option-radio-buttons-group"
+							value={newExpense.option}
+							onChange={handleChange}
+						>
+							<FormControlLabel value={0} control={<Radio />} label="HPD Prsten" />
+							<FormControlLabel value={1} control={<Radio />} label="Ostalo" />
+						</RadioGroup>
+					</FormControl>
+					<FormControl fullWidth>
+						<TextField
+							label="Amount"
+							name="amount"
+							type="number"
+							value={newExpense.amount}
+							onChange={handleChange}
+							required
+						/>
+					</FormControl>
+					<LocalizationProvider dateAdapter={AdapterDayjs}>
+						<DatePicker
+							label="Date(month/day)"
+							value={newExpense.date}
+							openTo="month"
+							views={["year", "month"]}
+							onChange={(newValue) =>
+								setNewExpense((prev: any) => ({
+									...prev,
+									date: newValue,
+								}))
+							}
+						/>
+					</LocalizationProvider>
+					<TextField
+						label="Description"
+						name="description"
+						value={newExpense.description}
+						onChange={handleChange}
+					/>
+					{errorMsg && <Typography color="error">{errorMsg}</Typography>}
+					<Button type="submit" variant="contained">
+						Dodaj trošak
+					</Button>
+				</Stack>
+			</Stack>
+		</Stack>
 	);
 }
