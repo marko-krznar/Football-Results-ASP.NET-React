@@ -28,7 +28,6 @@ public class ExpensesController : ControllerBase
             Id = e.Id,
             Option = e.Option,
             Amount = e.Amount,
-            Month = e.Month,
             Date = e.Date,
             Description = e.Description
         }).ToList();
@@ -42,7 +41,6 @@ public class ExpensesController : ControllerBase
         {
             Option = dto.Option,
             Amount = dto.Amount,
-            Month = dto.Month,
             Date = dto.Date,
             Description = dto.Description
         };
@@ -52,7 +50,6 @@ public class ExpensesController : ControllerBase
             Id = created.Id,
             Option = created.Option,
             Amount = created.Amount,
-            Month = created.Month,
             Date = created.Date,
             Description = created.Description
         };

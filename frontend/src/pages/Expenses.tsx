@@ -48,7 +48,7 @@ export default function Expenses() {
 	};
 	return (
 		<Stack gap={4} padding={4}>
-			<Typography variant="h4">Troškovi</Typography>
+			<Typography variant="h5">Troškovi za HPD prsten superligu</Typography>
 			{isLoading && <Typography>Loading…</Typography>}
 			{isError && <Typography color="error">Failed to load expenses.</Typography>}
 			{expenses.length === 0 && (
@@ -60,21 +60,17 @@ export default function Expenses() {
 				<Table size="small">
 					<TableHead>
 						<TableRow>
-							<TableCell>ID</TableCell>
-							<TableCell>Option</TableCell>
-							<TableCell>Amount</TableCell>
-							<TableCell>Date</TableCell>
-							<TableCell>Description</TableCell>
+							<TableCell>Opcija</TableCell>
+							<TableCell>Iznos (euri)</TableCell>
+							<TableCell>Mjesec</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{expenses.map((exp: any) => (
 							<TableRow key={exp.id}>
-								<TableCell>{exp.id}</TableCell>
 								<TableCell>{exp.option === 0 ? "HPD_PRSTEN" : "OTHER"}</TableCell>
 								<TableCell>{exp.amount}</TableCell>
 								<TableCell>{exp.date}</TableCell>
-								<TableCell>{exp.description}</TableCell>
 							</TableRow>
 						))}
 					</TableBody>

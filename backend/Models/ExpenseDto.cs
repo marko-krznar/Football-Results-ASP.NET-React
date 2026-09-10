@@ -9,9 +9,8 @@ public class ExpenseDto
     public int Id { get; set; }
     public ExpenseOption Option { get; set; }
     public decimal Amount { get; set; }
-    public int? Month { get; set; } // For HPD_PRSTEN
-    public DateOnly? Date { get; set; } // For OTHER
-    public string? Description { get; set; } // For OTHER
+    public DateOnly? Date { get; set; }
+    public string? Description { get; set; }
 }
 
 public class CreateExpenseDto
@@ -21,8 +20,6 @@ public class CreateExpenseDto
     [Required]
     [Range(0, double.MaxValue)]
     public decimal Amount { get; set; }
-    // Optional fields depending on Option
-    public int? Month { get; set; }
     public DateOnly? Date { get; set; }
     public string? Description { get; set; }
 }
