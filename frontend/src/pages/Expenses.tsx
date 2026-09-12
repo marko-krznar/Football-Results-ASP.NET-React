@@ -3,11 +3,6 @@ import React, { useState } from "react";
 import { useGetExpensesQuery, useCreateExpenseMutation } from "../redux/api/expensesApi";
 import {
 	Typography,
-	Table,
-	TableHead,
-	TableRow,
-	TableCell,
-	TableBody,
 	TextField,
 	Button,
 	Stack,
@@ -16,15 +11,28 @@ import {
 	FormLabel,
 	Radio,
 	RadioGroup,
+	Box,
+	Modal,
+	Portal,
+	useTheme,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Dayjs } from "dayjs";
+import DataGridDemo from "../components/ExpensesGrid";
 
 export default function Expenses() {
+	const theme = useTheme();
+
 	const { data: expenses = [], isLoading, isError } = useGetExpensesQuery();
 	const [createExpense] = useCreateExpenseMutation();
 
-	const [newExpense, setNewExpense] = useState<any>({ option: 0, amount: 0 });
+	const [newExpense, setNewExpense] = useState<{
+		option: number;
+		amount: number;
+		date: Dayjs | null;
+		description: string;
+	}>({ option: 0, amount: 0, date: null, description: "" });
 	const [errorMsg, setErrorMsg] = useState<string>("");
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,18 +45,45 @@ export default function Expenses() {
 
 	const handleSubmit = async (e: React.SubmitEvent) => {
 		e.preventDefault();
+
 		try {
-			await createExpense(newExpense).unwrap();
-			setNewExpense({ option: 0, amount: 0 });
+			const formattedDate = newExpense.date ? newExpense.date.format("YYYY-MM-DD") : null;
+			await createExpense({
+				...newExpense,
+				date: formattedDate,
+			}).unwrap();
+
+			setNewExpense({
+				option: 0,
+				amount: 0,
+				date: null,
+				description: "",
+			});
+
 			setErrorMsg("");
 		} catch (err) {
 			console.log(err);
 			setErrorMsg("Failed to create expense");
 		}
 	};
+
+	const [open, setOpen] = React.useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
+
 	return (
 		<Stack gap={4} padding={4}>
-			<Typography variant="h5">Troškovi za HPD prsten superligu</Typography>
+			<Stack direction="row" gap={1} alignItems="flex-start">
+				<Box flex={1}>
+					<Typography variant="h5" component="h2">
+						Troškovi
+					</Typography>
+					<Typography variant="body1">Iznos za termin za HPD prsten superligu je 75€.</Typography>
+				</Box>
+				<Button variant="contained" onClick={handleOpen}>
+					Dodaj novi trošak
+				</Button>
+			</Stack>
 			{isLoading && <Typography>Loading…</Typography>}
 			{isError && <Typography color="error">Failed to load expenses.</Typography>}
 			{expenses.length === 0 && (
@@ -56,80 +91,74 @@ export default function Expenses() {
 					Nisu pronađeni troškovi.
 				</Typography>
 			)}
-			{expenses.length > 0 && (
-				<Table size="small">
-					<TableHead>
-						<TableRow>
-							<TableCell>Opcija</TableCell>
-							<TableCell>Iznos (euri)</TableCell>
-							<TableCell>Mjesec</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{expenses.map((exp: any) => (
-							<TableRow key={exp.id}>
-								<TableCell>{exp.option === 0 ? "HPD_PRSTEN" : "OTHER"}</TableCell>
-								<TableCell>{exp.amount}</TableCell>
-								<TableCell>{exp.date}</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			)}
-			<Stack gap={2}>
-				<Typography variant="h5" component="p">
-					Upiši nove troškove
-				</Typography>
-				<Stack gap={2} component="form" onSubmit={handleSubmit}>
-					<FormControl fullWidth>
-						<FormLabel id="expense-option">Vrsta troška</FormLabel>
-						<RadioGroup
-							row
-							aria-labelledby="expense-option"
-							name="expense-option-radio-buttons-group"
-							value={newExpense.option}
-							onChange={handleChange}
-						>
-							<FormControlLabel value={0} control={<Radio />} label="HPD Prsten" />
-							<FormControlLabel value={1} control={<Radio />} label="Ostalo" />
-						</RadioGroup>
-					</FormControl>
-					<FormControl fullWidth>
-						<TextField
-							label="Amount"
-							name="amount"
-							type="number"
-							value={newExpense.amount}
-							onChange={handleChange}
-							required
-						/>
-					</FormControl>
-					<LocalizationProvider dateAdapter={AdapterDayjs}>
-						<DatePicker
-							label="Date(month/day)"
-							value={newExpense.date}
-							openTo="month"
-							views={["year", "month"]}
-							onChange={(newValue) =>
-								setNewExpense((prev: any) => ({
-									...prev,
-									date: newValue,
-								}))
-							}
-						/>
-					</LocalizationProvider>
-					<TextField
-						label="Description"
-						name="description"
-						value={newExpense.description}
-						onChange={handleChange}
-					/>
-					{errorMsg && <Typography color="error">{errorMsg}</Typography>}
-					<Button type="submit" variant="contained">
-						Dodaj trošak
-					</Button>
-				</Stack>
-			</Stack>
+			{expenses.length > 0 && <DataGridDemo expenses={expenses} />}
+			<Portal>
+				<Modal
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="modal-add-expense"
+					aria-describedby="modal-add-expense-form"
+					sx={{ justifyContent: "center", alignItems: "center" }}
+				>
+					<Stack gap={2} sx={{ backgroundColor: theme.palette.grey[900], width: "80%", padding: "4rem" }}>
+						<Typography variant="h5" component="p">
+							Upiši nove troškove
+						</Typography>
+						<Stack gap={2} component="form" onSubmit={handleSubmit}>
+							<FormControl fullWidth>
+								<FormLabel id="expense-option">Vrsta troška</FormLabel>
+								<RadioGroup
+									row
+									aria-labelledby="expense-option"
+									name="expense-option-radio-buttons-group"
+									value={newExpense.option}
+									onChange={(newOption) =>
+										setNewExpense((prev: any) => ({
+											...prev,
+											option: newOption.target.value,
+										}))
+									}
+								>
+									<FormControlLabel value={0} control={<Radio />} label="HPD Prsten" />
+									<FormControlLabel value={1} control={<Radio />} label="Ostalo" />
+								</RadioGroup>
+							</FormControl>
+							<FormControl fullWidth>
+								<TextField
+									label="Iznos"
+									name="amount"
+									type="number"
+									value={newExpense.amount}
+									onChange={handleChange}
+									required
+								/>
+							</FormControl>
+							<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="hr">
+								<DatePicker
+									label="Datum"
+									value={newExpense.date}
+									onChange={(newValue) =>
+										setNewExpense((prev: any) => ({
+											...prev,
+											date: newValue,
+										}))
+									}
+								/>
+							</LocalizationProvider>
+							<TextField
+								label="Opis"
+								name="description"
+								value={newExpense.description}
+								onChange={handleChange}
+							/>
+							{errorMsg && <Typography color="error">{errorMsg}</Typography>}
+							<Button type="submit" variant="contained">
+								Dodaj trošak
+							</Button>
+						</Stack>
+					</Stack>
+				</Modal>
+			</Portal>
 		</Stack>
 	);
 }
