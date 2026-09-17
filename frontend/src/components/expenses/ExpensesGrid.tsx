@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid } from "@mui/x-data-grid";
 import dayjs from "dayjs";
+import type { Expense, GridExpense } from "../../types/expenses";
 
-const columns: GridColDef<[number]>[] = [
+const columns: GridColDef<GridExpense>[] = [
 	{
 		field: "option",
 		headerName: "Opcija",
@@ -22,12 +22,12 @@ const columns: GridColDef<[number]>[] = [
 	{
 		field: "description",
 		headerName: "Opis",
-		flex: 1,
+		flex: 2,
 	},
 ];
 
-export default function DataGridDemo({ expenses }: { expenses: any[] }) {
-	const formatExpenses = expenses.map((expense: any) => ({
+export default function DataGridDemo({ expenses }: { expenses: Array<Expense> }) {
+	const formatExpenses = expenses.map((expense: Expense) => ({
 		...expense,
 		option: expense.option === 0 ? "HPD Prsten" : "Ostalo",
 		amount: expense.amount && `${expense.amount.toFixed(2)} €`,

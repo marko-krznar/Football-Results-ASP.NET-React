@@ -19,7 +19,7 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
-import DataGridDemo from "../components/ExpensesGrid";
+import DataGridDemo from "../components/expenses/ExpensesGrid";
 
 export default function Expenses() {
 	const theme = useTheme();
