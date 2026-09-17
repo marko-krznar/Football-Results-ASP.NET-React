@@ -161,20 +161,36 @@ export default function Navigation() {
 						)}
 
 						{!isLoading && isAuthenticated && isAdmin && (
-							<Tooltip title="Admin panel">
-								<Button
-									component={Link}
-									to="/admin"
-									color="inherit"
-									startIcon={<AdminPanelSettingsIcon />}
-									sx={{
-										color: (theme) => theme.palette.primary.main,
-										fontWeight: 600,
-									}}
-								>
-									Admin
-								</Button>
-							</Tooltip>
+							<>
+								<Tooltip title="Admin panel">
+									<Button
+										component={Link}
+										to="/admin"
+										color="inherit"
+										startIcon={<AdminPanelSettingsIcon />}
+										sx={{
+											color: (theme) => theme.palette.primary.main,
+											fontWeight: 600,
+										}}
+									>
+										Admin
+									</Button>
+								</Tooltip>
+								<Tooltip title="Expenses">
+									<Button
+										component={Link}
+										to="/expenses"
+										color="inherit"
+										startIcon={<AdminPanelSettingsIcon />}
+										sx={{
+											color: (theme) => theme.palette.primary.main,
+											fontWeight: 600,
+										}}
+									>
+										Expenses
+									</Button>
+								</Tooltip>
+							</>
 						)}
 
 						{!isLoading && (

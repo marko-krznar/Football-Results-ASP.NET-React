@@ -17,6 +17,7 @@ const theme = createTheme({
 	},
 	typography: {
 		fontFamily: "Lexend, sans-serif",
+		fontSize: 16,
 		h1: {
 			lineHeight: "1",
 		},
@@ -28,7 +29,7 @@ const theme = createTheme({
 			fontSize: "2rem",
 		},
 		subtitle1: {
-			fontSize: "6rem",
+			// fontSize: "6rem", TODO check the rest of the code and remove where this is not needed
 			lineHeight: "1",
 			fontWeight: "bold",
 		},
