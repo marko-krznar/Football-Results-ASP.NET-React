@@ -3,16 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const expensesApi = createApi({
 	reducerPath: "expensesApi",
-	baseQuery: fetchBaseQuery({
-		baseUrl: "/api/",
-		prepareHeaders: (headers, { getState }) => {
-			const token = (getState() as any).auth?.token;
-			if (token) {
-				headers.set("authorization", `Bearer ${token}`);
-			}
-			return headers;
-		},
-	}),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api`, credentials: "include" }),
 	tagTypes: ["Expenses"],
 	endpoints: (builder) => ({
 		getExpenses: builder.query<any[], void>({
