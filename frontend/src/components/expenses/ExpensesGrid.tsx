@@ -1,7 +1,7 @@
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid } from "@mui/x-data-grid";
 import dayjs from "dayjs";
-import type { Expense, GridExpense } from "../../types/expenses";
+import type { Expense, GridExpense } from "../../types/expense";
 
 const columns: GridColDef<GridExpense>[] = [
 	{
@@ -26,15 +26,15 @@ const columns: GridColDef<GridExpense>[] = [
 	},
 ];
 
-export default function DataGridDemo({ expenses }: { expenses: Array<Expense> }) {
+export default function ExpenseGrid({ expenses }: { expenses: Array<Expense> }) {
 	const formatExpenses = expenses.map((expense: Expense) => ({
 		...expense,
 		option: expense.option === 0 ? "HPD Prsten" : "Ostalo",
-		amount: expense.amount && `${expense.amount.toFixed(2)} €`,
+		amount: expense.amount ? `${expense.amount.toFixed(2)} €` : "0.00 €",
 		date:
 			expense.date && expense.option === 0
-				? dayjs(expense.date).format("MMMM")
-				: dayjs(expense.date).format("DD.MM.YYYY - dddd"),
+				? dayjs(expense.date).locale("hr").format("MMMM")
+				: dayjs(expense.date).locale("hr").format("DD.MM.YYYY - dddd"),
 	}));
 
 	return (
