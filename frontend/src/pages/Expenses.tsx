@@ -1,45 +1,71 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { useGetExpensesQuery, useCreateExpenseMutation } from "../redux/api/expensesApi";
 import {
-	Typography,
-	TextField,
-	Button,
-	Stack,
-	FormControl,
-	FormControlLabel,
-	FormLabel,
-	Radio,
-	RadioGroup,
-	Box,
-	Modal,
-	Portal,
-	useTheme,
-} from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Dayjs } from "dayjs";
-import DataGridDemo from "../components/expenses/ExpensesGrid";
+	useGetExpensesQuery,
+	useCreateExpenseMutation,
+	useUpdateExpenseMutation,
+	useDeleteExpenseMutation,
+} from "../redux/api/expensesApi";
+import { Typography, Button, Stack, Box } from "@mui/material";
+import ExpenseGrid from "../components/expenses/ExpensesGrid";
+import ModalAddExpense from "../components/common/ModalAddExpense";
+import ModalDeleteExpense from "../components/common/ModalDeleteExpense";
+import type { Expense } from "../types/expense";
+import dayjs from "dayjs";
 
 export default function Expenses() {
-	const theme = useTheme();
-
 	const { data: expenses = [], isLoading, isError } = useGetExpensesQuery();
 	const [createExpense] = useCreateExpenseMutation();
+	const [updateExpense] = useUpdateExpenseMutation();
+	const [deleteExpense] = useDeleteExpenseMutation();
 
-	const [newExpense, setNewExpense] = useState<{
-		option: number;
-		amount: number;
-		date: Dayjs | null;
-		description: string;
-	}>({ option: 0, amount: 0, date: null, description: "" });
+	const [expenseForm, setExpenseForm] = useState<Expense>({
+		option: 0,
+		amount: null,
+		date: null,
+		description: "",
+	});
+	const [editingId, setEditingId] = useState<number | null>(null);
 	const [errorMsg, setErrorMsg] = useState<string>("");
+
+	const [openModal, setOpenModal] = useState(false);
+	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+	const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null);
+
+	const handleOpenAdd = () => {
+		setEditingId(null);
+		setExpenseForm({
+			option: 0,
+			amount: null,
+			date: null,
+			description: "",
+		});
+		setErrorMsg("");
+		setOpenModal(true);
+	};
+
+	const handleOpenEdit = (expense: Expense) => {
+		setEditingId(expense.id ?? null);
+		setExpenseForm({
+			id: expense.id,
+			option: expense.option,
+			amount: expense.amount,
+			date: expense.date ? dayjs(expense.date) : null,
+			description: expense.description || "",
+		});
+		setErrorMsg("");
+		setOpenModal(true);
+	};
+
+	const handleCloseModal = () => {
+		setOpenModal(false);
+		setEditingId(null);
+	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
-		setNewExpense((prev: any) => ({
+		setExpenseForm((prev: Expense) => ({
 			...prev,
-			[name]: name === "amount" || name === "option" || name === "month" ? Number(value) : value,
+			[name]: name === "amount" || name === "option" ? Number(value) : value,
 		}));
 	};
 
@@ -47,118 +73,93 @@ export default function Expenses() {
 		e.preventDefault();
 
 		try {
-			const formattedDate = newExpense.date ? newExpense.date.format("YYYY-MM-DD") : null;
-			await createExpense({
-				...newExpense,
-				date: formattedDate,
-			}).unwrap();
+			if (editingId) {
+				await updateExpense({
+					id: editingId,
+					...expenseForm,
+				}).unwrap();
+			} else {
+				await createExpense(expenseForm).unwrap();
+			}
 
-			setNewExpense({
+			setExpenseForm({
 				option: 0,
-				amount: 0,
+				amount: null,
 				date: null,
 				description: "",
 			});
-
 			setErrorMsg("");
+			handleCloseModal();
 		} catch (err) {
-			console.log(err);
-			setErrorMsg("Failed to create expense");
+			console.error(err);
+			setErrorMsg(editingId ? "Failed to update expense" : "Failed to create expense");
 		}
 	};
 
-	const [open, setOpen] = React.useState(false);
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
+	const handleOpenDelete = (id: number) => {
+		setExpenseToDelete(id);
+		setDeleteDialogOpen(true);
+	};
+
+	const handleConfirmDelete = async () => {
+		if (expenseToDelete !== null) {
+			try {
+				await deleteExpense(expenseToDelete).unwrap();
+			} catch (err) {
+				console.error("Failed to delete expense:", err);
+			}
+		}
+		setDeleteDialogOpen(false);
+		setExpenseToDelete(null);
+	};
 
 	return (
 		<Stack gap={4} padding={4}>
 			<Stack direction="row" gap={1} alignItems="flex-start">
 				<Box flex={1}>
-					<Typography variant="h5" component="h2">
+					<Typography variant="h3" component="h2" gutterBottom>
 						Troškovi
 					</Typography>
 					<Typography variant="body1">Iznos za termin za HPD prsten superligu je 75€.</Typography>
 				</Box>
-				<Button variant="contained" onClick={handleOpen}>
+				<Button variant="contained" onClick={handleOpenAdd}>
 					Dodaj novi trošak
 				</Button>
 			</Stack>
+
 			{isLoading && <Typography>Loading…</Typography>}
 			{isError && <Typography color="error">Failed to load expenses.</Typography>}
-			{expenses.length === 0 && (
+
+			{expenses.length === 0 && !isLoading && (
 				<Typography variant="body1" color="textSecondary">
 					Nisu pronađeni troškovi.
 				</Typography>
 			)}
-			{expenses.length > 0 && <DataGridDemo expenses={expenses} />}
-			<Portal>
-				<Modal
-					open={open}
-					onClose={handleClose}
-					aria-labelledby="modal-add-expense"
-					aria-describedby="modal-add-expense-form"
-					sx={{ justifyContent: "center", alignItems: "center" }}
-				>
-					<Stack gap={2} sx={{ backgroundColor: theme.palette.grey[900], width: "80%", padding: "4rem" }}>
-						<Typography variant="h5" component="p">
-							Upiši nove troškove
-						</Typography>
-						<Stack gap={2} component="form" onSubmit={handleSubmit}>
-							<FormControl fullWidth>
-								<FormLabel id="expense-option">Vrsta troška</FormLabel>
-								<RadioGroup
-									row
-									aria-labelledby="expense-option"
-									name="expense-option-radio-buttons-group"
-									value={newExpense.option}
-									onChange={(newOption) =>
-										setNewExpense((prev: any) => ({
-											...prev,
-											option: newOption.target.value,
-										}))
-									}
-								>
-									<FormControlLabel value={0} control={<Radio />} label="HPD Prsten" />
-									<FormControlLabel value={1} control={<Radio />} label="Ostalo" />
-								</RadioGroup>
-							</FormControl>
-							<FormControl fullWidth>
-								<TextField
-									label="Iznos"
-									name="amount"
-									type="number"
-									value={newExpense.amount}
-									onChange={handleChange}
-									required
-								/>
-							</FormControl>
-							<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="hr">
-								<DatePicker
-									label="Datum"
-									value={newExpense.date}
-									onChange={(newValue) =>
-										setNewExpense((prev: any) => ({
-											...prev,
-											date: newValue,
-										}))
-									}
-								/>
-							</LocalizationProvider>
-							<TextField
-								label="Opis"
-								name="description"
-								value={newExpense.description}
-								onChange={handleChange}
-							/>
-							{errorMsg && <Typography color="error">{errorMsg}</Typography>}
-							<Button type="submit" variant="contained">
-								Dodaj trošak
-							</Button>
-						</Stack>
-					</Stack>
-				</Modal>
-			</Portal>
+
+			{expenses.length > 0 && (
+				<ExpenseGrid
+					expenses={expenses}
+					onEdit={handleOpenEdit}
+					onDelete={handleOpenDelete}
+				/>
+			)}
+
+			<ModalAddExpense
+				open={openModal}
+				handleClose={handleCloseModal}
+				newExpense={expenseForm}
+				setNewExpense={setExpenseForm}
+				handleChange={handleChange}
+				handleSubmit={handleSubmit}
+				errorMsg={errorMsg}
+				isEdit={editingId !== null}
+			/>
+
+			<ModalDeleteExpense
+				open={deleteDialogOpen}
+				handleClose={() => setDeleteDialogOpen(false)}
+				handleConfirm={handleConfirmDelete}
+			/>
 		</Stack>
 	);
 }

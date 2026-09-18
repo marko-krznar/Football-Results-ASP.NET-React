@@ -23,3 +23,15 @@ public class CreateExpenseDto
     public DateOnly Date { get; set; }
     public string? Description { get; set; }
 }
+
+public class UpdateExpenseDto
+{
+    [Required]
+    public ExpenseOption Option { get; set; }
+    [Required]
+    [Range(0, double.MaxValue)]
+    public decimal Amount { get; set; }
+    public DateOnly Date { get; set; }
+    public string? Description { get; set; }
+}
+

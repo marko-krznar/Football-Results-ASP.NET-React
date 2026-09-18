@@ -347,6 +347,20 @@ export default function Navigation() {
 									/>
 								</ListItemButton>
 							</ListItem>
+
+							<ListItem disablePadding>
+								<ListItemButton component={Link} to="/expenses" onClick={closeMobileMenu}>
+									<AdminPanelSettingsIcon sx={{ mr: 2 }} color="primary" />
+
+									<ListItemText
+										primary="Troškovi"
+										primaryTypographyProps={{
+											fontWeight: 600,
+											color: "primary.main",
+										}}
+									/>
+								</ListItemButton>
+							</ListItem>
 						</>
 					)}
 
