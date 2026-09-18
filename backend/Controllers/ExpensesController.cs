@@ -55,4 +55,36 @@ public class ExpensesController : ControllerBase
         };
         return CreatedAtAction(nameof(Get), new { id = created.Id }, resultDto);
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<ExpenseDto>> Update(int id, [FromBody] UpdateExpenseDto dto)
+    {
+        var updated = await _expenseService.Update(id, dto);
+        if (updated == null)
+        {
+            return NotFound();
+        }
+
+        var resultDto = new ExpenseDto
+        {
+            Id = updated.Id,
+            Option = updated.Option,
+            Amount = updated.Amount,
+            Date = updated.Date,
+            Description = updated.Description
+        };
+        return Ok(resultDto);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var deleted = await _expenseService.Delete(id);
+        if (!deleted)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
 }
+

@@ -8,6 +8,7 @@ export enum ExpenseOption {
 export type ExpenseOptionValue = ExpenseOption.HPD_PRSTEN | ExpenseOption.OSTALO;
 
 export interface Expense {
+	id?: number;
 	option: number;
 	amount: number | null;
 	date: Dayjs | null;

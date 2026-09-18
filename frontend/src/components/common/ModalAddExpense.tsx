@@ -24,6 +24,7 @@ export default function ModalAddExpense({
 	handleChange,
 	handleSubmit,
 	errorMsg,
+	isEdit = false,
 }: {
 	open: boolean;
 	handleClose: () => void;
@@ -32,6 +33,7 @@ export default function ModalAddExpense({
 	handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 	handleSubmit: (e: React.SubmitEvent) => Promise<void>;
 	errorMsg: string;
+	isEdit?: boolean;
 }) {
 	const theme = useTheme();
 
@@ -46,7 +48,7 @@ export default function ModalAddExpense({
 			>
 				<Stack gap={2} sx={{ backgroundColor: theme.palette.grey[900], width: "80%", padding: "4rem" }}>
 					<Typography variant="h3" component="p" textAlign="center" gutterBottom>
-						Upiši nove troškove
+						{isEdit ? "Uredi trošak" : "Upiši nove troškove"}
 					</Typography>
 					<Stack gap={2} component="form" onSubmit={handleSubmit}>
 						<FormControl fullWidth>
@@ -72,7 +74,7 @@ export default function ModalAddExpense({
 								label="Iznos"
 								name="amount"
 								type="number"
-								value={newExpense.amount}
+								value={newExpense.amount ?? ""}
 								onChange={handleChange}
 								required
 							/>
@@ -92,13 +94,16 @@ export default function ModalAddExpense({
 						<TextField
 							label="Opis"
 							name="description"
-							value={newExpense.description}
+							value={newExpense.description || ""}
 							onChange={handleChange}
 						/>
 						{errorMsg && <Typography color="error">{errorMsg}</Typography>}
-						<Stack direction="row" justifyContent="flex-end">
+						<Stack direction="row" justifyContent="flex-end" gap={2}>
+							<Button variant="outlined" onClick={handleClose}>
+								Odustani
+							</Button>
 							<Button type="submit" variant="contained">
-								Dodaj trošak
+								{isEdit ? "Spremi izmjene" : "Dodaj trošak"}
 							</Button>
 						</Stack>
 					</Stack>
