@@ -12,3 +12,43 @@ services:
       buildCommand: npm install && npm run build
       staticPublishPath: dist/frontend
       plan: free
+      envVars:
+          - key: VITE_API_URL
+            value: ""
+      routes:
+          - type: rewrite
+            source: /api/*
+            destination: https://hpd-superliga-backend.onrender.com/api/*
+          - type: rewrite
+            source: /login
+            destination: https://hpd-superliga-backend.onrender.com/login
+          - type: rewrite
+            source: /logout
+            destination: https://hpd-superliga-backend.onrender.com/logout
+          - type: rewrite
+            source: /manage/*
+            destination: https://hpd-superliga-backend.onrender.com/manage/*
+          - type: rewrite
+            source: /register
+            destination: https://hpd-superliga-backend.onrender.com/register
+          - type: rewrite
+            source: /refresh
+            destination: https://hpd-superliga-backend.onrender.com/refresh
+          - type: rewrite
+            source: /confirmEmail
+            destination: https://hpd-superliga-backend.onrender.com/confirmEmail
+          - type: rewrite
+            source: /resendConfirmationEmail
+            destination: https://hpd-superliga-backend.onrender.com/resendConfirmationEmail
+          - type: rewrite
+            source: /forgotPassword
+            destination: https://hpd-superliga-backend.onrender.com/forgotPassword
+          - type: rewrite
+            source: /resetPassword
+            destination: https://hpd-superliga-backend.onrender.com/resetPassword
+          - type: rewrite
+            source: /2fa
+            destination: https://hpd-superliga-backend.onrender.com/2fa
+          - type: rewrite
+            source: /*
+            destination: /index.html
