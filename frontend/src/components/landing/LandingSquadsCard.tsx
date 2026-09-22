@@ -59,6 +59,9 @@ function LandingSquadsCard({
 										overflow={"hidden"}
 										textOverflow={"ellipsis"}
 										whiteSpace="nowrap"
+										width="100%"
+										textAlign="center"
+										title={player}
 									>
 										{player}
 									</Typography>
@@ -117,6 +120,9 @@ function LandingSquadsCard({
 										overflow={"hidden"}
 										textOverflow={"ellipsis"}
 										whiteSpace="nowrap"
+										width="100%"
+										textAlign="center"
+										title={player}
 									>
 										{player}
 									</Typography>
