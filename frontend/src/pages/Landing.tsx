@@ -8,7 +8,7 @@ import LandingTotalResultCard from "../components/landing/LandingTotalResultCard
 
 export default function Landing() {
 	const selectedSeasonId = useSelectedSeason();
-	const { data: latestMatch, isLoading: latestMatchLoading } = useGetLatestMatchQuery();
+	const { data: latestMatch, isLoading: latestMatchLoading } = useGetLatestMatchQuery(selectedSeasonId);
 	const { data: totalSeasonScoreQuery, isLoading: totalSeasonScoreLoading } = useGetTotalSeasonScoreQuery(
 		selectedSeasonId ?? 1,
 		{ skip: !selectedSeasonId }
@@ -38,7 +38,7 @@ export default function Landing() {
 						flexDirection: { xs: "column", md: "row" },
 					}}
 				>
-					<LandingIntroCard matchDate={latestMatch?.date} />
+					<LandingIntroCard matchDate={latestMatch?.date} season="proljeće 2026" />
 					{totalSeasonScoreLoading && (
 						<Box flexGrow={1} flexShrink={1}>
 							<Skeleton variant="rounded" height={"100%"} />

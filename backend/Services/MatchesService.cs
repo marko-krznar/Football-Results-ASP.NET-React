@@ -250,9 +250,10 @@ public class MatchesService(AppDbContext context) : IMatchesService
         return ToDisplayDto(match);
     }
 
-    public async Task<MatchDisplayDto> GetLatestMatchDetails()
+    public async Task<MatchDisplayDto> GetLatestMatchDetails(int seasonId)
     {
         var match = await _context.Matches
+            .Where(m => m.SeasonId == seasonId)
             .Include(m => m.FirstTeam)
             .Include(m => m.SecondTeam)
             .Include(m => m.Sets)

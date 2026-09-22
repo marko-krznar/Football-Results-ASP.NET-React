@@ -56,9 +56,9 @@ public class MatchesController(IMatchesService matchesService) : ControllerBase
     }
 
     [HttpGet("latest-match-details")]
-    public async Task<IActionResult> GetLatestMatchDetails()
+    public async Task<IActionResult> GetLatestMatchDetails([FromQuery] int seasonId)
     {
-        var match = await _matchesService.GetLatestMatchDetails();
+        var match = await _matchesService.GetLatestMatchDetails(seasonId);
         return Ok(match);
     }
 

@@ -19,8 +19,8 @@ function LandingSquadsCard({
 				<Stack alignItems={"center"} gap={4} flexBasis={"50%"}>
 					<Typography variant="subtitle2">Crni</Typography>
 					<Stack direction="row" justifyContent="center" flexWrap="wrap" gap={2}>
-						{firstTeamPlayers?.map((player) => {
-							// if (player.isCaptain) {
+						{secondTeamPlayers?.map((player) => {
+							// if (player.name === "Ante") {
 							// 	return (
 							// 		<Box
 							// 			display="flex"
@@ -70,8 +70,8 @@ function LandingSquadsCard({
 				<Stack alignItems={"center"} gap={4} flexBasis={"50%"}>
 					<Typography variant="subtitle2">Bijeli</Typography>
 					<Stack direction="row" justifyContent="center" flexWrap="wrap" gap={2}>
-						{secondTeamPlayers?.map((player) => {
-							// if (player.name === "Ante") {
+						{firstTeamPlayers?.map((player) => {
+							// if (player.isCaptain) {
 							// 	return (
 							// 		<Box
 							// 			display="flex"
