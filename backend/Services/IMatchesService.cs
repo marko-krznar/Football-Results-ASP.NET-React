@@ -9,7 +9,7 @@ public interface IMatchesService
     Task<MatchDto> AddMatch(CreateMatchDto dto);
     Task<MatchDto> AddMatchWithDetails(CreateMatchWithDetailsDto dto);
     Task<MatchDisplayDto> GetMatchDisplay(int id);
-    Task<MatchDisplayDto> GetLatestMatchDetails();
+    Task<MatchDisplayDto> GetLatestMatchDetails(int seasonId);
     Task<List<MatchDisplayDto>> GetAllMatchesDisplay(int? seasonId = null);
     Task<SeasonScoreDto> GetSeasonScore(int seasonId);
     Task DeleteMatch(int id);

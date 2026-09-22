@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
 import dayjs from "dayjs";
 
-function LandingIntroCard({ matchDate }: { matchDate?: string }) {
+function LandingIntroCard({ matchDate, season }: { matchDate?: string; season: string }) {
 	return (
 		<Card
 			sx={{
@@ -9,7 +9,7 @@ function LandingIntroCard({ matchDate }: { matchDate?: string }) {
 			}}
 		>
 			<CardContent>
-				<Typography variant="body1">Aktivna sezona: proljeće 2026.</Typography>
+				<Typography variant="body1">Odabrana sezona: {season}.</Typography>
 				<Typography
 					variant="h1"
 					fontWeight="bold"

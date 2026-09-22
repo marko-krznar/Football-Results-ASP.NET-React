@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Chip, Divider, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, Chip, Divider, Stack, Typography, useTheme } from "@mui/material";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 
 function LandingTerminResults({
@@ -8,12 +8,14 @@ function LandingTerminResults({
 	firstSetsWon,
 	secondSetsWon,
 }: {
-	totalSets?: number;
-	firstTeamGoals?: number[];
-	secondTeamGoals?: number[];
-	firstSetsWon?: number;
-	secondSetsWon?: number;
+	totalSets: number;
+	firstTeamGoals: number[];
+	secondTeamGoals: number[];
+	firstSetsWon: number;
+	secondSetsWon: number;
 }) {
+	const theme = useTheme();
+
 	return (
 		<>
 			<Stack gap={2} marginBottom={4}>
@@ -39,11 +41,11 @@ function LandingTerminResults({
 							}}
 						>
 							<Box width="100%" display="flex" justifyContent="space-between" alignItems="center" gap={1}>
-								<Chip label="Set 1" />
+								<Chip label={`Set ${index + 1}`} />
 								<SportsSoccerIcon />
 							</Box>
 							<Box>
-								<Typography variant="subtitle1" textAlign="center">
+								<Typography variant="h2" component="p" textAlign="center" fontWeight="bold">
 									{secondTeamGoals?.[index]}
 								</Typography>
 								<Typography variant="body1" textAlign="center">
@@ -52,7 +54,7 @@ function LandingTerminResults({
 							</Box>
 							<Divider orientation="vertical" flexItem />
 							<Box>
-								<Typography variant="subtitle1" textAlign="center">
+								<Typography variant="h2" component="p" textAlign="center" fontWeight="bold">
 									{firstTeamGoals?.[index]}
 								</Typography>
 								<Typography variant="body1" textAlign="center">
@@ -72,7 +74,7 @@ function LandingTerminResults({
 						border: "2px solid #344551",
 					}}
 				>
-					<Typography variant="body1" textAlign="center" color="#95CFFF">
+					<Typography variant="body1" textAlign="center" color={theme.palette.primary.main}>
 						Konačni rezultat
 					</Typography>
 					<CardContent
@@ -85,28 +87,61 @@ function LandingTerminResults({
 						}}
 					>
 						<Box>
-							<Typography variant="subtitle1" textAlign="center" color="#95CFFF">
+							<Typography
+								variant="h2"
+								component="p"
+								textAlign="center"
+								fontWeight="bold"
+								color={
+									secondSetsWon > firstSetsWon
+										? theme.palette.primary.main
+										: theme.palette.text.primary
+								}
+							>
 								{secondSetsWon}
 							</Typography>
-							<Typography variant="body1" textAlign="center" color="#95CFFF">
+							<Typography
+								variant="body1"
+								textAlign="center"
+								color={
+									secondSetsWon > firstSetsWon
+										? theme.palette.primary.main
+										: theme.palette.text.primary
+								}
+							>
 								Crni
 							</Typography>
 						</Box>
-						<Typography variant="subtitle2" textAlign="center" color="#ADAAAA">
+						<Typography variant="subtitle2" textAlign="center">
 							:
 						</Typography>
 						<Box>
-							<Typography variant="subtitle1" textAlign="center" color="#ADAAAA">
+							<Typography
+								variant="h2"
+								component="p"
+								textAlign="center"
+								fontWeight="bold"
+								color={
+									firstSetsWon > secondSetsWon
+										? theme.palette.primary.main
+										: theme.palette.text.primary
+								}
+							>
 								{firstSetsWon}
 							</Typography>
-							<Typography variant="body1" textAlign="center">
+							<Typography
+								variant="body1"
+								textAlign="center"
+								color={
+									firstSetsWon > secondSetsWon
+										? theme.palette.primary.main
+										: theme.palette.text.primary
+								}
+							>
 								Bijeli
 							</Typography>
 						</Box>
 					</CardContent>
-					{/* <Typography variant="body1" textAlign="center" color="#95CFFF">
-						Pobjeda: Crni
-					</Typography> */}
 				</Card>
 			</Stack>
 		</>
