@@ -9,7 +9,7 @@ function LandingIntroCard({ matchDate }: { matchDate?: string }) {
 			}}
 		>
 			<CardContent>
-				<Typography variant="body1">Aktivna sezona: proljeće 2026.</Typography>
+				<Typography variant="body1">Odabrana sezona: proljeće 2026.</Typography>
 				<Typography
 					variant="h1"
 					fontWeight="bold"
