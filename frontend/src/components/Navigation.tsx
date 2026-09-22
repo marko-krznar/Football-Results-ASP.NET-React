@@ -30,6 +30,7 @@ import { useCurrentUser, useSelectedSeason } from "../redux/hooks";
 import { setSelectedSeasonId } from "../redux/seasonSlice";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
+import { getClosestSeasonId } from "../utils/getClosestSeasonIdUtils";
 
 export default function Navigation() {
 	const navigate = useNavigate();
@@ -42,11 +43,13 @@ export default function Navigation() {
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+	const closestSeason = seasons && getClosestSeasonId(seasons);
+
 	useEffect(() => {
-		if (selectedSeasonId === null && seasons && seasons.length > 0) {
-			dispatch(setSelectedSeasonId(seasons[0].id));
+		if (closestSeason) {
+			dispatch(setSelectedSeasonId(closestSeason));
 		}
-	}, [seasons, selectedSeasonId, dispatch]);
+	}, [closestSeason, dispatch]);
 
 	const handleLogout = async () => {
 		try {
