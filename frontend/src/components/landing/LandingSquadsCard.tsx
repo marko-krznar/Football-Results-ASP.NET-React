@@ -54,7 +54,14 @@ function LandingSquadsCard({
 									borderRadius={2}
 								>
 									<Avatar>{player.charAt(0)}</Avatar>
-									<Typography variant="body2">{player}</Typography>
+									<Typography
+										variant="body2"
+										overflow={"hidden"}
+										textOverflow={"ellipsis"}
+										whiteSpace="nowrap"
+									>
+										{player}
+									</Typography>
 								</Stack>
 							);
 						})}
@@ -105,7 +112,14 @@ function LandingSquadsCard({
 									borderRadius={2}
 								>
 									<Avatar>{player.charAt(0)}</Avatar>
-									<Typography variant="body2">{player}</Typography>
+									<Typography
+										variant="body2"
+										overflow={"hidden"}
+										textOverflow={"ellipsis"}
+										whiteSpace="nowrap"
+									>
+										{player}
+									</Typography>
 								</Stack>
 							);
 						})}
