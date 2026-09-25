@@ -5,14 +5,18 @@ import LandingIntroCard from "../components/landing/LandingIntroCard";
 import LandingSquadsCard from "../components/landing/LandingSquadsCard";
 import LandingTerminResults from "../components/landing/LandingTerminResults";
 import LandingTotalResultCard from "../components/landing/LandingTotalResultCard";
+import { useGetSeasonsQuery } from "../redux/api/seasonsApi";
 
 export default function Landing() {
 	const selectedSeasonId = useSelectedSeason();
 	const { data: latestMatch, isLoading: latestMatchLoading } = useGetLatestMatchQuery(selectedSeasonId);
+	const { data: seasons } = useGetSeasonsQuery();
 	const { data: totalSeasonScoreQuery, isLoading: totalSeasonScoreLoading } = useGetTotalSeasonScoreQuery(
 		selectedSeasonId ?? 1,
 		{ skip: !selectedSeasonId }
 	);
+
+	const currentSeason = seasons && seasons.find((season) => season.id === selectedSeasonId);
 
 	return (
 		<Container maxWidth="xl">
@@ -38,7 +42,9 @@ export default function Landing() {
 						flexDirection: { xs: "column", md: "row" },
 					}}
 				>
-					<LandingIntroCard matchDate={latestMatch?.date} season="proljeće 2026" />
+					{currentSeason && latestMatch && (
+						<LandingIntroCard matchDate={latestMatch.date} season={currentSeason.name} />
+					)}
 					{totalSeasonScoreLoading && (
 						<Box flexGrow={1} flexShrink={1}>
 							<Skeleton variant="rounded" height={"100%"} />

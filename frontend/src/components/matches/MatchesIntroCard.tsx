@@ -17,11 +17,17 @@ export default function MatchesIntroCard({
 }: TotalResult) {
 	const theme = useTheme();
 
+	const isSecondTeamLeading = secondTotalSetsWon >= firstTotalSetsWon;
+	const isFirstTeamLeading = firstTotalSetsWon >= secondTotalSetsWon;
+
+	const secondTeamColor = isSecondTeamLeading ? theme.palette.primary.main : theme.palette.text.primary;
+	const firstTeamColor = isFirstTeamLeading ? theme.palette.primary.main : theme.palette.text.primary;
+
 	return (
-		<Box>
-			<Card sx={{ padding: "4rem !important", flexGrow: 1 }}>
-				<CardContent>
-					<Typography variant="subtitle2" textAlign="center" color={theme.palette.primary.main}>
+		<Box sx={{ width: { xs: "100%", sm: "auto" }, minWidth: { sm: "320px" } }}>
+			<Card sx={{ p: { xs: 2, sm: 4, md: 6 }, width: "100%", flexGrow: 1 }}>
+				<CardContent sx={{ p: "0 !important" }}>
+					<Typography variant="subtitle2" textAlign="center" color={theme.palette.primary.main} sx={{ mb: 2 }}>
 						Sveukupno
 					</Typography>
 					<Box display="flex" justifyContent="center" alignItems="center" gap={4}>
@@ -31,22 +37,14 @@ export default function MatchesIntroCard({
 								component="p"
 								fontWeight="bold"
 								textAlign="center"
-								color={
-									secondTotalSetsWon < firstTotalSetsWon
-										? theme.palette.text.primary
-										: theme.palette.primary.main
-								}
+								color={secondTeamColor}
 							>
 								{secondTotalSetsWon}
 							</Typography>
 							<Typography
 								variant="body1"
 								textAlign="center"
-								color={
-									secondTotalSetsWon < firstTotalSetsWon
-										? theme.palette.text.primary
-										: theme.palette.primary.main
-								}
+								color={secondTeamColor}
 							>
 								{secondTeamName}
 							</Typography>
@@ -58,22 +56,14 @@ export default function MatchesIntroCard({
 								component="p"
 								fontWeight="bold"
 								textAlign="center"
-								color={
-									firstTotalSetsWon < secondTotalSetsWon
-										? theme.palette.text.primary
-										: theme.palette.primary.main
-								}
+								color={firstTeamColor}
 							>
 								{firstTotalSetsWon}
 							</Typography>
 							<Typography
 								variant="body1"
 								textAlign="center"
-								color={
-									firstTotalSetsWon < secondTotalSetsWon
-										? theme.palette.text.primary
-										: theme.palette.primary.main
-								}
+								color={firstTeamColor}
 							>
 								{firstTeamName}
 							</Typography>
