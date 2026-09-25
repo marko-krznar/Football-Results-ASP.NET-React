@@ -8,6 +8,8 @@ import {
 	DialogActions,
 	Button,
 	Stack,
+	useMediaQuery,
+	useTheme,
 } from "@mui/material";
 import MatchesIntro from "../components/matches/MatchesIntro";
 import { useState } from "react";
@@ -16,10 +18,13 @@ import { useSelectedSeason } from "../redux/hooks";
 import EditMatchModal from "../components/matches/EditMatchModal";
 import AddMatchModal from "../components/matches/AddMatchModal";
 import MatchTabel from "../components/matches/MatchTabel";
+import MatchesMobileCardList from "../components/matches/MatchesMobileCardList";
 import MatchesIntroCard from "../components/matches/MatchesIntroCard";
 import { useGetSeasonsQuery } from "../redux/api/seasonsApi";
 
 export default function Matches() {
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const selectedSeasonId = useSelectedSeason();
 	const { data } = useGetMatchesQuery(selectedSeasonId ?? 0, { skip: !selectedSeasonId });
 	const { data: totalSeasonScore } = useGetTotalSeasonScoreQuery(selectedSeasonId ?? 0, { skip: !selectedSeasonId });
@@ -52,13 +57,23 @@ export default function Matches() {
 					)}
 				</Stack>
 				{data && (
-					<MatchTabel
-						data={data}
-						setDeletingMatchId={setDeletingMatchId}
-						setDeleteDialogOpen={setDeleteDialogOpen}
-						setEditingMatchId={setEditingMatchId}
-						setEditModalOpen={setEditModalOpen}
-					/>
+					isMobile ? (
+						<MatchesMobileCardList
+							data={data}
+							setDeletingMatchId={setDeletingMatchId}
+							setDeleteDialogOpen={setDeleteDialogOpen}
+							setEditingMatchId={setEditingMatchId}
+							setEditModalOpen={setEditModalOpen}
+						/>
+					) : (
+						<MatchTabel
+							data={data}
+							setDeletingMatchId={setDeletingMatchId}
+							setDeleteDialogOpen={setDeleteDialogOpen}
+							setEditingMatchId={setEditingMatchId}
+							setEditModalOpen={setEditModalOpen}
+						/>
+					)
 				)}
 			</Box>
 			{addModalOpen && <AddMatchModal open={addModalOpen} onClose={() => setAddModalOpen(false)} />}
