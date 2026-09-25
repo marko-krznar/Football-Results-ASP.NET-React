@@ -15,6 +15,8 @@ import {
 	Checkbox,
 	FormControlLabel,
 	MenuItem,
+	useMediaQuery,
+	useTheme,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -40,6 +42,8 @@ interface AddMatchProps {
 }
 
 export default function AddMatchModal({ open, onClose }: AddMatchProps) {
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const { data: seasonsList, isLoading: seasonsLoading } = useGetSeasonsQuery();
 	const { data: teamsList, isLoading: teamsLoading } = useGetTeamsQuery();
 	const [addMatchWithDetails, { isLoading: isSaving }] = useAddMatchWithDetailsMutation();
@@ -169,7 +173,7 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 	};
 
 	return (
-		<Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+		<Dialog open={open} onClose={onClose} maxWidth="md" fullWidth fullScreen={isMobile}>
 			<DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", pr: 2 }}>
 				<Typography variant="h5" sx={{ fontWeight: "bold" }}>
 					Dodaj utakmicu
@@ -219,7 +223,7 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 					<Typography variant="h6">Setovi</Typography>
 					<Stack spacing={2}>
 						{sets.map((set, index) => (
-							<Stack direction="row" spacing={2} alignItems="center" key={index}>
+							<Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ xs: "stretch", sm: "center" }} key={index}>
 								<TextField
 									label={`Set ${set.setNumber}`}
 									type="number"

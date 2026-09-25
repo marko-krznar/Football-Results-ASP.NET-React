@@ -13,6 +13,8 @@ import {
 	DialogActions,
 	Checkbox,
 	FormControlLabel,
+	useMediaQuery,
+	useTheme,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -35,6 +37,8 @@ interface EditMatchModalProps {
 }
 
 export default function EditMatchModal({ open, matchId, onClose }: EditMatchModalProps) {
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const { data: match } = useGetMatchByIdQuery(matchId ?? 0, { skip: !matchId });
 	const { data: setsData } = useGetSetsQuery(matchId ?? 0, { skip: !matchId });
 	const { data: matchPlayers } = useGetMatchPlayersQuery(matchId ?? 0, { skip: !matchId });
@@ -125,7 +129,7 @@ export default function EditMatchModal({ open, matchId, onClose }: EditMatchModa
 		}
 	};
 	return (
-		<Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+		<Dialog open={open} onClose={onClose} maxWidth="md" fullWidth fullScreen={isMobile}>
 			<DialogTitle>Uredi utakmicu</DialogTitle>
 			<DialogContent dividers>
 				<Stack spacing={3}>
@@ -143,7 +147,7 @@ export default function EditMatchModal({ open, matchId, onClose }: EditMatchModa
 					</Typography>
 					<Stack spacing={2}>
 						{sets.map((set, index) => (
-							<Stack direction="row" spacing={2} alignItems="center" key={index}>
+							<Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ xs: "stretch", sm: "center" }} key={index}>
 								<TextField
 									label={`Set ${set.setNumber}`}
 									type="number"
