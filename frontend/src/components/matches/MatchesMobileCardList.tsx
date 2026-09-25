@@ -1,20 +1,10 @@
-import {
-	Box,
-	Card,
-	CardContent,
-	Typography,
-	IconButton,
-	Stack,
-	Chip,
-	Divider,
-	useTheme,
-} from "@mui/material";
+import { Box, Card, CardContent, Typography, IconButton, Stack, Chip, Divider, useTheme } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import dayjs from "dayjs";
 import "dayjs/locale/hr";
 import { useCurrentUser } from "../../redux/hooks";
-import { Match } from "./MatchTabel";
+import type { Match } from "./MatchTabel";
 
 type MatchesMobileCardListProps = {
 	data: Match[];
@@ -113,7 +103,12 @@ export default function MatchesMobileCardList({
 							<Divider sx={{ my: 1 }} />
 
 							{/* Set-by-Set Breakdown */}
-							<Typography variant="caption" color="text.secondary" fontWeight="bold" sx={{ display: "block", mb: 0.5 }}>
+							<Typography
+								variant="caption"
+								color="text.secondary"
+								fontWeight="bold"
+								sx={{ display: "block", mb: 0.5 }}
+							>
 								Po setovima:
 							</Typography>
 							<Stack direction="row" spacing={1} flexWrap="wrap" sx={{ gap: 0.5, mb: 1.5 }}>
