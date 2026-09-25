@@ -40,7 +40,7 @@ export default function Matches() {
 					paddingBlock: 4,
 				}}
 			>
-				<Stack direction={"row"} spacing={4}>
+				<Stack direction={{ xs: "column", sm: "row" }} spacing={4} sx={{ width: "100%", mb: 4 }}>
 					{selectedSeason && <MatchesIntro season={selectedSeason.name} />}
 					{totalSeasonScore && (
 						<MatchesIntroCard
