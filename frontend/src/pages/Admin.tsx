@@ -20,12 +20,12 @@ import PersonIcon from "@mui/icons-material/Person";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { useNavigate, useSearchParams } from "react-router";
 
-// Existing admin components — migrated as-is
-import AddSeason from "../components/admin/AddSeason";
-import AddTeam from "../components/admin/AddTeam";
-import AddTeamMembers from "../components/admin/AddTeamMembers";
-import ManagePlayers from "../components/admin/ManagePlayers";
-import ManageTeams from "../components/admin/ManageTeams";
+// Admin tab components
+import AdminSeasonsTab from "../components/admin/AdminSeasonsTab";
+import AdminAddTeamTab from "../components/admin/AdminAddTeamTab";
+import AdminAddTeamMembersTab from "../components/admin/AdminAddTeamMembersTab";
+import AdminPlayersTab from "../components/admin/AdminPlayersTab";
+import AdminTeamsTab from "../components/admin/AdminTeamsTab";
 
 // Matches tab reuses the full Matches page content
 import AdminMatchesTab from "../components/admin/AdminMatchesTab";
@@ -169,7 +169,7 @@ function AdminTabContent({ activeTab }: { activeTab: AdminTab }) {
 					<Typography variant="h4" sx={{ color: "#fff", fontWeight: "bold" }}>
 						Seasons
 					</Typography>
-					<AddSeason />
+					<AdminSeasonsTab />
 				</Stack>
 			);
 
@@ -179,14 +179,14 @@ function AdminTabContent({ activeTab }: { activeTab: AdminTab }) {
 					<Typography variant="h4" sx={{ color: "#fff", fontWeight: "bold" }}>
 						Teams
 					</Typography>
-					<AddTeam />
-					<ManageTeams />
-					<AddTeamMembers />
+					<AdminAddTeamTab />
+					<AdminTeamsTab />
+					<AdminAddTeamMembersTab />
 				</Stack>
 			);
 
 		case "players":
-			return <ManagePlayers />;
+			return <AdminPlayersTab />;
 
 		case "expenses":
 			return <AdminExpensesTab />;

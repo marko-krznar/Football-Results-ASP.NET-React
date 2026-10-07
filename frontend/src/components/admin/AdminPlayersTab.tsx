@@ -26,7 +26,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { useAddPlayerMutation, useGetPlayersQuery, useUpdatePlayerMutation, type Player } from "../../redux/api/playersApi";
 
-export default function ManagePlayers() {
+export default function AdminPlayersTab() {
 	const { data: playersList, isLoading: isFetching } = useGetPlayersQuery();
 	const [addPlayer, { isLoading: isAdding }] = useAddPlayerMutation();
 	const [updatePlayer, { isLoading: isUpdating }] = useUpdatePlayerMutation();

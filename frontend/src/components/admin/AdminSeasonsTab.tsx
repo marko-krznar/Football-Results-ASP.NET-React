@@ -23,7 +23,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 
-export default function AddSeason() {
+export default function AdminSeasonsTab() {
 	const outerTheme = useTheme();
 	const pickerTheme = createTheme(outerTheme, {
 		typography: {

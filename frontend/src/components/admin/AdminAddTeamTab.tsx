@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useGetPlayersQuery } from "../../redux/api/playersApi";
 import { useGetSeasonsQuery } from "../../redux/api/seasonsApi";
 
-export default function AddTeam() {
+export default function AdminAddTeamTab() {
 	const [addTeam, { isLoading: isAdding }] = useAddTeamMutation();
 	const { data: playersList } = useGetPlayersQuery();
 	const { data: seasonsList } = useGetSeasonsQuery();
