@@ -107,10 +107,10 @@ export default function AdminExpensesTab() {
 			<Stack direction="row" gap={1} alignItems="flex-start">
 				<Box flex={1}>
 					<Typography variant="h4" sx={{ color: "#fff", fontWeight: "bold" }}>
-						Expenses
+						Troškovi
 					</Typography>
 					<Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)", mt: 0.5 }}>
-						Cost per session for HPD Prsten Superliga is 75€.
+						Troškovi za termin na ŠD Hotanj je 75€.
 					</Typography>
 				</Box>
 				<Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenAdd}>

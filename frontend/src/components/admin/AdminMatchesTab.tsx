@@ -50,11 +50,11 @@ export default function AdminMatchesTab() {
 			<Stack direction="row" alignItems="center" justifyContent="space-between">
 				<Box>
 					<Typography variant="h4" sx={{ color: "#fff", fontWeight: "bold" }}>
-						Matches
+						Upravljanje terminima
 					</Typography>
 					{selectedSeason && (
 						<Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)", mt: 0.5 }}>
-							Season: {selectedSeason.name}
+							Sezona: {selectedSeason.name}
 						</Typography>
 					)}
 				</Box>
@@ -64,7 +64,7 @@ export default function AdminMatchesTab() {
 					onClick={() => setAddModalOpen(true)}
 					sx={{ whiteSpace: "nowrap" }}
 				>
-					Add Match
+					Dodaj termin
 				</Button>
 			</Stack>
 
