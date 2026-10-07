@@ -179,20 +179,6 @@ export default function Navigation() {
 										Admin
 									</Button>
 								</Tooltip>
-								<Tooltip title="Expenses">
-									<Button
-										component={Link}
-										to="/expenses"
-										color="inherit"
-										startIcon={<AdminPanelSettingsIcon />}
-										sx={{
-											color: (theme) => theme.palette.primary.main,
-											fontWeight: 600,
-										}}
-									>
-										Expenses
-									</Button>
-								</Tooltip>
 							</>
 						)}
 
@@ -343,20 +329,6 @@ export default function Navigation() {
 
 									<ListItemText
 										primary="Admin panel"
-										primaryTypographyProps={{
-											fontWeight: 600,
-											color: "primary.main",
-										}}
-									/>
-								</ListItemButton>
-							</ListItem>
-
-							<ListItem disablePadding>
-								<ListItemButton component={Link} to="/expenses" onClick={closeMobileMenu}>
-									<AdminPanelSettingsIcon sx={{ mr: 2 }} color="primary" />
-
-									<ListItemText
-										primary="Troškovi"
 										primaryTypographyProps={{
 											fontWeight: 600,
 											color: "primary.main",

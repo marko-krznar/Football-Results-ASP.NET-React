@@ -210,12 +210,10 @@ public class MatchesService(AppDbContext context) : IMatchesService
     private static MatchDto ToDto(Match m)
     {
         var firstTeamSetsWon = m.Sets.Count(s => 
-            s.FirstTeamGoals >= 6 && 
-            s.FirstTeamGoals - s.SecondTeamGoals >= 2);
+            backend.Domain.MatchResultEngine.IsSetWinner(s.FirstTeamGoals, s.SecondTeamGoals));
 
         var secondTeamSetsWon = m.Sets.Count(s => 
-            s.SecondTeamGoals >= 6 && 
-            s.SecondTeamGoals - s.FirstTeamGoals >= 2);
+            backend.Domain.MatchResultEngine.IsSetWinner(s.SecondTeamGoals, s.FirstTeamGoals));
 
         return new MatchDto
         {

@@ -201,3 +201,9 @@ mono_crash.*
 # Tests
 coverage
 .agents
+
+# Antigravity custom directories
+agents/
+skills/
+skills-lock.json
+AGENTS.md

@@ -20,7 +20,7 @@ import { useGetPlayersQuery } from "../../redux/api/playersApi";
 import React from "react";
 import { useAddTeamMembersMutation } from "../../redux/api/teamMembersApi";
 
-export default function AddTeamMembers() {
+export default function AdminAddTeamMembersTab() {
 	const [addTeamMembers, { isLoading: isAdding }] = useAddTeamMembersMutation();
 	const { data: playersList } = useGetPlayersQuery();
 	const { data: teamsList } = useGetTeamsQuery();

@@ -1,19 +1,171 @@
-import Stack from "@mui/material/Stack";
-import AddSeason from "../components/admin/AddSeason";
-import AddTeam from "../components/admin/AddTeam";
-import AddTeamMembers from "../components/admin/AddTeamMembers";
-import ManagePlayers from "../components/admin/ManagePlayers";
-import ManageTeams from "../components/admin/ManageTeams";
+import {
+	Box,
+	Container,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	Paper,
+	Stack,
+	useMediaQuery,
+	useTheme,
+} from "@mui/material";
+import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import GroupsIcon from "@mui/icons-material/Groups";
+import PersonIcon from "@mui/icons-material/Person";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import { useNavigate, useSearchParams } from "react-router";
+
+// Admin tab components
+import AdminSeasonsTab from "../components/admin/AdminSeasonsTab";
+import AdminAddTeamTab from "../components/admin/AdminAddTeamTab";
+import AdminAddTeamMembersTab from "../components/admin/AdminAddTeamMembersTab";
+import AdminPlayersTab from "../components/admin/AdminPlayersTab";
+import AdminTeamsTab from "../components/admin/AdminTeamsTab";
+
+// Matches tab reuses the full Matches page content
+import AdminMatchesTab from "../components/admin/AdminMatchesTab";
+
+// Expenses tab reuses the Expenses page content
+import AdminExpensesTab from "../components/admin/AdminExpensesTab";
+
+type AdminTab = "matches" | "seasons" | "teams" | "players" | "expenses";
+
+interface NavItem {
+	id: AdminTab;
+	label: string;
+	icon: React.ReactElement;
+}
+
+const NAV_ITEMS: NavItem[] = [
+	{ id: "matches", label: "Termini", icon: <SportsSoccerIcon /> },
+	{ id: "seasons", label: "Sezone", icon: <CalendarMonthIcon /> },
+	{ id: "teams", label: "Timovi", icon: <GroupsIcon /> },
+	{ id: "players", label: "Igrači", icon: <PersonIcon /> },
+	{ id: "expenses", label: "Troškovi", icon: <ReceiptLongIcon /> },
+];
+
+const SIDEBAR_WIDTH = 220;
+
+const VALID_TABS = new Set<AdminTab>(["matches", "seasons", "teams", "players", "expenses"]);
+
+function isValidTab(value: string | null): value is AdminTab {
+	return VALID_TABS.has(value as AdminTab);
+}
 
 export default function Admin() {
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+	const rawTab = searchParams.get("tab");
+	const activeTab: AdminTab = isValidTab(rawTab) ? rawTab : "matches";
+
+	const handleTabChange = (tab: AdminTab) => {
+		navigate(`/admin?tab=${tab}`, { replace: true });
+	};
+
 	return (
-		// TODO Make this as progress with steps
-		<Stack spacing={4} sx={{ padding: 4 }}>
-			<ManagePlayers />
-			<AddSeason />
-			<AddTeam />
-			<ManageTeams />
-			<AddTeamMembers />
-		</Stack>
+		<Container maxWidth="xl">
+			<Box
+				sx={{
+					display: "flex",
+					minHeight: "calc(100vh - 64px)",
+				}}
+			>
+				{/* Desktop sidebar — hidden on mobile (global AdminBottomNav handles mobile nav) */}
+				{!isMobile && (
+					<Paper
+						elevation={0}
+						sx={{
+							width: SIDEBAR_WIDTH,
+							flexShrink: 0,
+							borderRight: "1px solid",
+							borderColor: "#2E302F",
+							background: "#1E1F1E",
+							minHeight: "100%",
+							pt: 3,
+						}}
+					>
+						<List disablePadding>
+							{NAV_ITEMS.map((item) => {
+								const isActive = activeTab === item.id;
+								return (
+									<ListItem key={item.id} disablePadding>
+										<ListItemButton
+											selected={isActive}
+											onClick={() => handleTabChange(item.id)}
+											sx={{
+												mx: 1,
+												borderRadius: 1,
+												mb: 0.5,
+												"&.Mui-selected": {
+													backgroundColor: "rgba(25, 118, 210, 0.15)",
+													"&:hover": {
+														backgroundColor: "rgba(25, 118, 210, 0.22)",
+													},
+												},
+											}}
+										>
+											<ListItemIcon
+												sx={{
+													color: isActive ? "primary.main" : "rgba(255,255,255,0.55)",
+													minWidth: 40,
+												}}
+											>
+												{item.icon}
+											</ListItemIcon>
+											<ListItemText
+												primary={item.label}
+												primaryTypographyProps={{
+													fontWeight: isActive ? 600 : 400,
+													color: isActive ? "primary.main" : "rgba(255,255,255,0.8)",
+													fontSize: "0.9rem",
+												}}
+											/>
+										</ListItemButton>
+									</ListItem>
+								);
+							})}
+						</List>
+					</Paper>
+				)}
+
+				{/* Main content area */}
+				<Box sx={{ flex: 1, overflow: "auto" }}>
+					<Container maxWidth="xl" sx={{ py: 4 }}>
+						<AdminTabContent activeTab={activeTab} />
+					</Container>
+				</Box>
+			</Box>
+		</Container>
 	);
+}
+
+function AdminTabContent({ activeTab }: { activeTab: AdminTab }) {
+	switch (activeTab) {
+		case "matches":
+			return <AdminMatchesTab />;
+
+		case "seasons":
+			return <AdminSeasonsTab />;
+
+		case "teams":
+			return (
+				<Stack spacing={4}>
+					<AdminAddTeamTab />
+					<AdminTeamsTab />
+					<AdminAddTeamMembersTab />
+				</Stack>
+			);
+
+		case "players":
+			return <AdminPlayersTab />;
+
+		case "expenses":
+			return <AdminExpensesTab />;
+	}
 }

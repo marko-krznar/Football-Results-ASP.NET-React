@@ -6,7 +6,9 @@ import "./App.scss";
 import { ThemeProvider, createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navigation from "./components/Navigation";
+import AdminBottomNav from "./components/AdminBottomNav";
 import { Outlet } from "react-router";
+import { Box } from "@mui/material";
 
 const theme = createTheme({
 	palette: {
@@ -65,7 +67,11 @@ function App() {
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Navigation />
-			<Outlet />
+			{/* Bottom padding ensures content is never hidden behind the fixed admin bottom nav on mobile */}
+			<Box sx={{ pb: { xs: 7, md: 0 } }}>
+				<Outlet />
+			</Box>
+			<AdminBottomNav />
 		</ThemeProvider>
 	);
 }

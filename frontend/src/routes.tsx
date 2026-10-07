@@ -7,7 +7,6 @@ import Matches from "./pages/Matches";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Seasons from "./pages/Seasons";
-import Expenses from "./pages/Expenses";
 
 export const router = createBrowserRouter([
 	{
@@ -40,15 +39,6 @@ export const router = createBrowserRouter([
 					{
 						path: "admin",
 						element: <Admin />,
-					},
-				],
-			},
-			{
-				element: <ProtectedRoute />,
-				children: [
-					{
-						path: "expenses",
-						element: <Expenses />,
 					},
 				],
 			},

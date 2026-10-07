@@ -38,7 +38,7 @@ import {
 	useRemoveTeamMemberMutation,
 } from "../../redux/api/teamMembersApi";
 
-export default function ManageTeams() {
+export default function AdminTeamsTab() {
 	const { data: teamsList, isLoading: teamsLoading } = useGetTeamsQuery();
 	const { data: seasonsList } = useGetSeasonsQuery();
 	const { data: playersList } = useGetPlayersQuery();
