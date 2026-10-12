@@ -5,7 +5,6 @@ import {
 	Card,
 	CardContent,
 	Checkbox,
-	CircularProgress,
 	FormControl,
 	FormControlLabel,
 	FormLabel,
@@ -13,6 +12,7 @@ import {
 	RadioGroup,
 	Stack,
 	Typography,
+	useTheme,
 } from "@mui/material";
 import { useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useState } from "react";
@@ -21,6 +21,7 @@ import React from "react";
 import { useAddTeamMembersMutation } from "../../redux/api/teamMembersApi";
 
 export default function AdminAddTeamMembersTab() {
+	const theme = useTheme();
 	const [addTeamMembers, { isLoading: isAdding }] = useAddTeamMembersMutation();
 	const { data: playersList } = useGetPlayersQuery();
 	const { data: teamsList } = useGetTeamsQuery();
@@ -47,16 +48,14 @@ export default function AdminAddTeamMembersTab() {
 	};
 	return (
 		<Stack spacing={4}>
-			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: "1.5rem !important" }}>
-				Upravljanje članovima tima
-			</Typography>
+			<Box>
+				<Typography variant="h3" component="h2" gutterBottom>
+					Upravljanje članovima tima
+				</Typography>
+			</Box>
 
 			<Card variant="outlined" sx={{ background: "#1E1F1E", borderColor: "#2E302F" }}>
 				<CardContent>
-					<Typography variant="h6" gutterBottom sx={{ color: "#fff", mb: 3 }}>
-						Dodaj članove u tim
-					</Typography>
-
 					{formError && (
 						<Alert severity="error" sx={{ mb: 2 }}>
 							{formError}
@@ -97,7 +96,9 @@ export default function AdminAddTeamMembersTab() {
 														}}
 													/>
 												}
-												label={team.seasonName ? `${team.name} (${team.seasonName})` : team.name}
+												label={
+													team.seasonName ? `${team.name} (${team.seasonName})` : team.name
+												}
 												sx={{ color: "#fff" }}
 											/>
 										))}
@@ -111,9 +112,7 @@ export default function AdminAddTeamMembersTab() {
 										justifyContent="space-between"
 										sx={{ mb: 1 }}
 									>
-										<Typography sx={{ fontWeight: "medium", color: "#fff" }}>
-											Igrači
-										</Typography>
+										<Typography sx={{ fontWeight: "medium", color: "#fff" }}>Igrači</Typography>
 										<Box>
 											<Button
 												size="small"
@@ -137,12 +136,12 @@ export default function AdminAddTeamMembersTab() {
 									{playersList && (
 										<Box
 											sx={{
-												display: "flex",
-												flexDirection: "column",
-												p: 1,
-												border: "1px solid #2E302F",
-												borderRadius: 1,
-												background: "#121212",
+												display: "grid",
+												gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+												backgroundColor: theme.palette.background.paper,
+												padding: 2,
+												gap: 1,
+												borderRadius: 2,
 											}}
 										>
 											{playersList.map((player) => (
@@ -164,22 +163,28 @@ export default function AdminAddTeamMembersTab() {
 															}}
 														/>
 													}
-													label={<Typography variant="body2" sx={{ color: "#fff" }}>{player.name}</Typography>}
+													label={
+														<Typography variant="body2" sx={{ color: "#fff" }}>
+															{player.name}
+														</Typography>
+													}
 												/>
 											))}
 										</Box>
 									)}
 								</Box>
-								<Button
-									type="submit"
-									variant="contained"
-									color="primary"
-									size="large"
-									disabled={isAdding}
-									sx={{ mt: 2 }}
-								>
-									{isAdding ? <CircularProgress size={24} /> : "Spremi Članove"}
-								</Button>
+								<Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-end">
+									<Button
+										type="submit"
+										variant="contained"
+										color="primary"
+										size="large"
+										disabled={isAdding}
+										sx={{ mt: 2 }}
+									>
+										Spremi Članove
+									</Button>
+								</Stack>
 							</Stack>
 						</Box>
 					)}

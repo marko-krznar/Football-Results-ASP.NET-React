@@ -104,26 +104,24 @@ export default function AdminExpensesTab() {
 
 	return (
 		<Stack spacing={4}>
-			<Stack direction="row" gap={1} alignItems="flex-start">
+			<Stack direction="row" gap={1} alignItems="center">
 				<Box flex={1}>
-					<Typography variant="h4" sx={{ color: "#fff", fontWeight: "bold" }}>
+					<Typography variant="h3" component="h2" gutterBottom>
 						Troškovi
 					</Typography>
-					<Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)", mt: 0.5 }}>
-						Troškovi za termin na ŠD Hotanj je 75€.
-					</Typography>
+					<Typography variant="body2">Troškovi za termin na ŠD Hotanj je 75€.</Typography>
 				</Box>
 				<Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenAdd}>
-					Add Expense
+					Dodaj trošak
 				</Button>
 			</Stack>
 
 			{isLoading && <Typography>Loading…</Typography>}
-			{isError && <Typography color="error">Failed to load expenses.</Typography>}
+			{isError && <Typography color="error">Učitavanje troškova nije uspjelo.</Typography>}
 
 			{expenses.length === 0 && !isLoading && (
 				<Typography variant="body1" color="textSecondary">
-					No expenses found.
+					Nisu pronađeni troškovi.
 				</Typography>
 			)}
 
