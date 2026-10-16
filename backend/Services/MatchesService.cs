@@ -63,6 +63,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
             SecondTeamId = dto.SecondTeamId,
             Location = dto.Location,
             Note = dto.Note,
+            CountsForStandings = dto.CountsForStandings,
         };
 
         _context.Matches.Add(match);
@@ -76,6 +77,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
             Date = match.MatchDate,
             Location = match.Location,
             Note = match.Note,
+            CountsForStandings = match.CountsForStandings,
             FirstTeamId = match.FirstTeamId,
             FirstTeamName = firstTeam.Name,
             SecondTeamId = match.SecondTeamId,
@@ -168,6 +170,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
             SecondTeamId = dto.SecondTeamId,
             Location = dto.Location,
             Note = dto.Note,
+            CountsForStandings = dto.CountsForStandings,
         };
         _context.Matches.Add(match);
 
@@ -223,6 +226,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
             Date = m.MatchDate,
             Location = m.Location,
             Note = m.Note,
+            CountsForStandings = m.CountsForStandings,
             FirstTeamId = m.FirstTeamId,
             FirstTeamName = m.FirstTeam != null ? m.FirstTeam.Name : string.Empty,
             SecondTeamId = m.SecondTeamId,
@@ -320,6 +324,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
             Date = m.MatchDate,
             Location = m.Location,
             Note = m.Note,
+            CountsForStandings = m.CountsForStandings,
             TotalSets = totalSets,
             FirstTeam = new MatchTeamDisplayDto
             {
@@ -348,7 +353,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
             .Include(m => m.FirstTeam)
             .Include(m => m.SecondTeam)
             .Include(m => m.Sets)
-            .Where(m => m.SeasonId == seasonId)
+            .Where(m => m.SeasonId == seasonId && m.CountsForStandings)
             .ToListAsync();
 
         if (matches.Count == 0)
@@ -425,6 +430,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
         match.MatchDate = dto.Date;
         match.Location = dto.Location;
         match.Note = dto.Note;
+        match.CountsForStandings = dto.CountsForStandings;
 
         await _context.SaveChangesAsync();
         return ToDto(match);
@@ -492,6 +498,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
         match.MatchDate = dto.Date;
         match.Location = dto.Location;
         match.Note = dto.Note;
+        match.CountsForStandings = dto.CountsForStandings;
 
         // 2. Ažuriranje setova (obriši stare i dodaj nove)
         _context.Sets.RemoveRange(match.Sets);

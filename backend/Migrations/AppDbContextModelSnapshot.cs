@@ -252,6 +252,12 @@ namespace backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("CountsForStandings")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("counts_for_standings");
+
                     b.Property<int>("FirstTeamId")
                         .HasColumnType("integer")
                         .HasColumnName("first_team_id");

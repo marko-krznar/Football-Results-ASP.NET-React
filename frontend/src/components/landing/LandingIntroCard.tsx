@@ -1,7 +1,16 @@
-import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
+import { Box, Card, CardContent, Chip, Divider, Typography } from "@mui/material";
 import dayjs from "dayjs";
+import "dayjs/locale/hr";
 
-function LandingIntroCard({ matchDate, season }: { matchDate?: string; season: string }) {
+function LandingIntroCard({
+	matchDate,
+	season,
+	isFriendly,
+}: {
+	matchDate?: string;
+	season: string;
+	isFriendly?: boolean;
+}) {
 	return (
 		<Card
 			sx={{
@@ -27,7 +36,7 @@ function LandingIntroCard({ matchDate, season }: { matchDate?: string; season: s
 					Praćenje rezultata, statistika i dinamike igre u realnom vremenu.
 				</Typography>
 				<Divider />
-				<Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+				<Box sx={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" }}>
 					{/* <Box>
 						<Typography variant="body1">
 							Odigrani termini
@@ -37,9 +46,18 @@ function LandingIntroCard({ matchDate, season }: { matchDate?: string; season: s
 					<Box>
 						<Typography variant="body1">Posljednji termin</Typography>
 						<Typography variant="subtitle2">
-							{dayjs(matchDate).locale("hr").format("DD.MM.YYYY.")}
+							{matchDate ? dayjs(matchDate).locale("hr").format("DD.MM.YYYY.") : "-"}
 						</Typography>
 					</Box>
+					{isFriendly && (
+						<Chip
+							size="small"
+							label="Prijateljski termin"
+							color="warning"
+							variant="outlined"
+							sx={{ fontWeight: "bold" }}
+						/>
+					)}
 				</Box>
 			</CardContent>
 		</Card>

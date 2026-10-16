@@ -16,6 +16,7 @@ public class MatchDisplayDto
     public DateOnly Date { get; set; }
     public string? Location { get; set; }
     public string? Note { get; set; }
+    public bool CountsForStandings { get; set; } = true;
     public int TotalSets { get; set; }
     public MatchTeamDisplayDto FirstTeam { get; set; } = new();
     public MatchTeamDisplayDto SecondTeam { get; set; } = new();

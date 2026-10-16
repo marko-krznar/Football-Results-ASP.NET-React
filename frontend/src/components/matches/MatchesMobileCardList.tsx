@@ -1,7 +1,8 @@
-import { Box, Card, CardContent, Typography, IconButton, Stack, Divider } from "@mui/material";
+import { Box, Card, CardContent, Typography, IconButton, Stack, Divider, Chip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import dayjs from "dayjs";
 import "dayjs/locale/hr";
 import { useCurrentUser } from "../../redux/hooks";
@@ -132,6 +133,7 @@ export default function MatchesMobileCardList({
 	return (
 		<Stack spacing={2.5} sx={{ width: "100%" }}>
 			{data.map((match: Match) => {
+				const isUncounted = match.countsForStandings === false;
 				const formattedDate = dayjs(match.date).locale("hr").format("ddd DD.MM.YYYY.");
 				const locationText = match.location || "ŠD Hotanj";
 
@@ -143,8 +145,8 @@ export default function MatchesMobileCardList({
 							width: "100%",
 							borderRadius: 3,
 							p: "16px !important",
-							backgroundColor: "background.paper",
-							borderColor: "divider",
+							backgroundColor: isUncounted ? "action.hover" : "background.paper",
+							borderColor: isUncounted ? "warning.main" : "divider",
 						}}
 					>
 						<CardContent sx={{ p: "0 !important", gap: 2, display: "flex", flexDirection: "column" }}>
@@ -160,6 +162,15 @@ export default function MatchesMobileCardList({
 										>
 											{formattedDate}
 										</Typography>
+										{isUncounted && (
+											<Chip
+												size="small"
+												label="Ne broji se"
+												color="warning"
+												variant="outlined"
+												sx={{ height: 22, fontSize: "0.72rem", fontWeight: "bold" }}
+											/>
+										)}
 									</Stack>
 
 									<Stack direction="row" spacing={0.5} alignItems="center" color="text.secondary">
@@ -211,6 +222,26 @@ export default function MatchesMobileCardList({
 								)}
 							</Stack>
 
+							{isUncounted && match.note && (
+								<Box
+									sx={{
+										display: "flex",
+										alignItems: "center",
+										gap: 1,
+										p: 1.2,
+										borderRadius: 2,
+										backgroundColor: "background.paper",
+										border: 1,
+										borderColor: "divider",
+									}}
+								>
+									<InfoOutlinedIcon sx={{ fontSize: 18, color: "warning.main" }} />
+									<Typography variant="caption" color="text.secondary">
+										{match.note}
+									</Typography>
+								</Box>
+							)}
+
 							<Divider sx={{ my: 0.5, borderColor: "divider", opacity: 0.6 }} />
 
 							{/* Scoreboard: Team 2 vs Team 1 */}
@@ -224,7 +255,7 @@ export default function MatchesMobileCardList({
 								<TeamScoreColumn
 									teamName={match.secondTeam.teamName}
 									fallbackName="Crni"
-									setsWon={match.secondTeam.setsWon}
+									setsWon={isUncounted ? 0 : match.secondTeam.setsWon}
 									isDarkJersey
 								/>
 
@@ -244,7 +275,7 @@ export default function MatchesMobileCardList({
 											color="text.secondary"
 											sx={{ letterSpacing: "0.05em" }}
 										>
-											FT
+											{isUncounted ? "VOID" : "FT"}
 										</Typography>
 									</Box>
 									<Typography variant="body1" fontWeight="bold" color="text.secondary">
@@ -256,7 +287,7 @@ export default function MatchesMobileCardList({
 								<TeamScoreColumn
 									teamName={match.firstTeam.teamName}
 									fallbackName="Bijeli"
-									setsWon={match.firstTeam.setsWon}
+									setsWon={isUncounted ? 0 : match.firstTeam.setsWon}
 									isDarkJersey={false}
 								/>
 							</Stack>
@@ -276,6 +307,9 @@ export default function MatchesMobileCardList({
 									</Typography>
 								</Stack>
 
+								{isUncounted && match.totalSets === 0 ? (
+									<Typography color="text.secondary">-</Typography>
+								) : (
 								<Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap sx={{ gap: 1 }}>
 									{match.secondTeam.goalsPerSet.map((goal, index) => {
 										const firstGoal = match.firstTeam.goalsPerSet[index] ?? 0;
@@ -315,6 +349,7 @@ export default function MatchesMobileCardList({
 										);
 									})}
 								</Stack>
+								)}
 							</Box>
 
 							<Divider sx={{ my: 0.5, borderColor: "divider", opacity: 0.6 }} />

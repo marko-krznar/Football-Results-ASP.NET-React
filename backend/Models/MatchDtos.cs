@@ -12,6 +12,7 @@ public class MatchDto
     public int SecondTeamId { get; set; }
     public string SecondTeamName { get; set; } = string.Empty;
     public string? Note { get; set; }
+    public bool CountsForStandings { get; set; } = true;
     public int FirstTeamSetsWon { get; set; }
     public int SecondTeamSetsWon { get; set; }
     public int FirstTeamTotalGoals { get; set; }
@@ -26,6 +27,7 @@ public class CreateMatchDto
     public required int FirstTeamId { get; set; }
     public required int SecondTeamId { get; set; }
     public string? Note { get; set; }
+    public bool CountsForStandings { get; set; } = true;
 }
 
 public class CreateMatchWithDetailsDto
@@ -36,6 +38,7 @@ public class CreateMatchWithDetailsDto
     public required int FirstTeamId { get; set; }
     public required int SecondTeamId { get; set; }
     public string? Note { get; set; }
+    public bool CountsForStandings { get; set; } = true;
     public List<UpsertSetDto> Sets { get; set; } = [];
     public List<int> FirstTeamPlayerIds { get; set; } = [];
     public List<int> SecondTeamPlayerIds { get; set; } = [];
@@ -46,6 +49,7 @@ public class UpdateMatchDto
     public required DateOnly Date { get; set; }
     public string? Location { get; set; }
     public string? Note { get; set; }
+    public bool CountsForStandings { get; set; } = true;
 }
 
 public class UpdateMatchWithDetailsDto
@@ -53,6 +57,7 @@ public class UpdateMatchWithDetailsDto
     public required DateOnly Date { get; set; }
     public string? Location { get; set; }
     public string? Note { get; set; }
+    public bool CountsForStandings { get; set; } = true;
     public List<UpsertSetDto> Sets { get; set; } = [];
     public List<int> FirstTeamPlayerIds { get; set; } = [];
     public List<int> SecondTeamPlayerIds { get; set; } = [];

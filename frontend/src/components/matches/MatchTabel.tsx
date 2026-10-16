@@ -9,9 +9,11 @@ import {
 	Typography,
 	IconButton,
 	Stack,
+	Chip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import dayjs from "dayjs";
 import "dayjs/locale/hr";
 import { useTheme } from "@mui/material/styles";
@@ -31,6 +33,7 @@ export interface Match {
 	date: string;
 	location: string | null;
 	note: string | null;
+	countsForStandings?: boolean;
 	totalSets: number;
 	firstTeam: MatchTeam;
 	secondTeam: MatchTeam;
@@ -73,13 +76,32 @@ export default function MatchTabel({
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{data.map((match: Match) => (
-						<TableRow key={match.id}>
+					{data.map((match: Match) => {
+						const isUncounted = match.countsForStandings === false;
+
+						return (
+						<TableRow
+							key={match.id}
+							sx={isUncounted ? { backgroundColor: "action.hover" } : undefined}
+						>
 							<TableCell style={{ width: "12rem" }}>
-								<Typography variant="body1">
-									{dayjs(match.date).locale("hr").format("ddd DD.MM.YYYY.")}
-								</Typography>
-								<Typography variant="body1">ŠD Hotanj 19:00</Typography>
+								<Stack spacing={0.5} alignItems="flex-start">
+									<Typography variant="body1">
+										{dayjs(match.date).locale("hr").format("ddd DD.MM.YYYY.")}
+									</Typography>
+									<Typography variant="body2" color="text.secondary">
+										{match.location || "ŠD Hotanj"} 19:00
+									</Typography>
+									{isUncounted && (
+										<Chip
+											size="small"
+											label="Ne broji se"
+											color="warning"
+											variant="outlined"
+											sx={{ height: 20, fontSize: "0.7rem", fontWeight: "bold" }}
+										/>
+									)}
+								</Stack>
 							</TableCell>
 							<TableCell style={{ width: "6rem" }}>
 								<Typography variant="body1">Crni</Typography>
@@ -102,22 +124,42 @@ export default function MatchTabel({
 								>
 									<Typography>{match.firstTeam.playerNames.join(", ")}</Typography>
 								</Box>
+								{isUncounted && match.note && (
+									<Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.75 }}>
+										<InfoOutlinedIcon sx={{ fontSize: 16, color: "warning.main" }} />
+										<Typography variant="caption" color="text.secondary" fontStyle="italic">
+											{match.note}
+										</Typography>
+									</Box>
+								)}
 							</TableCell>
 							<TableCell style={{ width: "10rem" }}>
-								<Stack spacing={2} direction={"row"}>
-									{match.secondTeam.goalsPerSet.map((goal, index) => (
-										<Typography key={index}>{goal}</Typography>
-									))}
-								</Stack>
-								<Stack spacing={2} direction={"row"}>
-									{match.firstTeam.goalsPerSet.map((goal, index) => (
-										<Typography key={index}>{goal}</Typography>
-									))}
-								</Stack>
+								{isUncounted && match.totalSets === 0 ? (
+									<Typography color="text.secondary">-</Typography>
+								) : (
+									<>
+										<Stack spacing={2} direction={"row"}>
+											{match.secondTeam.goalsPerSet.map((goal, index) => (
+												<Typography key={index}>{goal}</Typography>
+											))}
+										</Stack>
+										<Stack spacing={2} direction={"row"}>
+											{match.firstTeam.goalsPerSet.map((goal, index) => (
+												<Typography key={index}>{goal}</Typography>
+											))}
+										</Stack>
+									</>
+								)}
 							</TableCell>
 							<TableCell style={{ width: "3rem" }}>
-								<Typography>{match.secondTeam.setsWon}</Typography>
-								<Typography>{match.firstTeam.setsWon}</Typography>
+								{isUncounted ? (
+									<Typography color="text.secondary">-</Typography>
+								) : (
+									<>
+										<Typography>{match.secondTeam.setsWon}</Typography>
+										<Typography>{match.firstTeam.setsWon}</Typography>
+									</>
+								)}
 							</TableCell>
 							{/* Column 6: Summary */}
 							{/* <TableCell style={{ width: "3rem" }}>
@@ -161,7 +203,8 @@ export default function MatchTabel({
 								</TableCell>
 							)}
 						</TableRow>
-					))}
+						);
+					})}
 				</TableBody>
 			</Table>
 		</TableContainer>

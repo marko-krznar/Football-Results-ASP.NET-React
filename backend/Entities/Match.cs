@@ -11,6 +11,7 @@ public class Match
     public int SecondTeamId { get; set; }
     public string? Location { get; set; }
     public string? Note { get; set; }
+    public bool CountsForStandings { get; set; } = true;
 
     public Season? Season { get; set; }
     public Team? FirstTeam { get; set; }
