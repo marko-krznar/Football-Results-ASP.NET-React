@@ -3,14 +3,14 @@ import "@fontsource/lexend/500.css";
 import "@fontsource/lexend/700.css";
 import "./App.scss";
 
-import { ThemeProvider, createTheme } from "@mui/material";
+import { ThemeProvider, createTheme, responsiveFontSizes } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navigation from "./components/Navigation";
 import AdminBottomNav from "./components/AdminBottomNav";
 import { Outlet } from "react-router";
 import { Box } from "@mui/material";
 
-const theme = createTheme({
+const theme = responsiveFontSizes(createTheme({
 	palette: {
 		mode: "dark",
 		background: {
@@ -60,7 +60,7 @@ const theme = createTheme({
 			},
 		},
 	},
-});
+}));
 
 function App() {
 	return (

@@ -43,7 +43,12 @@ export default function AdminMatchesTab() {
 
 	return (
 		<Stack spacing={4}>
-			<Stack direction="row" alignItems="center" justifyContent="space-between">
+			<Stack
+				direction={isMobile ? "column" : "row"}
+				alignItems="center"
+				justifyContent="space-between"
+				spacing={2}
+			>
 				<Box>
 					<Typography variant="h3" component="h2" gutterBottom>
 						Upravljanje terminima
@@ -55,6 +60,7 @@ export default function AdminMatchesTab() {
 					startIcon={<AddIcon />}
 					onClick={() => setAddModalOpen(true)}
 					sx={{ whiteSpace: "nowrap" }}
+					fullWidth={isMobile}
 				>
 					Dodaj termin
 				</Button>

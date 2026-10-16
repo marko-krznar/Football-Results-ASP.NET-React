@@ -8,10 +8,10 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { useCurrentUser } from "../redux/hooks";
 
 const NAV_ITEMS = [
-	{ value: "matches", label: "Matches", icon: <SportsSoccerIcon /> },
-	{ value: "seasons", label: "Seasons", icon: <CalendarMonthIcon /> },
-	{ value: "teams", label: "Teams", icon: <GroupsIcon /> },
-	{ value: "players", label: "Players", icon: <PersonIcon /> },
+	{ value: "matches", label: "Termini", icon: <SportsSoccerIcon /> },
+	{ value: "seasons", label: "Kalendar", icon: <CalendarMonthIcon /> },
+	{ value: "teams", label: "Ekipa", icon: <GroupsIcon /> },
+	{ value: "players", label: "Profil", icon: <PersonIcon /> },
 	{ value: "expenses", label: "Expenses", icon: <ReceiptLongIcon /> },
 ];
 
@@ -52,12 +52,16 @@ export default function AdminBottomNav() {
 					navigate(`/admin?tab=${newValue}`);
 				}}
 				sx={{
-					background: "#1E1F1E",
+					background: (theme) => theme.palette.background.paper || theme.palette.background.default,
 					"& .MuiBottomNavigationAction-root": {
-						color: "rgba(255,255,255,0.5)",
+						color: "text.secondary",
 						minWidth: 0,
+						padding: "6px 0",
 						"&.Mui-selected": {
 							color: "primary.main",
+							"& .MuiSvgIcon-root": {
+								color: "primary.main",
+							},
 						},
 					},
 				}}
