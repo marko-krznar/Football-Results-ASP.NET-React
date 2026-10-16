@@ -8,14 +8,13 @@ import {
 	Stack,
 	Chip,
 	Pagination,
-	Button,
+	// Button,
 	Fab,
 	useTheme,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import TuneIcon from "@mui/icons-material/Tune";
-import AddIcon from "@mui/icons-material/Add";
+// import TuneIcon from "@mui/icons-material/Tune";
 import dayjs from "dayjs";
 import "dayjs/locale/hr";
 import type { Expense } from "../../types/expense";
@@ -39,7 +38,8 @@ export default function ExpensesMobileCardList({
 	const [activeFilter, setActiveFilter] = useState<string>("all");
 	const [page, setPage] = useState(1);
 
-	// Extract unique month filters from expenses
+	// TODO in future: re-enable availableMonths when month chips are restored
+	/*
 	const availableMonths = useMemo(() => {
 		const monthsMap = new Map<string, string>();
 		expenses.forEach((e) => {
@@ -55,6 +55,7 @@ export default function ExpensesMobileCardList({
 		});
 		return Array.from(monthsMap.entries()).map(([key, label]) => ({ key, label }));
 	}, [expenses]);
+	*/
 
 	// Filter expenses based on active selection
 	const filteredExpenses = useMemo(() => {
@@ -101,6 +102,8 @@ export default function ExpensesMobileCardList({
 					</Typography>
 				</Box>
 
+				{/* TODO in future: re-enable Filteri button */}
+				{/*
 				<Button
 					variant="outlined"
 					color="primary"
@@ -111,6 +114,7 @@ export default function ExpensesMobileCardList({
 				>
 					Filteri
 				</Button>
+				*/}
 			</Stack>
 
 			{/* Filter Chips Bar (Horizontal Scrollable) */}
@@ -136,6 +140,8 @@ export default function ExpensesMobileCardList({
 					}}
 				/>
 
+				{/* TODO in future: re-enable month filter chips (September, October, etc.) */}
+				{/*
 				{availableMonths.map((m) => {
 					const isActive = activeFilter === m.key;
 					return (
@@ -152,6 +158,7 @@ export default function ExpensesMobileCardList({
 						/>
 					);
 				})}
+				*/}
 
 				<Chip
 					label="Termini"
@@ -219,7 +226,7 @@ export default function ExpensesMobileCardList({
 			</Card>
 
 			{/* List of Expense Cards */}
-			<Stack spacing={2}>
+			<Stack spacing={2} useFlexGap>
 				{paginatedExpenses.length === 0 ? (
 					<Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
 						Nisu pronađeni troškovi za odabrani filter.
@@ -356,7 +363,6 @@ export default function ExpensesMobileCardList({
 					}}
 				>
 					<Fab variant="extended" color="primary" onClick={onAddNew} aria-label="Novi trošak">
-						<AddIcon sx={{ mr: 1 }} />
 						Novi trošak
 					</Fab>
 				</Box>

@@ -10,7 +10,6 @@ import {
 	Radio,
 	TextField,
 	Button,
-	useTheme,
 } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -35,8 +34,6 @@ export default function ModalAddExpense({
 	errorMsg: string;
 	isEdit?: boolean;
 }) {
-	const theme = useTheme();
-
 	return (
 		<Portal>
 			<Modal
@@ -46,7 +43,19 @@ export default function ModalAddExpense({
 				aria-describedby="modal-add-expense-form"
 				sx={{ justifyContent: "center", alignItems: "center" }}
 			>
-				<Stack gap={2} sx={{ backgroundColor: theme.palette.grey[900], width: "80%", padding: "4rem" }}>
+				<Stack
+					gap={2}
+					sx={{
+						backgroundColor: "background.paper",
+						width: { xs: "100%", sm: "80%" },
+						height: { xs: "100%", sm: "auto" },
+						maxWidth: { xs: "100vw", sm: "600px" },
+						maxHeight: { xs: "100vh", sm: "90vh" },
+						overflowY: "auto",
+						p: { xs: 3, sm: "4rem" },
+						justifyContent: { xs: "center", sm: "flex-start" },
+					}}
+				>
 					<Typography variant="h3" component="p" textAlign="center" gutterBottom>
 						{isEdit ? "Uredi trošak" : "Upiši nove troškove"}
 					</Typography>
@@ -71,6 +80,7 @@ export default function ModalAddExpense({
 						</FormControl>
 						<FormControl fullWidth>
 							<TextField
+								fullWidth
 								label="Iznos"
 								name="amount"
 								type="number"
@@ -82,6 +92,7 @@ export default function ModalAddExpense({
 						<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="hr">
 							<DatePicker
 								label="Datum"
+								slotProps={{ textField: { fullWidth: true } }}
 								value={newExpense.date}
 								onChange={(newValue) =>
 									setNewExpense((prev: Expense) => ({
@@ -92,18 +103,24 @@ export default function ModalAddExpense({
 							/>
 						</LocalizationProvider>
 						<TextField
+							fullWidth
 							label="Opis"
 							name="description"
 							value={newExpense.description || ""}
 							onChange={handleChange}
 						/>
 						{errorMsg && <Typography color="error">{errorMsg}</Typography>}
-						<Stack direction="row" justifyContent="flex-end" gap={2}>
-							<Button variant="outlined" onClick={handleClose}>
-								Odustani
-							</Button>
-							<Button type="submit" variant="contained">
+						<Stack
+							direction={{ xs: "column", sm: "row-reverse" }}
+							justifyContent="flex-start"
+							gap={2}
+							sx={{ mt: 1 }}
+						>
+							<Button type="submit" variant="contained" fullWidth>
 								{isEdit ? "Spremi izmjene" : "Dodaj trošak"}
+							</Button>
+							<Button variant="text" onClick={handleClose} fullWidth>
+								Odustani
 							</Button>
 						</Stack>
 					</Stack>

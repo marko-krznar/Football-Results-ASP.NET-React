@@ -8,11 +8,11 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { useCurrentUser } from "../redux/hooks";
 
 const NAV_ITEMS = [
-	{ value: "matches", label: "Termini", icon: <SportsSoccerIcon /> },
-	{ value: "seasons", label: "Kalendar", icon: <CalendarMonthIcon /> },
-	{ value: "teams", label: "Ekipa", icon: <GroupsIcon /> },
-	{ value: "players", label: "Profil", icon: <PersonIcon /> },
-	{ value: "expenses", label: "Expenses", icon: <ReceiptLongIcon /> },
+	{ value: "matches", label: "Termini", icon: <SportsSoccerIcon fontSize="small" /> },
+	{ value: "seasons", label: "Sezone", icon: <CalendarMonthIcon fontSize="small" /> },
+	{ value: "teams", label: "Ekipe", icon: <GroupsIcon fontSize="small" /> },
+	{ value: "players", label: "Igrači", icon: <PersonIcon fontSize="small" /> },
+	{ value: "expenses", label: "Troškovi", icon: <ReceiptLongIcon fontSize="small" /> },
 ];
 
 /**
@@ -43,27 +43,16 @@ export default function AdminBottomNav() {
 				left: 0,
 				right: 0,
 				zIndex: (t) => t.zIndex.appBar,
-				borderTop: "1px solid #2E302F",
 			}}
 		>
 			<BottomNavigation
+				sx={{
+					height: "auto",
+				}}
+				showLabels
 				value={activeTab}
 				onChange={(_e, newValue: string) => {
 					navigate(`/admin?tab=${newValue}`);
-				}}
-				sx={{
-					background: (theme) => theme.palette.background.paper || theme.palette.background.default,
-					"& .MuiBottomNavigationAction-root": {
-						color: "text.secondary",
-						minWidth: 0,
-						padding: "6px 0",
-						"&.Mui-selected": {
-							color: "primary.main",
-							"& .MuiSvgIcon-root": {
-								color: "primary.main",
-							},
-						},
-					},
 				}}
 			>
 				{NAV_ITEMS.map((item) => (
@@ -72,9 +61,20 @@ export default function AdminBottomNav() {
 						label={item.label}
 						value={item.value}
 						icon={item.icon}
+						sx={(t) => ({
+							py: 1.5,
+							minWidth: 0,
+							"& .MuiBottomNavigationAction-label": {
+								...t.typography.caption,
+								"&.Mui-selected": {
+									...t.typography.caption,
+								},
+							},
+						})}
 					/>
 				))}
 			</BottomNavigation>
 		</Paper>
 	);
 }
+

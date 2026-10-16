@@ -7,6 +7,7 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	Fab,
 	Stack,
 	Typography,
 	useMediaQuery,
@@ -55,16 +56,26 @@ export default function AdminMatchesTab() {
 					</Typography>
 					{selectedSeason && <Typography variant="body2">Sezona: {selectedSeason.name}</Typography>}
 				</Box>
-				<Button
-					variant="contained"
-					startIcon={<AddIcon />}
-					onClick={() => setAddModalOpen(true)}
-					sx={{ whiteSpace: "nowrap" }}
-					fullWidth={isMobile}
-				>
-					Dodaj termin
-				</Button>
 			</Stack>
+
+			<Box
+				sx={{
+					position: "fixed",
+					bottom: { xs: 76, md: 32 },
+					right: { xs: 16, sm: 24, md: 32 },
+					zIndex: (t) => t.zIndex.speedDial,
+				}}
+			>
+				<Fab
+					variant="extended"
+					color="primary"
+					onClick={() => setAddModalOpen(true)}
+					aria-label="Dodaj termin"
+				>
+					<AddIcon sx={{ mr: 1 }} />
+					Dodaj termin
+				</Fab>
+			</Box>
 
 			{data &&
 				(isMobile ? (

@@ -40,11 +40,15 @@ const theme = responsiveFontSizes(createTheme({
 		},
 	},
 	components: {
+		MuiStack: {
+			defaultProps: {
+				useFlexGap: true,
+			},
+		},
 		MuiCard: {
 			styleOverrides: {
 				root: {
 					borderRadius: "1rem",
-					marginTop: "0 !important", // TODO check if !important can be avoided
 					padding: "2rem !important", // TODO check if !important can be avoided
 				},
 			},
