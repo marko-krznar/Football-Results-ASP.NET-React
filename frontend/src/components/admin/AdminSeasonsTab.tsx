@@ -4,15 +4,12 @@ import {
 	Button,
 	Card,
 	CardContent,
-	CircularProgress,
-	createTheme,
 	FormControl,
 	FormControlLabel,
 	FormLabel,
 	Radio,
 	RadioGroup,
 	Stack,
-	ThemeProvider,
 	Typography,
 	useTheme,
 } from "@mui/material";
@@ -24,16 +21,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 
 export default function AdminSeasonsTab() {
-	const outerTheme = useTheme();
-	const pickerTheme = createTheme(outerTheme, {
-		typography: {
-			subtitle1: {
-				fontSize: "1rem",
-				lineHeight: "1.5",
-				fontWeight: "normal",
-			},
-		},
-	});
+	const theme = useTheme();
 
 	const [addSeason, { isLoading: isAdding }] = useAddSeasonMutation();
 
@@ -77,16 +65,13 @@ export default function AdminSeasonsTab() {
 
 	return (
 		<Stack spacing={4}>
-			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: "1.5rem !important" }}>
-				Upravljanje Sezonama
-			</Typography>
-			{/* Form Card */}
-			<Card variant="outlined" sx={{ background: "#1E1F1E", borderColor: "#2E302F" }}>
+			<Box>
+				<Typography variant="h3" component="h2" gutterBottom>
+					Upravljanje Sezonama
+				</Typography>
+			</Box>
+			<Card sx={{ background: theme.palette.grey[900] }}>
 				<CardContent>
-					<Typography variant="h6" gutterBottom sx={{ color: "#fff", mb: 3 }}>
-						Dodaj novu sezonu
-					</Typography>
-
 					{formError && (
 						<Alert severity="error" sx={{ mb: 2 }}>
 							{formError}
@@ -99,80 +84,78 @@ export default function AdminSeasonsTab() {
 					)}
 
 					<Box component="form" onSubmit={handleSubmit}>
-						<ThemeProvider theme={pickerTheme}>
-							<LocalizationProvider dateAdapter={AdapterDayjs}>
-								<Stack spacing={3}>
-									<DatePicker
-										label="Godina"
-										views={["year"]}
-										value={yearVal}
-										onChange={(newValue) => setYearVal(newValue)}
-										slotProps={{
-											textField: { required: true, fullWidth: true },
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
+							<Stack spacing={3}>
+								<DatePicker
+									label="Godina"
+									views={["year"]}
+									value={yearVal}
+									onChange={(newValue) => setYearVal(newValue)}
+									slotProps={{
+										textField: { required: true, fullWidth: true },
+									}}
+								/>
+
+								<FormControl component="fieldset">
+									<FormLabel
+										id="season-type-label"
+										sx={{
+											color: "rgba(255, 255, 255, 0.7)",
+											"&.Mui-focused": { color: "#fff" },
 										}}
-									/>
-
-									<FormControl component="fieldset">
-										<FormLabel
-											id="season-type-label"
-											sx={{
-												color: "rgba(255, 255, 255, 0.7)",
-												"&.Mui-focused": { color: "#fff" },
-											}}
-										>
-											Tip Sezone
-										</FormLabel>
-										<RadioGroup
-											row
-											aria-labelledby="season-type-label"
-											name="season-type"
-											value={type}
-											onChange={(e) => setType(e.target.value)}
-										>
-											<FormControlLabel
-												value="Spring"
-												control={
-													<Radio
-														sx={{
-															color: "rgba(255, 255, 255, 0.7)",
-															"&.Mui-checked": { color: "#fff" },
-														}}
-													/>
-												}
-												label="Proljeće (Spring)"
-												sx={{ color: "#fff" }}
-											/>
-											<FormControlLabel
-												value="Autumn"
-												control={
-													<Radio
-														sx={{
-															color: "rgba(255, 255, 255, 0.7)",
-															"&.Mui-checked": { color: "#fff" },
-														}}
-													/>
-												}
-												label="Jesen (Autumn)"
-												sx={{ color: "#fff" }}
-											/>
-										</RadioGroup>
-									</FormControl>
-
-									<Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-										<DatePicker
-											label="Datum početka"
-											value={startDate}
-											onChange={(newValue) => setStartDate(newValue)}
-											slotProps={{ textField: { required: true, fullWidth: true } }}
+									>
+										Tip Sezone
+									</FormLabel>
+									<RadioGroup
+										row
+										aria-labelledby="season-type-label"
+										name="season-type"
+										value={type}
+										onChange={(e) => setType(e.target.value)}
+									>
+										<FormControlLabel
+											value="Spring"
+											control={
+												<Radio
+													sx={{
+														color: "rgba(255, 255, 255, 0.7)",
+														"&.Mui-checked": { color: "#fff" },
+													}}
+												/>
+											}
+											label="Proljeće (Spring)"
+											sx={{ color: "#fff" }}
 										/>
-										<DatePicker
-											label="Datum završetka"
-											value={endDate}
-											onChange={(newValue) => setEndDate(newValue)}
-											slotProps={{ textField: { required: true, fullWidth: true } }}
+										<FormControlLabel
+											value="Autumn"
+											control={
+												<Radio
+													sx={{
+														color: "rgba(255, 255, 255, 0.7)",
+														"&.Mui-checked": { color: "#fff" },
+													}}
+												/>
+											}
+											label="Jesen (Autumn)"
+											sx={{ color: "#fff" }}
 										/>
-									</Stack>
+									</RadioGroup>
+								</FormControl>
 
+								<DatePicker
+									label="Datum početka"
+									value={startDate}
+									onChange={(newValue) => setStartDate(newValue)}
+									slotProps={{ textField: { required: true, fullWidth: true } }}
+								/>
+								<DatePicker
+									label="Datum završetka"
+									value={endDate}
+									onChange={(newValue) => setEndDate(newValue)}
+									slotProps={{ textField: { required: true, fullWidth: true } }}
+								/>
+
+								<Stack direction="row" alignItems="center" justifyContent="flex-end">
 									<Button
 										type="submit"
 										variant="contained"
@@ -181,11 +164,11 @@ export default function AdminSeasonsTab() {
 										disabled={isAdding}
 										sx={{ mt: 2 }}
 									>
-										{isAdding ? <CircularProgress size={24} /> : "Spremi Sezonu"}
+										Spremi Sezonu
 									</Button>
 								</Stack>
-							</LocalizationProvider>
-						</ThemeProvider>
+							</Stack>
+						</LocalizationProvider>
 					</Box>
 				</CardContent>
 			</Card>

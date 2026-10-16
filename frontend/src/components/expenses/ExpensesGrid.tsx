@@ -39,13 +39,13 @@ export default function ExpenseGrid({ expenses, onEdit, onDelete }: ExpenseGridP
 		{
 			field: "actions",
 			headerName: "Akcije",
-			flex: 1,
+			flex: 0,
 			sortable: false,
 			filterable: false,
 			renderCell: (params) => {
 				const rawExpense = expenses.find((e) => e.id === params.row.id);
 				return (
-					<Stack direction="row" spacing={1}>
+					<Stack direction="row" spacing={1} justifyContent="flex-end">
 						<IconButton size="small" color="primary" onClick={() => rawExpense && onEdit(rawExpense)}>
 							<EditIcon fontSize="small" />
 						</IconButton>
@@ -86,10 +86,10 @@ export default function ExpenseGrid({ expenses, onEdit, onDelete }: ExpenseGridP
 			columns={columns}
 			initialState={{
 				pagination: {
-					paginationModel: { pageSize: 5 },
+					paginationModel: { pageSize: 15 },
 				},
 			}}
-			pageSizeOptions={[5]}
+			pageSizeOptions={[15]}
 			slots={{
 				footer: CustomFooter,
 			}}

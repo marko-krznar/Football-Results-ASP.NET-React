@@ -7,20 +7,20 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	Fab,
 	Stack,
 	Typography,
 	useMediaQuery,
 	useTheme,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useGetMatchesQuery, useGetTotalSeasonScoreQuery, useRemoveMatchMutation } from "../../redux/api/matchesApi";
+import { useGetMatchesQuery, useRemoveMatchMutation } from "../../redux/api/matchesApi";
 import { useSelectedSeason } from "../../redux/hooks";
 import { useGetSeasonsQuery } from "../../redux/api/seasonsApi";
 import AddMatchModal from "../matches/AddMatchModal";
 import EditMatchModal from "../matches/EditMatchModal";
 import MatchTabel from "../matches/MatchTabel";
 import MatchesMobileCardList from "../matches/MatchesMobileCardList";
-import MatchesIntroCard from "../matches/MatchesIntroCard";
 
 /**
  * Matches management tab for the Admin dashboard.
@@ -31,9 +31,6 @@ export default function AdminMatchesTab() {
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const selectedSeasonId = useSelectedSeason();
 	const { data } = useGetMatchesQuery(selectedSeasonId ?? 0, { skip: !selectedSeasonId });
-	const { data: totalSeasonScore } = useGetTotalSeasonScoreQuery(selectedSeasonId ?? 0, {
-		skip: !selectedSeasonId,
-	});
 	const { data: seasons } = useGetSeasonsQuery();
 	const [removeMatch] = useRemoveMatchMutation();
 
@@ -47,35 +44,38 @@ export default function AdminMatchesTab() {
 
 	return (
 		<Stack spacing={4}>
-			<Stack direction="row" alignItems="center" justifyContent="space-between">
+			<Stack
+				direction={isMobile ? "column" : "row"}
+				alignItems="center"
+				justifyContent="space-between"
+				spacing={2}
+			>
 				<Box>
-					<Typography variant="h4" sx={{ color: "#fff", fontWeight: "bold" }}>
+					<Typography variant="h3" component="h2" gutterBottom>
 						Upravljanje terminima
 					</Typography>
-					{selectedSeason && (
-						<Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)", mt: 0.5 }}>
-							Sezona: {selectedSeason.name}
-						</Typography>
-					)}
+					{selectedSeason && <Typography variant="body2">Sezona: {selectedSeason.name}</Typography>}
 				</Box>
-				<Button
-					variant="contained"
-					startIcon={<AddIcon />}
-					onClick={() => setAddModalOpen(true)}
-					sx={{ whiteSpace: "nowrap" }}
-				>
-					Dodaj termin
-				</Button>
 			</Stack>
 
-			{totalSeasonScore && (
-				<MatchesIntroCard
-					firstTeamName={totalSeasonScore.firstTeam.teamName}
-					firstTotalSetsWon={totalSeasonScore.firstTeam.totalSetsWon}
-					secondTeamName={totalSeasonScore.secondTeam.teamName}
-					secondTotalSetsWon={totalSeasonScore.secondTeam.totalSetsWon}
-				/>
-			)}
+			<Box
+				sx={{
+					position: "fixed",
+					bottom: { xs: 76, md: 32 },
+					right: { xs: 16, sm: 24, md: 32 },
+					zIndex: (t) => t.zIndex.speedDial,
+				}}
+			>
+				<Fab
+					variant="extended"
+					color="primary"
+					onClick={() => setAddModalOpen(true)}
+					aria-label="Dodaj termin"
+				>
+					<AddIcon sx={{ mr: 1 }} />
+					Dodaj termin
+				</Fab>
+			</Box>
 
 			{data &&
 				(isMobile ? (

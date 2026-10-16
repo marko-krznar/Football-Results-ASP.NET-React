@@ -10,7 +10,6 @@ import {
 	DialogContent,
 	DialogTitle,
 	IconButton,
-	Paper,
 	Stack,
 	Table,
 	TableBody,
@@ -20,13 +19,20 @@ import {
 	TableRow,
 	TextField,
 	Typography,
+	useTheme,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
-import { useAddPlayerMutation, useGetPlayersQuery, useUpdatePlayerMutation, type Player } from "../../redux/api/playersApi";
+import {
+	useAddPlayerMutation,
+	useGetPlayersQuery,
+	useUpdatePlayerMutation,
+	type Player,
+} from "../../redux/api/playersApi";
 
 export default function AdminPlayersTab() {
+	const theme = useTheme();
 	const { data: playersList, isLoading: isFetching } = useGetPlayersQuery();
 	const [addPlayer, { isLoading: isAdding }] = useAddPlayerMutation();
 	const [updatePlayer, { isLoading: isUpdating }] = useUpdatePlayerMutation();
@@ -91,16 +97,14 @@ export default function AdminPlayersTab() {
 
 	return (
 		<Stack spacing={4}>
-			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: "1.5rem !important" }}>
-				Upravljanje igračima
-			</Typography>
+			<Box>
+				<Typography variant="h3" component="h2" gutterBottom>
+					Upravljanje igračima
+				</Typography>
+			</Box>
 
-			<Card variant="outlined" sx={{ background: "#1E1F1E", borderColor: "#2E302F" }}>
+			<Card variant="outlined" sx={{ background: theme.palette.grey[900] }}>
 				<CardContent>
-					<Typography variant="h6" gutterBottom sx={{ color: "#fff", mb: 3 }}>
-						Dodaj novog igrača
-					</Typography>
-
 					{formError && (
 						<Alert severity="error" sx={{ mb: 2 }}>
 							{formError}
@@ -111,51 +115,29 @@ export default function AdminPlayersTab() {
 							{successMsg}
 						</Alert>
 					)}
-
-					<Box component="form" onSubmit={handleAddSubmit}>
-						<Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
-							<TextField
-								label="Ime i prezime igrača"
-								value={newPlayerName}
-								onChange={(e) => setNewPlayerName(e.target.value)}
-								fullWidth
-								required
-							/>
-							<Button
-								type="submit"
-								variant="contained"
-								color="primary"
-								size="large"
-								disabled={isAdding}
-								startIcon={<AddIcon />}
-								sx={{ whiteSpace: "nowrap", height: "56px" }}
-							>
-								{isAdding ? <CircularProgress size={24} /> : "Dodaj igrača"}
-							</Button>
-						</Stack>
-					</Box>
-
-					<Box sx={{ mt: 4 }}>
-						<Typography variant="h6" gutterBottom sx={{ color: "#fff", mb: 2 }}>
-							Popis igrača
-						</Typography>
-
+					<Box sx={{ mt: 2 }}>
 						{isFetching ? (
 							<CircularProgress sx={{ display: "block", mx: "auto", my: 2 }} />
 						) : (
-							<TableContainer component={Paper} sx={{ background: "#121212", border: "1px solid #2E302F" }}>
+							<TableContainer>
 								<Table size="small">
 									<TableHead>
 										<TableRow>
 											<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>ID</TableCell>
-											<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Ime i prezime</TableCell>
-											<TableCell align="right" sx={{ color: "#fff", fontWeight: "bold" }}>Akcije</TableCell>
+											<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>
+												Ime i prezime
+											</TableCell>
+											<TableCell align="right" sx={{ color: "#fff", fontWeight: "bold" }}>
+												Akcije
+											</TableCell>
 										</TableRow>
 									</TableHead>
 									<TableBody>
 										{playersList?.map((player) => (
 											<TableRow key={player.id}>
-												<TableCell sx={{ color: "rgba(255,255,255,0.7)" }}>{player.id}</TableCell>
+												<TableCell sx={{ color: "rgba(255,255,255,0.7)" }}>
+													{player.id}
+												</TableCell>
 												<TableCell sx={{ color: "#fff" }}>{player.name}</TableCell>
 												<TableCell align="right">
 													<IconButton
@@ -172,6 +154,27 @@ export default function AdminPlayersTab() {
 								</Table>
 							</TableContainer>
 						)}
+					</Box>
+					<Box component="form" onSubmit={handleAddSubmit}>
+						<TextField
+							label="Ime i prezime igrača"
+							value={newPlayerName}
+							onChange={(e) => setNewPlayerName(e.target.value)}
+							fullWidth
+							required
+						/>
+						<Stack direction={{ xs: "column", sm: "row" }} justifyContent="flex-end" mt={4}>
+							<Button
+								type="submit"
+								variant="contained"
+								color="primary"
+								size="large"
+								disabled={isAdding}
+								startIcon={<AddIcon />}
+							>
+								Dodaj igrača
+							</Button>
+						</Stack>
 					</Box>
 				</CardContent>
 			</Card>

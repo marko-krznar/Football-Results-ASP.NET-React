@@ -26,9 +26,11 @@ import { useGetSeasonsQuery } from "../../redux/api/seasonsApi";
 import { useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useAddMatchWithDetailsMutation } from "../../redux/api/matchesApi";
 import { useGetTeamMembersQuery } from "../../redux/api/teamMembersApi";
-import { getCurrentDate } from "../../utils/matchUtils";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import type { Dayjs } from "dayjs";
 
 interface SetRow {
 	setNumber: number;
@@ -65,7 +67,7 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 	});
 
 	const [selectedSeason, setSelectedSeason] = useState<string>(seasonsList ? String(seasonsList[0].id) : "");
-	const [date, setDate] = useState<string>(getCurrentDate());
+	const [date, setDate] = useState<Dayjs | null>(dayjs());
 	const [sets, setSets] = useState<SetRow[]>([{ setNumber: 1, firstTeamGoals: 0, secondTeamGoals: 0 }]);
 	const [firstTeamPlayerIds, setFirstTeamPlayerIds] = useState<number[]>(
 		firstTeamMembersRaw ? firstTeamMembersRaw.map((player) => player.playerId) : []
@@ -152,7 +154,7 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 		try {
 			await addMatchWithDetails({
 				seasonId: Number(selectedSeason),
-				date,
+				date: date?.format("YYYY-MM-DD") ?? "",
 				firstTeamId: firstTeam.id,
 				secondTeamId: secondTeam.id,
 				sets,
@@ -210,20 +212,32 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 						</Alert>
 					)}
 
-					<TextField
+					<DatePicker
+						label="Datum"
+						value={date}
+						onChange={(value) => setDate(value)}
+						slotProps={{ textField: { required: true, fullWidth: true } }}
+					/>
+
+					{/* <TextField
 						label="Datum"
 						type="date"
 						value={date}
 						onChange={(e) => setDate(e.target.value)}
 						fullWidth
-					/>
+					/> */}
 
 					<Divider />
 
 					<Typography variant="h6">Setovi</Typography>
 					<Stack spacing={2}>
 						{sets.map((set, index) => (
-							<Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ xs: "stretch", sm: "center" }} key={index}>
+							<Stack
+								direction={{ xs: "column", sm: "row" }}
+								spacing={2}
+								alignItems={{ xs: "stretch", sm: "center" }}
+								key={index}
+							>
 								<TextField
 									label={`Set ${set.setNumber}`}
 									type="number"
