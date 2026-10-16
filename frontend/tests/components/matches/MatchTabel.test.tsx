@@ -115,4 +115,50 @@ describe("MatchTabel", () => {
 		expect(setDeletingMatchId).toHaveBeenCalledWith(42);
 		expect(setDeleteDialogOpen).toHaveBeenCalledWith(true);
 	});
+
+	it("renders uncounted match with chip and description note", () => {
+		vi.spyOn(hooks, "useCurrentUser").mockReturnValue({
+			...mockCurrentUser,
+			isAuthenticated: false,
+			isAdmin: false,
+		});
+
+		const uncountedMatch: Match = {
+			id: 99,
+			date: "2026-09-01",
+			location: "ŠD Hotanj",
+			note: "Ekipa Bijeli se nije pojavila",
+			countsForStandings: false,
+			totalSets: 0,
+			firstTeam: {
+				teamId: 1,
+				teamName: "Bijeli",
+				playerNames: [],
+				goalsPerSet: [],
+				setsWon: 0,
+				totalGoals: 0,
+			},
+			secondTeam: {
+				teamId: 2,
+				teamName: "Crni",
+				playerNames: ["Luka"],
+				goalsPerSet: [],
+				setsWon: 0,
+				totalGoals: 0,
+			},
+		};
+
+		render(
+			<MatchTabel
+				data={[uncountedMatch]}
+				setDeletingMatchId={setDeletingMatchId}
+				setDeleteDialogOpen={setDeleteDialogOpen}
+				setEditingMatchId={setEditingMatchId}
+				setEditModalOpen={setEditModalOpen}
+			/>
+		);
+
+		expect(screen.getByText("Ne broji se")).toBeInTheDocument();
+		expect(screen.getAllByText("Ekipa Bijeli se nije pojavila")).toHaveLength(1);
+	});
 });

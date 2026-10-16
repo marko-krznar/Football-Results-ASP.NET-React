@@ -11,6 +11,7 @@ export interface Match {
 	secondTeamId: number;
 	secondTeamName: string;
 	note: string | null;
+	countsForStandings?: boolean;
 	firstTeamSetsWon: number;
 	secondTeamSetsWon: number;
 	firstTeamTotalGoals: number;
@@ -41,6 +42,7 @@ export interface CreateMatchRequest {
 	firstTeamId: number;
 	secondTeamId: number;
 	note?: string;
+	countsForStandings?: boolean;
 }
 
 export interface CreateMatchWithDetailsRequest {
@@ -50,6 +52,7 @@ export interface CreateMatchWithDetailsRequest {
 	firstTeamId: number;
 	secondTeamId: number;
 	note?: string;
+	countsForStandings?: boolean;
 	sets: {
 		setNumber: number;
 		firstTeamGoals: number;
@@ -64,6 +67,7 @@ export interface UpdateMatchRequest {
 	date: string; // "YYYY-MM-DD"
 	location?: string;
 	note?: string;
+	countsForStandings?: boolean;
 }
 
 export interface UpdateMatchWithDetailsRequest {
@@ -71,6 +75,7 @@ export interface UpdateMatchWithDetailsRequest {
 	date: string; // "YYYY-MM-DD"
 	location?: string;
 	note?: string;
+	countsForStandings?: boolean;
 	sets: {
 		setNumber: number;
 		firstTeamGoals: number;

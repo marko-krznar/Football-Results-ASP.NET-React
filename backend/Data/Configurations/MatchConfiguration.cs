@@ -41,6 +41,11 @@ public class MatchConfiguration : IEntityTypeConfiguration<Match>
             .HasColumnName("note")
             .HasMaxLength(500);
 
+        builder.Property(e => e.CountsForStandings)
+            .HasColumnName("counts_for_standings")
+            .HasDefaultValue(true)
+            .IsRequired();
+
         builder.HasOne(e => e.Season)
             .WithMany()
             .HasForeignKey(e => e.SeasonId)

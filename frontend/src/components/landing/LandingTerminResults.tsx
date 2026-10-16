@@ -7,20 +7,24 @@ function LandingTerminResults({
 	secondTeamGoals,
 	firstSetsWon,
 	secondSetsWon,
+	title,
+	subtitle,
 }: {
 	totalSets: number;
 	firstTeamGoals: number[];
 	secondTeamGoals: number[];
 	firstSetsWon: number;
 	secondSetsWon: number;
+	title?: string;
+	subtitle?: string;
 }) {
 	const theme = useTheme();
 
 	return (
 		<>
 			<Stack gap={2} marginBottom={4}>
-				<Typography variant="h3">Zadnji odigrani termin</Typography>
-				<Typography variant="body1">Analiza setova i konačan ishod</Typography>
+				<Typography variant="h3">{title ?? "Zadnji odigrani termin"}</Typography>
+				<Typography variant="body1">{subtitle ?? "Analiza setova i konačan ishod"}</Typography>
 			</Stack>
 			<Stack
 				spacing={4}

@@ -68,6 +68,8 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 
 	const [selectedSeason, setSelectedSeason] = useState<string>(seasonsList ? String(seasonsList[0].id) : "");
 	const [date, setDate] = useState<Dayjs | null>(dayjs());
+	const [countsForStandings, setCountsForStandings] = useState<boolean>(true);
+	const [note, setNote] = useState<string>("");
 	const [sets, setSets] = useState<SetRow[]>([{ setNumber: 1, firstTeamGoals: 0, secondTeamGoals: 0 }]);
 	const [firstTeamPlayerIds, setFirstTeamPlayerIds] = useState<number[]>(
 		firstTeamMembersRaw ? firstTeamMembersRaw.map((player) => player.playerId) : []
@@ -127,6 +129,8 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 
 	const resetForm = () => {
 		setSets([{ setNumber: 1, firstTeamGoals: 0, secondTeamGoals: 0 }]);
+		setCountsForStandings(true);
+		setNote("");
 		setFirstTeamPlayerIds([]);
 		setSecondTeamPlayerIds([]);
 	};
@@ -146,8 +150,12 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 			setFormError("Za ovu sezonu nisu pronađene obje ekipe.");
 			return;
 		}
-		if (sets.length === 0) {
-			setFormError("Dodaj barem jedan set.");
+		if (countsForStandings && sets.length === 0) {
+			setFormError("Dodaj barem jedan set za važeću utakmicu.");
+			return;
+		}
+		if (!countsForStandings && !note.trim()) {
+			setFormError("Unesi opis/razlog zašto se ovaj termin ne broji (npr. ekipa se nije pojavila).");
 			return;
 		}
 
@@ -157,7 +165,9 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 				date: date?.format("YYYY-MM-DD") ?? "",
 				firstTeamId: firstTeam.id,
 				secondTeamId: secondTeam.id,
-				sets,
+				note: note.trim() || undefined,
+				countsForStandings,
+				sets: countsForStandings ? sets : sets.filter((s) => s.firstTeamGoals > 0 || s.secondTeamGoals > 0),
 				firstTeamPlayerIds,
 				secondTeamPlayerIds,
 			}).unwrap();
@@ -219,17 +229,45 @@ export default function AddMatchModal({ open, onClose }: AddMatchProps) {
 						slotProps={{ textField: { required: true, fullWidth: true } }}
 					/>
 
-					{/* <TextField
-						label="Datum"
-						type="date"
-						value={date}
-						onChange={(e) => setDate(e.target.value)}
-						fullWidth
-					/> */}
+					<Box sx={{ p: 1.5, borderRadius: 2, border: 1, borderColor: "divider", backgroundColor: "action.hover" }}>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={!countsForStandings}
+									onChange={(e) => setCountsForStandings(!e.target.checked)}
+									color="warning"
+								/>
+							}
+							label={
+								<Box>
+									<Typography variant="body2" sx={{ fontWeight: "bold" }}>
+										Termin se ne broji za ligu / bodove (npr. ekipa se nije pojavila)
+									</Typography>
+									<Typography variant="caption" color="text.secondary">
+										Ako je označeno, ovaj termin neće utjecati na tablicu ni ukupan broj setova sezone.
+									</Typography>
+								</Box>
+							}
+						/>
+
+						{!countsForStandings && (
+							<TextField
+								label="Opis / razlog zašto se termin ne broji *"
+								placeholder="Npr. Ekipa Bijeli se nije pojavila ili odigran prijateljski termin"
+								value={note}
+								onChange={(e) => setNote(e.target.value)}
+								fullWidth
+								multiline
+								rows={2}
+								sx={{ mt: 1.5 }}
+								required
+							/>
+						)}
+					</Box>
 
 					<Divider />
 
-					<Typography variant="h6">Setovi</Typography>
+					<Typography variant="h6">Setovi {!countsForStandings && "(opcionalno)"}</Typography>
 					<Stack spacing={2}>
 						{sets.map((set, index) => (
 							<Stack

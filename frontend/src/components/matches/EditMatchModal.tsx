@@ -52,6 +52,8 @@ export default function EditMatchModal({ open, matchId, onClose }: EditMatchModa
 		matchPlayers && matchPlayers.filter((player) => player.teamId === 1).map((player) => player.playerId);
 
 	const [date, setDate] = useState<string>("");
+	const [countsForStandings, setCountsForStandings] = useState<boolean>(true);
+	const [note, setNote] = useState<string>("");
 	const [sets, setSets] = useState<SetRow[]>([]);
 	const [firstTeamPlayerIds, setFirstTeamPlayerIds] = useState<number[]>([]);
 	const [secondTeamPlayerIds, setSecondTeamPlayerIds] = useState<number[]>([]);
@@ -60,6 +62,8 @@ export default function EditMatchModal({ open, matchId, onClose }: EditMatchModa
 	useEffect(() => {
 		if (match) {
 			setDate(match.date);
+			setCountsForStandings(match.countsForStandings !== false);
+			setNote(match.note || "");
 		}
 		if (setsData) {
 			setSets(
@@ -115,14 +119,22 @@ export default function EditMatchModal({ open, matchId, onClose }: EditMatchModa
 	const handleSaveChanges = async () => {
 		if (!matchId) return;
 
+		if (!countsForStandings && !note.trim()) {
+			setFormError("Unesi opis/razlog zašto se ovaj termin ne broji (npr. ekipa se nije pojavila).");
+			return;
+		}
+
 		try {
 			await updateMatchWithDetails({
 				id: matchId,
 				date,
-				sets,
+				note: note.trim() || undefined,
+				countsForStandings,
+				sets: countsForStandings ? sets : sets.filter((s) => s.firstTeamGoals > 0 || s.secondTeamGoals > 0),
 				firstTeamPlayerIds,
 				secondTeamPlayerIds,
 			}).unwrap();
+			onClose();
 		} catch (err: unknown) {
 			const apiError = err as { data?: { message?: string } };
 			setFormError(apiError?.data?.message || "Greška pri ažuriranju utakmice.");
@@ -142,8 +154,44 @@ export default function EditMatchModal({ open, matchId, onClose }: EditMatchModa
 						slotProps={{ inputLabel: { shrink: true } }}
 					/>
 
+					<Box sx={{ p: 1.5, borderRadius: 2, border: 1, borderColor: "divider", backgroundColor: "action.hover" }}>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={!countsForStandings}
+									onChange={(e) => setCountsForStandings(!e.target.checked)}
+									color="warning"
+								/>
+							}
+							label={
+								<Box>
+									<Typography variant="body2" sx={{ fontWeight: "bold" }}>
+										Termin se ne broji za ligu / bodove (npr. ekipa se nije pojavila)
+									</Typography>
+									<Typography variant="caption" color="text.secondary">
+										Ako je označeno, ovaj termin neće utjecati na tablicu ni ukupan broj setova sezone.
+									</Typography>
+								</Box>
+							}
+						/>
+
+						{!countsForStandings && (
+							<TextField
+								label="Opis / razlog zašto se termin ne broji *"
+								placeholder="Npr. Ekipa Bijeli se nije pojavila ili odigran prijateljski termin"
+								value={note}
+								onChange={(e) => setNote(e.target.value)}
+								fullWidth
+								multiline
+								rows={2}
+								sx={{ mt: 1.5 }}
+								required
+							/>
+						)}
+					</Box>
+
 					<Typography variant="h6" sx={{ fontWeight: "bold" }}>
-						Setovi
+						Setovi {!countsForStandings && "(opcionalno)"}
 					</Typography>
 					<Stack spacing={2}>
 						{sets.map((set, index) => (
