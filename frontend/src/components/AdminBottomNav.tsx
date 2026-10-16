@@ -8,11 +8,11 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { useCurrentUser } from "../redux/hooks";
 
 const NAV_ITEMS = [
-	{ value: "matches", label: "Matches", icon: <SportsSoccerIcon /> },
-	{ value: "seasons", label: "Seasons", icon: <CalendarMonthIcon /> },
-	{ value: "teams", label: "Teams", icon: <GroupsIcon /> },
-	{ value: "players", label: "Players", icon: <PersonIcon /> },
-	{ value: "expenses", label: "Expenses", icon: <ReceiptLongIcon /> },
+	{ value: "matches", label: "Termini", icon: <SportsSoccerIcon fontSize="small" /> },
+	{ value: "seasons", label: "Sezone", icon: <CalendarMonthIcon fontSize="small" /> },
+	{ value: "teams", label: "Ekipe", icon: <GroupsIcon fontSize="small" /> },
+	{ value: "players", label: "Igrači", icon: <PersonIcon fontSize="small" /> },
+	{ value: "expenses", label: "Troškovi", icon: <ReceiptLongIcon fontSize="small" /> },
 ];
 
 /**
@@ -43,23 +43,16 @@ export default function AdminBottomNav() {
 				left: 0,
 				right: 0,
 				zIndex: (t) => t.zIndex.appBar,
-				borderTop: "1px solid #2E302F",
 			}}
 		>
 			<BottomNavigation
+				sx={{
+					height: "auto",
+				}}
+				showLabels
 				value={activeTab}
 				onChange={(_e, newValue: string) => {
 					navigate(`/admin?tab=${newValue}`);
-				}}
-				sx={{
-					background: "#1E1F1E",
-					"& .MuiBottomNavigationAction-root": {
-						color: "rgba(255,255,255,0.5)",
-						minWidth: 0,
-						"&.Mui-selected": {
-							color: "primary.main",
-						},
-					},
 				}}
 			>
 				{NAV_ITEMS.map((item) => (
@@ -68,9 +61,20 @@ export default function AdminBottomNav() {
 						label={item.label}
 						value={item.value}
 						icon={item.icon}
+						sx={(t) => ({
+							py: 1.5,
+							minWidth: 0,
+							"& .MuiBottomNavigationAction-label": {
+								...t.typography.caption,
+								"&.Mui-selected": {
+									...t.typography.caption,
+								},
+							},
+						})}
 					/>
 				))}
 			</BottomNavigation>
 		</Paper>
 	);
 }
+

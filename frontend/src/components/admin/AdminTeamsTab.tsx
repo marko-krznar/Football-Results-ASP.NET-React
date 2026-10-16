@@ -23,6 +23,7 @@ import {
 	TableRow,
 	TextField,
 	Typography,
+	useTheme,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import GroupIcon from "@mui/icons-material/Group";
@@ -39,6 +40,7 @@ import {
 } from "../../redux/api/teamMembersApi";
 
 export default function AdminTeamsTab() {
+	const theme = useTheme();
 	const { data: teamsList, isLoading: teamsLoading } = useGetTeamsQuery();
 	const { data: seasonsList } = useGetSeasonsQuery();
 	const { data: playersList } = useGetPlayersQuery();
@@ -162,16 +164,14 @@ export default function AdminTeamsTab() {
 
 	return (
 		<Stack spacing={4}>
-			<Typography variant="h4" gutterBottom sx={{ color: "#fff", fontWeight: "bold", mb: "1.5rem !important" }}>
-				Uređivanje ekipa i sastava
-			</Typography>
+			<Box>
+				<Typography variant="h3" component="h2" gutterBottom>
+					Uređivanje ekipa i sastava
+				</Typography>
+			</Box>
 
-			<Card variant="outlined" sx={{ background: "#1E1F1E", borderColor: "#2E302F" }}>
+			<Card variant="outlined" sx={{ background: theme.palette.grey[900] }}>
 				<CardContent>
-					<Typography variant="h6" gutterBottom sx={{ color: "#fff", mb: 3 }}>
-						Popis ekipa
-					</Typography>
-
 					{formError && (
 						<Alert severity="error" sx={{ mb: 2 }}>
 							{formError}
@@ -186,22 +186,26 @@ export default function AdminTeamsTab() {
 					{teamsLoading ? (
 						<CircularProgress sx={{ display: "block", mx: "auto", my: 2 }} />
 					) : (
-						<TableContainer component={Paper} sx={{ background: "#121212", border: "1px solid #2E302F" }}>
-							<Table size="small">
+						<TableContainer>
+							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Naziv ekipe</TableCell>
-										<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Sezona (Godina)</TableCell>
+										<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Ekipa</TableCell>
 										<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Kapetan</TableCell>
-										<TableCell align="right" sx={{ color: "#fff", fontWeight: "bold" }}>Akcije</TableCell>
+										<TableCell align="right" sx={{ color: "#fff", fontWeight: "bold" }}>
+											Akcije
+										</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
 									{teamsList?.map((team) => (
 										<TableRow key={team.id}>
-											<TableCell sx={{ color: "#fff" }}>{team.name}</TableCell>
-											<TableCell sx={{ color: "rgba(255,255,255,0.7)" }}>{team.seasonName}</TableCell>
-											<TableCell sx={{ color: "rgba(255,255,255,0.7)" }}>{team.captainName || "-"}</TableCell>
+											<TableCell>
+												{team.name} - {team.seasonName}
+											</TableCell>
+											<TableCell sx={{ color: "rgba(255,255,255,0.7)" }}>
+												{team.captainName || "-"}
+											</TableCell>
 											<TableCell align="right">
 												<Stack direction="row" spacing={1} justifyContent="flex-end">
 													<Button
@@ -215,7 +219,6 @@ export default function AdminTeamsTab() {
 													<Button
 														size="small"
 														variant="contained"
-														color="secondary"
 														startIcon={<GroupIcon />}
 														onClick={() => handleOpenRosterModal(team)}
 													>
@@ -378,7 +381,7 @@ export default function AdminTeamsTab() {
 										disabled={isAddingMembers || selectedNewPlayerIds.length === 0}
 										startIcon={<AddIcon />}
 									>
-										{isAddingMembers ? <CircularProgress size= {24} /> : "Dodaj odabrane igrače"}
+										{isAddingMembers ? <CircularProgress size={24} /> : "Dodaj odabrane igrače"}
 									</Button>
 								</Stack>
 							) : (

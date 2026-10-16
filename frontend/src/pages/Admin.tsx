@@ -135,10 +135,8 @@ export default function Admin() {
 				)}
 
 				{/* Main content area */}
-				<Box sx={{ flex: 1, overflow: "auto" }}>
-					<Container maxWidth="xl" sx={{ py: 4 }}>
-						<AdminTabContent activeTab={activeTab} />
-					</Container>
+				<Box sx={{ flex: 1, overflow: "auto" }} paddingBlock={4}>
+					<AdminTabContent activeTab={activeTab} />
 				</Box>
 			</Box>
 		</Container>

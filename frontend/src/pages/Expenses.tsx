@@ -5,14 +5,17 @@ import {
 	useUpdateExpenseMutation,
 	useDeleteExpenseMutation,
 } from "../redux/api/expensesApi";
-import { Typography, Button, Stack, Box } from "@mui/material";
+import { Typography, Button, Stack, Box, useTheme, useMediaQuery } from "@mui/material";
 import ExpenseGrid from "../components/expenses/ExpensesGrid";
+import ExpensesMobileCardList from "../components/expenses/ExpensesMobileCardList";
 import ModalAddExpense from "../components/common/ModalAddExpense";
 import ModalDeleteExpense from "../components/common/ModalDeleteExpense";
 import type { Expense } from "../types/expense";
 import dayjs from "dayjs";
 
 export default function Expenses() {
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const { data: expenses = [], isLoading, isError } = useGetExpensesQuery();
 	const [createExpense] = useCreateExpenseMutation();
 	const [updateExpense] = useUpdateExpenseMutation();
@@ -136,13 +139,21 @@ export default function Expenses() {
 				</Typography>
 			)}
 
-			{expenses.length > 0 && (
-				<ExpenseGrid
-					expenses={expenses}
-					onEdit={handleOpenEdit}
-					onDelete={handleOpenDelete}
-				/>
-			)}
+			{expenses.length > 0 &&
+				(isMobile ? (
+					<ExpensesMobileCardList
+						expenses={expenses}
+						onEdit={handleOpenEdit}
+						onDelete={handleOpenDelete}
+						onAddNew={handleOpenAdd}
+					/>
+				) : (
+					<ExpenseGrid
+						expenses={expenses}
+						onEdit={handleOpenEdit}
+						onDelete={handleOpenDelete}
+					/>
+				))}
 
 			<ModalAddExpense
 				open={openModal}

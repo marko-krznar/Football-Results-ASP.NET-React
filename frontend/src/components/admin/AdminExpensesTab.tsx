@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import {
 	useGetExpensesQuery,
@@ -8,6 +8,7 @@ import {
 	useDeleteExpenseMutation,
 } from "../../redux/api/expensesApi";
 import ExpenseGrid from "../expenses/ExpensesGrid";
+import ExpensesMobileCardList from "../expenses/ExpensesMobileCardList";
 import ModalAddExpense from "../common/ModalAddExpense";
 import ModalDeleteExpense from "../common/ModalDeleteExpense";
 import type { Expense } from "../../types/expense";
@@ -18,6 +19,8 @@ import dayjs from "dayjs";
  * Mirrors the content of the /expenses page, embedded inside the admin shell.
  */
 export default function AdminExpensesTab() {
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const { data: expenses = [], isLoading, isError } = useGetExpensesQuery();
 	const [createExpense] = useCreateExpenseMutation();
 	const [updateExpense] = useUpdateExpenseMutation();
@@ -104,32 +107,50 @@ export default function AdminExpensesTab() {
 
 	return (
 		<Stack spacing={4}>
-			<Stack direction="row" gap={1} alignItems="flex-start">
-				<Box flex={1}>
-					<Typography variant="h4" sx={{ color: "#fff", fontWeight: "bold" }}>
-						Troškovi
-					</Typography>
-					<Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)", mt: 0.5 }}>
-						Troškovi za termin na ŠD Hotanj je 75€.
-					</Typography>
-				</Box>
-				<Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenAdd}>
-					Add Expense
-				</Button>
-			</Stack>
+			{!isMobile && (
+				<Stack
+					direction="row"
+					alignItems="center"
+					justifyContent="space-between"
+					spacing={2}
+				>
+					<Box flex={1}>
+						<Typography variant="h3" component="h2" gutterBottom>
+							Troškovi
+						</Typography>
+						<Typography variant="body2">Troškovi za termin na ŠD Hotanj je 75€.</Typography>
+					</Box>
+					<Button
+						variant="contained"
+						startIcon={<AddIcon />}
+						onClick={handleOpenAdd}
+						sx={{ whiteSpace: "nowrap" }}
+					>
+						Dodaj trošak
+					</Button>
+				</Stack>
+			)}
 
 			{isLoading && <Typography>Loading…</Typography>}
-			{isError && <Typography color="error">Failed to load expenses.</Typography>}
+			{isError && <Typography color="error">Učitavanje troškova nije uspjelo.</Typography>}
 
 			{expenses.length === 0 && !isLoading && (
 				<Typography variant="body1" color="textSecondary">
-					No expenses found.
+					Nisu pronađeni troškovi.
 				</Typography>
 			)}
 
-			{expenses.length > 0 && (
-				<ExpenseGrid expenses={expenses} onEdit={handleOpenEdit} onDelete={handleOpenDelete} />
-			)}
+			{expenses.length > 0 &&
+				(isMobile ? (
+					<ExpensesMobileCardList
+						expenses={expenses}
+						onEdit={handleOpenEdit}
+						onDelete={handleOpenDelete}
+						onAddNew={handleOpenAdd}
+					/>
+				) : (
+					<ExpenseGrid expenses={expenses} onEdit={handleOpenEdit} onDelete={handleOpenDelete} />
+				))}
 
 			<ModalAddExpense
 				open={openModal}
