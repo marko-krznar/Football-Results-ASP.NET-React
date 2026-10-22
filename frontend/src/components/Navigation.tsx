@@ -12,10 +12,10 @@ import {
 	ListItem,
 	ListItemButton,
 	ListItemText,
-	FormControl,
-	Select,
 	MenuItem,
 	Divider,
+	Menu,
+	Select,
 } from "@mui/material";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import LoginIcon from "@mui/icons-material/Login";
@@ -23,7 +23,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { Link, useNavigate } from "react-router";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { Link, useNavigate, useLocation } from "react-router";
 import { useLogoutMutation, authApi } from "../redux/api/authApi";
 import { useGetSeasonsQuery } from "../redux/api/seasonsApi";
 import { useCurrentUser, useSelectedSeason } from "../redux/hooks";
@@ -32,9 +34,69 @@ import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { getClosestSeasonId } from "../utils/getClosestSeasonIdUtils";
 
+const navLinks = [
+	{ label: "Naslovna", to: "/" },
+	{ label: "Termini", to: "/matches" },
+	{ label: "Momčadi", to: "/teams" },
+	{ label: "Sezone", to: "/seasons" },
+];
+
+/** Rounded-square container that wraps the logo icon */
+function LogoIconBox({ children }: { children: React.ReactNode }) {
+	return (
+		<Box
+			sx={{
+				width: { xs: 38, sm: 44 },
+				height: { xs: 38, sm: 44 },
+				borderRadius: "10px",
+				backgroundColor: "rgba(255,255,255,0.07)",
+				border: (theme) => `1px solid ${theme.palette.divider}`,
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				flexShrink: 0,
+			}}
+		>
+			{children}
+		</Box>
+	);
+}
+
+/** Stacked "HPD PRSTEN / REKREATIVNA LIGA" wordmark */
+function LogoWordmark() {
+	return (
+		<Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+			<Typography
+				variant="body1"
+				noWrap
+				sx={{
+					fontWeight: 700,
+					color: "text.primary",
+					lineHeight: 1.1,
+					letterSpacing: "0.05em",
+				}}
+			>
+				HPD PRSTEN
+			</Typography>
+			<Typography
+				variant="caption"
+				noWrap
+				sx={{
+					color: "text.secondary",
+					letterSpacing: "0.1em",
+					lineHeight: 1.3,
+				}}
+			>
+				REKREATIVNA LIGA
+			</Typography>
+		</Box>
+	);
+}
+
 export default function Navigation() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const location = useLocation();
 
 	const { user, isLoading, isAuthenticated, isAdmin } = useCurrentUser();
 	const { data: seasons } = useGetSeasonsQuery();
@@ -42,6 +104,8 @@ export default function Navigation() {
 	const [logout] = useLogoutMutation();
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const [seasonAnchorEl, setSeasonAnchorEl] = useState<null | HTMLElement>(null);
+	const seasonMenuOpen = Boolean(seasonAnchorEl);
 
 	const closestSeason = seasons && getClosestSeasonId(seasons);
 
@@ -67,6 +131,23 @@ export default function Navigation() {
 		setMobileMenuOpen(false);
 	};
 
+	const handleSeasonMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+		setSeasonAnchorEl(event.currentTarget);
+	};
+
+	const handleSeasonMenuClose = () => {
+		setSeasonAnchorEl(null);
+	};
+
+	const handleSeasonSelect = (id: number) => {
+		dispatch(setSelectedSeasonId(id));
+		handleSeasonMenuClose();
+	};
+
+	const selectedSeason = seasons?.find((s) => s.id === selectedSeasonId);
+
+	const isActive = (to: string) => (to === "/" ? location.pathname === "/" : location.pathname.startsWith(to));
+
 	return (
 		<AppBar
 			position="sticky"
@@ -82,39 +163,72 @@ export default function Navigation() {
 					disableGutters
 					sx={{
 						minHeight: { xs: 64, sm: 72 },
+						display: "flex",
+						justifyContent: "space-between",
 					}}
 				>
+					{/* ── Logo ── */}
 					<Button
 						component={Link}
 						to="/"
 						onClick={closeMobileMenu}
 						sx={{
-							gap: 1,
+							gap: 1.5,
 							minWidth: 0,
-							px: { xs: 0, sm: 1 },
+							px: { xs: 0, sm: 0.5 },
+							textTransform: "uppercase",
+							"&:hover": { backgroundColor: "transparent" },
 						}}
 					>
-						<SportsSoccerIcon
-							sx={{
-								fontSize: { xs: "1.7rem", sm: "2rem" },
-							}}
-						/>
-
-						<Typography
-							variant="body1"
-							noWrap
-							sx={{
-								fontWeight: 700,
-								fontSize: { xs: "0.9rem", sm: "1rem" },
-								color: (theme) => theme.palette.primary.main,
-							}}
-						>
-							HPD PRSTEN
-						</Typography>
+						<LogoIconBox>
+							<SportsSoccerIcon
+								sx={{ fontSize: { xs: "1.4rem", sm: "1.6rem" }, color: "text.primary" }}
+							/>
+						</LogoIconBox>
+						<LogoWordmark />
 					</Button>
 
-					<Box sx={{ flexGrow: 1 }} />
+					{/* ── Desktop nav links ── */}
+					<Box
+						sx={{
+							display: { xs: "none", md: "flex" },
+							gap: 0.5,
+							alignItems: "center",
+						}}
+					>
+						{navLinks.map((link) => {
+							const active = isActive(link.to);
+							return (
+								<Button
+									key={link.to}
+									component={Link}
+									to={link.to}
+									sx={{
+										color: active ? "text.primary" : "text.secondary",
+										fontWeight: active ? 600 : 400,
+										textTransform: "uppercase",
+										fontSize: "0.8rem",
+										letterSpacing: "0.06em",
+										borderRadius: "20px",
+										px: 2,
+										py: 0.75,
+										border: active
+											? (theme) => `1px solid ${theme.palette.divider}`
+											: "1px solid transparent",
+										backgroundColor: active ? "rgba(255,255,255,0.05)" : "transparent",
+										"&:hover": {
+											backgroundColor: "rgba(255,255,255,0.06)",
+											border: (theme) => `1px solid ${theme.palette.divider}`,
+										},
+									}}
+								>
+									{link.label}
+								</Button>
+							);
+						})}
+					</Box>
 
+					{/* ── Desktop right actions ── */}
 					<Box
 						sx={{
 							display: { xs: "none", md: "flex" },
@@ -122,66 +236,86 @@ export default function Navigation() {
 							alignItems: "center",
 						}}
 					>
-						<Button component={Link} to="/" color="inherit">
-							Naslovna
-						</Button>
-
-						<Button component={Link} to="/matches" color="inherit">
-							Termini
-						</Button>
-
-						<Button component={Link} to="/teams" color="inherit">
-							Momčadi
-						</Button>
-
-						<Button component={Link} to="/seasons" color="inherit">
-							Sezone
-						</Button>
-
+						{/* Season pill picker */}
 						{seasons && seasons.length > 0 && (
-							<FormControl size="small" sx={{ minWidth: 140, mx: 1 }}>
-								<Select
-									value={selectedSeasonId ?? ""}
-									onChange={(e) => dispatch(setSelectedSeasonId(Number(e.target.value)))}
+							<>
+								<Button
+									onClick={handleSeasonMenuOpen}
+									startIcon={
+										<FiberManualRecordIcon
+											sx={{ fontSize: "0.5rem !important", color: "success.main" }}
+										/>
+									}
+									endIcon={
+										<KeyboardArrowDownIcon
+											sx={{
+												fontSize: "1rem !important",
+												transition: "transform 0.2s",
+												transform: seasonMenuOpen ? "rotate(180deg)" : "rotate(0deg)",
+											}}
+										/>
+									}
 									sx={{
-										color: "inherit",
-										fontSize: "0.875rem",
-										"& .MuiOutlinedInput-notchedOutline": {
-											borderColor: "rgba(255, 255, 255, 0.23)",
-										},
-										"&:hover .MuiOutlinedInput-notchedOutline": {
-											borderColor: "rgba(255, 255, 255, 0.5)",
+										color: "text.primary",
+										textTransform: "uppercase",
+										fontWeight: 500,
+										fontSize: "0.8rem",
+										letterSpacing: "0.06em",
+										borderRadius: "20px",
+										px: 1.5,
+										py: 0.75,
+										"&:hover": { backgroundColor: "rgba(255,255,255,0.06)" },
+									}}
+								>
+									{selectedSeason?.name ?? "Sezona"}
+								</Button>
+
+								<Menu
+									anchorEl={seasonAnchorEl}
+									open={seasonMenuOpen}
+									onClose={handleSeasonMenuClose}
+									slotProps={{
+										paper: {
+											sx: { mt: 0.5, borderRadius: "12px", minWidth: 160 },
 										},
 									}}
 								>
 									{seasons.map((season) => (
-										<MenuItem key={season.id} value={season.id}>
+										<MenuItem
+											key={season.id}
+											selected={season.id === selectedSeasonId}
+											onClick={() => handleSeasonSelect(season.id)}
+										>
 											{season.name}
 										</MenuItem>
 									))}
-								</Select>
-							</FormControl>
-						)}
-
-						{!isLoading && isAuthenticated && isAdmin && (
-							<>
-								<Tooltip title="Admin panel">
-									<Button
-										component={Link}
-										to="/admin"
-										color="inherit"
-										startIcon={<AdminPanelSettingsIcon />}
-										sx={{
-											color: (theme) => theme.palette.primary.main,
-											fontWeight: 600,
-										}}
-									>
-										Admin
-									</Button>
-								</Tooltip>
+								</Menu>
 							</>
 						)}
 
+						{/* Admin link */}
+						{!isLoading && isAuthenticated && isAdmin && (
+							<Button
+								component={Link}
+								to="/admin"
+								endIcon={<AdminPanelSettingsIcon />}
+								sx={{
+									color: "text.primary",
+									textTransform: "uppercase",
+									fontWeight: 600,
+									fontSize: "0.8rem",
+									letterSpacing: "0.06em",
+									borderRadius: "20px",
+									px: 2,
+									py: 0.75,
+									"&:hover": { backgroundColor: "rgba(255,255,255,0.06)" },
+								}}
+							>
+								Admin
+							</Button>
+						)}
+
+						{/* Auth button */}
 						{!isLoading && (
 							<>
 								{isAuthenticated ? (
@@ -189,15 +323,17 @@ export default function Navigation() {
 										<Button
 											id="nav-logout-btn"
 											onClick={handleLogout}
-											color="inherit"
-											startIcon={<LogoutIcon />}
+											endIcon={<LogoutIcon sx={{ fontSize: "1rem !important" }} />}
 											sx={{
-												ml: 1,
-												borderRadius: "0.6rem",
-												border: "1px solid rgba(255,255,255,0.12)",
-												"&:hover": {
-													backgroundColor: "rgba(255,255,255,0.06)",
-												},
+												color: "text.primary",
+												textTransform: "uppercase",
+												fontWeight: 600,
+												fontSize: "0.8rem",
+												letterSpacing: "0.06em",
+												borderRadius: "20px",
+												px: 2,
+												py: 0.75,
+												"&:hover": { backgroundColor: "rgba(255,255,255,0.06)" },
 											}}
 										>
 											Odjava
@@ -208,20 +344,21 @@ export default function Navigation() {
 										id="nav-login-btn"
 										component={Link}
 										to="/login"
-										variant="contained"
-										startIcon={<LoginIcon />}
+										endIcon={<LoginIcon sx={{ fontSize: "1rem !important" }} />}
 										sx={{
-											ml: 1,
-											borderRadius: "0.6rem",
-											textTransform: "none",
+											color: (theme) => theme.palette.background.default,
+											backgroundColor: "text.primary",
+											textTransform: "uppercase",
 											fontWeight: 600,
-											background: "linear-gradient(135deg, #1976d2 0%, #1565c0 100%)",
-											boxShadow: "0 2px 8px rgba(25,118,210,0.35)",
+											fontSize: "0.8rem",
+											letterSpacing: "0.06em",
+											borderRadius: "20px",
+											px: 2,
+											py: 0.75,
 											"&:hover": {
-												boxShadow: "0 4px 14px rgba(25,118,210,0.5)",
-												transform: "translateY(-1px)",
+												backgroundColor: "text.primary",
+												opacity: 0.88,
 											},
-											transition: "all 0.2s ease",
 										}}
 									>
 										Prijava
@@ -231,12 +368,10 @@ export default function Navigation() {
 						)}
 					</Box>
 
+					{/* ── Mobile hamburger ── */}
 					<IconButton
 						onClick={() => setMobileMenuOpen(true)}
-						sx={{
-							display: { xs: "flex", md: "none" },
-							ml: 1,
-						}}
+						sx={{ display: { xs: "flex", md: "none" }, ml: 1 }}
 						aria-label="Otvori navigaciju"
 					>
 						<MenuIcon />
@@ -244,7 +379,9 @@ export default function Navigation() {
 				</Toolbar>
 			</Container>
 
+			{/* ── Mobile drawer ── */}
 			<Drawer anchor="right" open={mobileMenuOpen} onClose={closeMobileMenu}>
+				{/* Drawer header */}
 				<Box
 					sx={{
 						display: "flex",
@@ -253,18 +390,11 @@ export default function Navigation() {
 						p: 2,
 					}}
 				>
-					<Box
-						sx={{
-							display: "flex",
-							alignItems: "center",
-							gap: 1,
-						}}
-					>
-						<SportsSoccerIcon color="primary" sx={{ fontSize: "1.8rem" }} />
-
-						<Typography fontWeight={700} color="primary">
-							HPD PRSTEN
-						</Typography>
+					<Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+						<LogoIconBox>
+							<SportsSoccerIcon sx={{ fontSize: "1.4rem", color: "text.primary" }} />
+						</LogoIconBox>
+						<LogoWordmark />
 					</Box>
 
 					<IconButton onClick={closeMobileMenu} aria-label="Zatvori navigaciju">
@@ -275,29 +405,18 @@ export default function Navigation() {
 				<Divider />
 
 				<List sx={{ px: 1 }}>
-					<ListItem disablePadding>
-						<ListItemButton component={Link} to="/" onClick={closeMobileMenu}>
-							<ListItemText primary="Naslovna" />
-						</ListItemButton>
-					</ListItem>
-
-					<ListItem disablePadding>
-						<ListItemButton component={Link} to="/matches" onClick={closeMobileMenu}>
-							<ListItemText primary="Termini" />
-						</ListItemButton>
-					</ListItem>
-
-					<ListItem disablePadding>
-						<ListItemButton component={Link} to="/teams" onClick={closeMobileMenu}>
-							<ListItemText primary="Momčadi" />
-						</ListItemButton>
-					</ListItem>
-
-					<ListItem disablePadding>
-						<ListItemButton component={Link} to="/seasons" onClick={closeMobileMenu}>
-							<ListItemText primary="Sezone" />
-						</ListItemButton>
-					</ListItem>
+					{navLinks.map((link) => (
+						<ListItem key={link.to} disablePadding>
+							<ListItemButton
+								component={Link}
+								to={link.to}
+								onClick={closeMobileMenu}
+								selected={isActive(link.to)}
+							>
+								<ListItemText primary={link.label} />
+							</ListItemButton>
+						</ListItem>
+					))}
 
 					{seasons && seasons.length > 0 && (
 						<Box sx={{ px: 2, py: 1 }}>
@@ -354,12 +473,7 @@ export default function Navigation() {
 							) : (
 								<ListItem disablePadding>
 									<ListItemButton component={Link} to="/login" onClick={closeMobileMenu}>
-										<LoginIcon
-											sx={{
-												mr: 2,
-												color: "primary.main",
-											}}
-										/>
+										<LoginIcon sx={{ mr: 2, color: "primary.main" }} />
 
 										<ListItemText primary="Prijava" />
 									</ListItemButton>
