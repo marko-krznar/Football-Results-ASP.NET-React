@@ -241,6 +241,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
     public async Task<MatchDisplayDto> GetMatchDisplay(int id)
     {
         var match = await _context.Matches
+            .Include(m => m.Season)
             .Include(m => m.FirstTeam)
             .Include(m => m.SecondTeam)
             .Include(m => m.Sets)
@@ -256,6 +257,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
     {
         var match = await _context.Matches
             .Where(m => m.SeasonId == seasonId)
+            .Include(m => m.Season)
             .Include(m => m.FirstTeam)
             .Include(m => m.SecondTeam)
             .Include(m => m.Sets)
@@ -271,6 +273,7 @@ public class MatchesService(AppDbContext context) : IMatchesService
     public async Task<List<MatchDisplayDto>> GetAllMatchesDisplay(int? seasonId = null)
     {
         var query = _context.Matches
+            .Include(m => m.Season)
             .Include(m => m.FirstTeam)
             .Include(m => m.SecondTeam)
             .Include(m => m.Sets)
@@ -321,6 +324,8 @@ public class MatchesService(AppDbContext context) : IMatchesService
         return new MatchDisplayDto
         {
             Id = m.Id,
+            SeasonId = m.SeasonId,
+            SeasonName = m.Season != null ? m.Season.Name : string.Empty,
             Date = m.MatchDate,
             Location = m.Location,
             Note = m.Note,
