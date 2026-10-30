@@ -106,6 +106,10 @@ export const matchesApi = createApi({
 			query: (seasonId) => (seasonId ? `/matches/display?seasonId=${seasonId}` : "/matches/display"),
 			providesTags: ["Matches"],
 		}),
+		getAllMatches: builder.query<Match[], void>({
+			query: () => "/matches",
+			providesTags: ["Matches"],
+		}),
 		getMatchById: builder.query<Match, number>({
 			query: (id) => `/matches/${id}`,
 			providesTags: (_result, _error, id) => [{ type: "Matches", id }],
@@ -164,6 +168,7 @@ export const matchesApi = createApi({
 
 export const {
 	useGetMatchesQuery,
+	useGetAllMatchesQuery,
 	useGetMatchByIdQuery,
 	useGetLatestMatchQuery,
 	useAddMatchMutation,
