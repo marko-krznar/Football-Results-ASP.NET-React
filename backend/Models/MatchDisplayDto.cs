@@ -13,6 +13,8 @@ public class MatchTeamDisplayDto
 public class MatchDisplayDto
 {
     public int Id { get; set; }
+    public int SeasonId { get; set; }
+    public string SeasonName { get; set; } = string.Empty;
     public DateOnly Date { get; set; }
     public string? Location { get; set; }
     public string? Note { get; set; }
