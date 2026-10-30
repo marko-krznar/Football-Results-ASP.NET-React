@@ -1,17 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { Link, useLocation } from "react-router";
 
-export interface NavLinkItem {
-	label: string;
-	to: string;
-}
-
-export const MAIN_NAV_LINKS: NavLinkItem[] = [
-	{ label: "Naslovna", to: "/" },
-	{ label: "Termini", to: "/matches" },
-	{ label: "Momčadi", to: "/teams" },
-	{ label: "Sezone", to: "/seasons" },
-];
+import { MAIN_NAV_LINKS } from "./navLinks";
 
 export default function MainNav() {
 	const location = useLocation();

@@ -18,24 +18,15 @@ import { Link } from "react-router";
 import { useDispatch } from "react-redux";
 import { setSelectedSeasonId } from "../../redux/seasonSlice";
 import { useSelectedSeason } from "../../redux/hooks";
-
-export interface Season {
-	id: number;
-	name: string;
-	[key: string]: any;
-}
-
-export interface User {
-	email?: string;
-	[key: string]: any;
-}
+import type { Season } from "../../redux/api/seasonsApi";
+import type { UserInfo } from "../../redux/api/authApi";
 
 interface SeasonAndAdminControlsProps {
 	seasons?: Season[];
 	isLoading: boolean;
 	isAuthenticated: boolean;
 	isAdmin: boolean;
-	user?: User | null;
+	user?: UserInfo | null;
 	onOpenLogoutModal: () => void;
 }
 

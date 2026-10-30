@@ -30,7 +30,8 @@ import { useState, useEffect } from "react";
 import { getClosestSeasonId } from "../utils/getClosestSeasonIdUtils";
 
 import NavigationLogo from "./navigation/NavigationLogo";
-import MainNav, { MAIN_NAV_LINKS } from "./navigation/MainNav";
+import MainNav from "./navigation/MainNav";
+import { MAIN_NAV_LINKS } from "./navigation/navLinks";
 import SeasonAndAdminControls from "./navigation/SeasonAndAdminControls";
 import LogoutModal from "./navigation/LogoutModal";
 
