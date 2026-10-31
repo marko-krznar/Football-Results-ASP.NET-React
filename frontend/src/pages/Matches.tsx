@@ -26,8 +26,6 @@ import MatchTabel from "../components/matches/MatchTabel";
 import MatchesMobileCardList from "../components/matches/MatchesMobileCardList";
 import MatchesIntroCard from "../components/matches/MatchesIntroCard";
 import { useGetSeasonsQuery } from "../redux/api/seasonsApi";
-import dayjs from "dayjs";
-import "dayjs/locale/hr";
 
 export default function Matches() {
 	const theme = useTheme();
@@ -44,15 +42,7 @@ export default function Matches() {
 	const [deletingMatchId, setDeletingMatchId] = useState<number | null>(null);
 
 	const selectedSeason = seasons && seasons.find((season) => season.id === selectedSeasonId);
-
-	// Derive last updated date from the most recent match
-	const lastUpdated =
-		data && data.length > 0
-			? dayjs(data[0].date).locale("hr").format("ddd DD.MM.YYYY.")
-			: undefined;
-
-	// Count only ranked matches
-	const rankedMatchCount = data ? data.filter((m) => m.countsForStandings !== false).length : undefined;
+	const totalMatches = data?.length;
 
 	return (
 		<Container maxWidth="xl">
@@ -62,8 +52,7 @@ export default function Matches() {
 					{selectedSeason && (
 						<MatchesIntro
 							season={selectedSeason.name}
-							matchCount={rankedMatchCount}
-							lastUpdatedDate={lastUpdated}
+							totalMatches={totalMatches}
 						/>
 					)}
 					{totalSeasonScore && (
@@ -72,7 +61,6 @@ export default function Matches() {
 							firstTotalSetsWon={totalSeasonScore.firstTeam.totalSetsWon}
 							secondTeamName={totalSeasonScore.secondTeam.teamName}
 							secondTotalSetsWon={totalSeasonScore.secondTeam.totalSetsWon}
-							totalMatches={data?.length}
 						/>
 					)}
 				</Stack>

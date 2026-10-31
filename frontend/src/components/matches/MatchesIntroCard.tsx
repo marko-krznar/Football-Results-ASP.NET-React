@@ -1,41 +1,77 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Card, CardContent, Chip, Divider, LinearProgress, Stack, useTheme } from "@mui/material";
+import { Card, CardContent, Stack, useTheme } from "@mui/material";
 
 export interface TotalResult {
 	firstTeamName: string;
 	firstTotalSetsWon: number;
 	secondTeamName: string;
 	secondTotalSetsWon: number;
-	totalMatches?: number;
 }
 
-function TeamCircle({ isDark }: { isDark: boolean }) {
+function TeamBlock({
+	isDark,
+	name,
+	score,
+	isWinner,
+}: {
+	isDark: boolean;
+	name: string;
+	score: number;
+	isWinner: boolean;
+}) {
 	const theme = useTheme();
 	return (
-		<Box
-			sx={{
-				width: 52,
-				height: 52,
-				borderRadius: "50%",
-				backgroundColor: isDark ? theme.palette.background.default : theme.palette.background.paper,
-				border: `1px solid ${theme.palette.divider}`,
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				boxShadow: 3,
-				mb: 1,
-			}}
-		>
+		<Stack alignItems="center" spacing={1.5}>
+			{/* Jersey circle */}
 			<Box
 				sx={{
-					width: 16,
-					height: 16,
+					width: 56,
+					height: 56,
 					borderRadius: "50%",
-					backgroundColor: isDark ? theme.palette.action.disabled : theme.palette.primary.light,
+					backgroundColor: isDark ? theme.palette.background.default : theme.palette.background.paper,
+					border: `1px solid ${theme.palette.divider}`,
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					boxShadow: 3,
 				}}
-			/>
-		</Box>
+			>
+				<Box
+					sx={{
+						width: 18,
+						height: 18,
+						borderRadius: "50%",
+						backgroundColor: isDark ? theme.palette.action.disabled : theme.palette.primary.light,
+					}}
+				/>
+			</Box>
+
+			{/* Score */}
+			<Typography
+				variant="h2"
+				fontWeight="bold"
+				color={isWinner ? "text.primary" : "text.secondary"}
+				sx={{ lineHeight: 1 }}
+			>
+				{score}
+			</Typography>
+
+			{/* Team name */}
+			<Stack spacing={0.25} alignItems="center">
+				<Typography
+					variant="caption"
+					fontWeight="bold"
+					sx={{
+						textTransform: "uppercase",
+						letterSpacing: "0.1em",
+						color: isWinner ? "text.primary" : "text.secondary",
+					}}
+				>
+					{name}
+				</Typography>
+			</Stack>
+		</Stack>
 	);
 }
 
@@ -44,119 +80,46 @@ export default function MatchesIntroCard({
 	firstTotalSetsWon,
 	secondTeamName,
 	secondTotalSetsWon,
-	totalMatches,
 }: TotalResult) {
-	const theme = useTheme();
-	const total = firstTotalSetsWon + secondTotalSetsWon;
-	const secondPct = total > 0 ? Math.round((secondTotalSetsWon / total) * 100) : 0;
-	const firstPct = total > 0 ? Math.round((firstTotalSetsWon / total) * 100) : 0;
-	const diff = Math.abs(secondTotalSetsWon - firstTotalSetsWon);
-	const leaderName = secondTotalSetsWon >= firstTotalSetsWon ? secondTeamName : firstTeamName;
-
-	// Which side is "leading" — highlight with primary color
-	const secondColor =
-		secondTotalSetsWon >= firstTotalSetsWon ? theme.palette.text.primary : theme.palette.text.secondary;
-	const firstColor =
-		firstTotalSetsWon >= secondTotalSetsWon ? theme.palette.text.primary : theme.palette.text.secondary;
+	const secondWins = secondTotalSetsWon >= firstTotalSetsWon;
+	const firstWins = firstTotalSetsWon >= secondTotalSetsWon;
 
 	return (
-		<Box sx={{ width: { xs: "100%", sm: "auto" }, minWidth: { sm: "320px" } }}>
-			<Card sx={{ width: "100%" }}>
-				<CardContent>
-					{/* Header row */}
-					<Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-						<Box>
-							<Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.1em" }}>
-								Omjer pobjeda
-							</Typography>
-							<Typography variant="h4" fontWeight="bold" color="text.primary">
-								Sveukupno
-							</Typography>
-						</Box>
-						{totalMatches !== undefined && (
-							<Chip label={`${totalMatches} Susreta`} size="small" variant="outlined" sx={{ borderColor: "divider" }} />
-						)}
-					</Stack>
+		<Box sx={{ width: { xs: "100%", sm: "auto" }, minWidth: { sm: "280px" } }}>
+			<Card sx={{ width: "100%", height: "100%" }}>
+				<CardContent sx={{ height: "100%", justifyContent: "center" }}>
+					{/* Label */}
+					<Typography
+						variant="caption"
+						color="text.secondary"
+						sx={{ textTransform: "uppercase", letterSpacing: "0.1em", textAlign: "center", display: "block" }}
+					>
+						Sveukupno
+					</Typography>
 
-					{/* Team score row */}
-					<Stack direction="row" justifyContent="space-between" alignItems="center">
-						{/* Left team: second (Crni) */}
-						<Stack alignItems="center" spacing={0}>
-							<TeamCircle isDark />
-							<Typography variant="h2" fontWeight="bold" color={secondColor} sx={{ lineHeight: 1 }}>
-								{secondTotalSetsWon}
-							</Typography>
-							<Typography
-								variant="caption"
-								fontWeight="bold"
-								color="text.secondary"
-								sx={{ textTransform: "uppercase", letterSpacing: "0.08em", mt: 0.25 }}
-							>
-								{secondTeamName}
-							</Typography>
-							<Typography variant="caption" color="text.secondary">
-								{secondPct}% pobjeda
-							</Typography>
-						</Stack>
-
-						{/* Center: OMJER label */}
-						<Stack alignItems="center" spacing={0.5}>
-							<Typography variant="caption" color="text.secondary" sx={{ letterSpacing: "0.12em", textTransform: "uppercase" }}>
-								Omjer
-							</Typography>
-						</Stack>
-
-						{/* Right team: first (Bijeli) */}
-						<Stack alignItems="center" spacing={0}>
-							<TeamCircle isDark={false} />
-							<Typography variant="h2" fontWeight="bold" color={firstColor} sx={{ lineHeight: 1 }}>
-								{firstTotalSetsWon}
-							</Typography>
-							<Typography
-								variant="caption"
-								fontWeight="bold"
-								color="text.secondary"
-								sx={{ textTransform: "uppercase", letterSpacing: "0.08em", mt: 0.25 }}
-							>
-								{firstTeamName}
-							</Typography>
-							<Typography variant="caption" color="text.secondary">
-								{firstPct}% pobjeda
-							</Typography>
-						</Stack>
-					</Stack>
-
-					<Divider />
-
-					{/* Progress bar section */}
-					<Box>
-						<Stack direction="row" justifyContent="space-between" sx={{ mb: 0.75 }}>
-							<Typography variant="caption" color="text.secondary">
-								{secondTeamName} ({secondTotalSetsWon})
-							</Typography>
-							<Typography variant="caption" color="text.secondary">
-								{firstTeamName} ({firstTotalSetsWon})
-							</Typography>
-						</Stack>
-						<LinearProgress
-							variant="determinate"
-							value={secondPct}
-							sx={{
-								height: 6,
-								borderRadius: 3,
-								backgroundColor: theme.palette.action.hover,
-								"& .MuiLinearProgress-bar": {
-									borderRadius: 3,
-									backgroundColor: theme.palette.primary.main,
-								},
-							}}
+					{/* Teams + score */}
+					<Stack direction="row" justifyContent="center" alignItems="center" spacing={3}>
+						{/* Left: second team (Crni) */}
+						<TeamBlock
+							isDark
+							name={secondTeamName || "Crni"}
+							score={secondTotalSetsWon}
+							isWinner={secondWins}
 						/>
-						{diff > 0 && (
-							<Typography variant="caption" color="text.secondary" sx={{ mt: 0.75, display: "block" }}>
-								{leaderName} trenutno vode s {diff} pobjedom razlike.
-							</Typography>
-						)}
-					</Box>
+
+						{/* Center separator */}
+						<Typography variant="h4" color="text.secondary" sx={{ pb: 4 }}>
+							:
+						</Typography>
+
+						{/* Right: first team (Bijeli) */}
+						<TeamBlock
+							isDark={false}
+							name={firstTeamName || "Bijeli"}
+							score={firstTotalSetsWon}
+							isWinner={firstWins}
+						/>
+					</Stack>
 				</CardContent>
 			</Card>
 		</Box>
