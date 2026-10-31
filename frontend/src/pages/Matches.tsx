@@ -1,5 +1,8 @@
 import {
 	Box,
+	Card,
+	CardContent,
+	Chip,
 	Container,
 	Dialog,
 	DialogTitle,
@@ -7,7 +10,9 @@ import {
 	DialogContentText,
 	DialogActions,
 	Button,
+	Divider,
 	Stack,
+	Typography,
 	useMediaQuery,
 	useTheme,
 } from "@mui/material";
@@ -21,6 +26,8 @@ import MatchTabel from "../components/matches/MatchTabel";
 import MatchesMobileCardList from "../components/matches/MatchesMobileCardList";
 import MatchesIntroCard from "../components/matches/MatchesIntroCard";
 import { useGetSeasonsQuery } from "../redux/api/seasonsApi";
+import dayjs from "dayjs";
+import "dayjs/locale/hr";
 
 export default function Matches() {
 	const theme = useTheme();
@@ -38,44 +45,79 @@ export default function Matches() {
 
 	const selectedSeason = seasons && seasons.find((season) => season.id === selectedSeasonId);
 
+	// Derive last updated date from the most recent match
+	const lastUpdated =
+		data && data.length > 0
+			? dayjs(data[0].date).locale("hr").format("ddd DD.MM.YYYY.")
+			: undefined;
+
+	// Count only ranked matches
+	const rankedMatchCount = data ? data.filter((m) => m.countsForStandings !== false).length : undefined;
+
 	return (
 		<Container maxWidth="xl">
-			<Box
-				sx={{
-					paddingBlock: 4,
-				}}
-			>
+			<Box sx={{ paddingBlock: 4 }}>
+				{/* ─── Top hero row ─── */}
 				<Stack direction={{ xs: "column", sm: "row" }} spacing={4} sx={{ width: "100%", mb: 4 }}>
-					{selectedSeason && <MatchesIntro season={selectedSeason.name} />}
+					{selectedSeason && (
+						<MatchesIntro
+							season={selectedSeason.name}
+							matchCount={rankedMatchCount}
+							lastUpdatedDate={lastUpdated}
+						/>
+					)}
 					{totalSeasonScore && (
 						<MatchesIntroCard
 							firstTeamName={totalSeasonScore.firstTeam.teamName}
 							firstTotalSetsWon={totalSeasonScore.firstTeam.totalSetsWon}
 							secondTeamName={totalSeasonScore.secondTeam.teamName}
 							secondTotalSetsWon={totalSeasonScore.secondTeam.totalSetsWon}
+							totalMatches={data?.length}
 						/>
 					)}
 				</Stack>
+
+				{/* ─── Table section ─── */}
 				{data && (
-					isMobile ? (
-						<MatchesMobileCardList
-							data={data}
-							setDeletingMatchId={setDeletingMatchId}
-							setDeleteDialogOpen={setDeleteDialogOpen}
-							setEditingMatchId={setEditingMatchId}
-							setEditModalOpen={setEditModalOpen}
-						/>
-					) : (
-						<MatchTabel
-							data={data}
-							setDeletingMatchId={setDeletingMatchId}
-							setDeleteDialogOpen={setDeleteDialogOpen}
-							setEditingMatchId={setEditingMatchId}
-							setEditModalOpen={setEditModalOpen}
-						/>
-					)
+					<Card>
+						<CardContent>
+							{/* Table header */}
+							<Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }} gap={1}>
+								<Box>
+									<Typography variant="h4" fontWeight="bold">
+										Tablica odigranih termina
+									</Typography>
+									<Typography variant="body2" color="text.secondary">
+										Detaljan pregled sastava, rezultata po setovima i konačnog ishoda
+									</Typography>
+								</Box>
+								<Chip label={`Prikazano: ${data.length} susreta`} variant="outlined" sx={{ borderColor: "divider" }} />
+							</Stack>
+
+							<Divider />
+
+							{isMobile ? (
+								<MatchesMobileCardList
+									data={data}
+									setDeletingMatchId={setDeletingMatchId}
+									setDeleteDialogOpen={setDeleteDialogOpen}
+									setEditingMatchId={setEditingMatchId}
+									setEditModalOpen={setEditModalOpen}
+								/>
+							) : (
+								<MatchTabel
+									data={data}
+									setDeletingMatchId={setDeletingMatchId}
+									setDeleteDialogOpen={setDeleteDialogOpen}
+									setEditingMatchId={setEditingMatchId}
+									setEditModalOpen={setEditModalOpen}
+								/>
+							)}
+						</CardContent>
+					</Card>
 				)}
 			</Box>
+
 			{addModalOpen && <AddMatchModal open={addModalOpen} onClose={() => setAddModalOpen(false)} />}
 			{editModalOpen && (
 				<EditMatchModal

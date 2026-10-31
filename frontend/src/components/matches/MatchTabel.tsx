@@ -14,6 +14,8 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import dayjs from "dayjs";
 import "dayjs/locale/hr";
 import { useTheme } from "@mui/material/styles";
@@ -48,6 +50,77 @@ type MatchTableProps = {
 	setEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+/** Pill showing a single set result, e.g. "SET 1 / 6 : 8" */
+function SetPill({ setIndex, blackGoals, whiteGoals }: { setIndex: number; blackGoals: number; whiteGoals: number }) {
+	const theme = useTheme();
+	return (
+		<Box
+			sx={{
+				display: "inline-flex",
+				flexDirection: "column",
+				alignItems: "center",
+				px: 1.5,
+				py: 0.75,
+				borderRadius: 2,
+				border: `1px solid ${theme.palette.divider}`,
+				backgroundColor: theme.palette.action.hover,
+				minWidth: 68,
+			}}
+		>
+			<Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, letterSpacing: "0.06em" }}>
+				Set {setIndex + 1}
+			</Typography>
+			<Typography variant="body2" fontWeight="bold" color="text.primary">
+				{blackGoals} : {whiteGoals}
+			</Typography>
+		</Box>
+	);
+}
+
+/** Final outcome badge: shows setsWon, winner dot + name */
+function FinalOutcomeBadge({
+	blackSetsWon,
+	whiteSetsWon,
+	blackTeamName,
+	whiteTeamName,
+}: {
+	blackSetsWon: number;
+	whiteSetsWon: number;
+	blackTeamName: string;
+	whiteTeamName: string;
+}) {
+	const theme = useTheme();
+	const blackWon = blackSetsWon > whiteSetsWon;
+	const winnerName = blackWon ? blackTeamName || "Crni" : whiteTeamName || "Bijeli";
+
+	return (
+		<Box
+			sx={{
+				display: "inline-flex",
+				flexDirection: "column",
+				alignItems: "flex-end",
+				gap: 0.5,
+				px: 1.5,
+				py: 1,
+				borderRadius: 2,
+				border: `1px solid ${theme.palette.divider}`,
+				backgroundColor: theme.palette.background.paper,
+				minWidth: 80,
+			}}
+		>
+			<Typography variant="body1" fontWeight="bold" color="text.primary">
+				{blackSetsWon} : {whiteSetsWon}
+			</Typography>
+			<Stack direction="row" spacing={0.5} alignItems="center">
+				<FiberManualRecordIcon sx={{ fontSize: "0.5rem", color: "primary.main" }} />
+				<Typography variant="caption" fontWeight="bold" color="primary.main" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
+					{winnerName}
+				</Typography>
+			</Stack>
+		</Box>
+	);
+}
+
 export default function MatchTabel({
 	data,
 	setDeletingMatchId,
@@ -63,146 +136,197 @@ export default function MatchTabel({
 			<Table aria-label="match table" sx={{ minWidth: 800 }}>
 				<TableHead>
 					<TableRow>
-						<TableCell style={{ width: "12rem" }} sx={{ fontWeight: "bold" }}>Datum i lokacija</TableCell>
-						<TableCell style={{ width: "6rem" }} sx={{ fontWeight: "bold" }}>Ekipa</TableCell>
-						<TableCell sx={{ fontWeight: "bold" }}>Igrači</TableCell>
-						<TableCell style={{ width: "10rem" }} sx={{ fontWeight: "bold" }}>Po setovima</TableCell>
-						<TableCell style={{ width: "3rem" }} sx={{ fontWeight: "bold" }}>Setovi</TableCell>
+						<TableCell sx={{ fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.08em", fontSize: "0.72rem", color: "text.secondary" }}>
+							Datum i lokacija
+						</TableCell>
+						<TableCell sx={{ fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.08em", fontSize: "0.72rem", color: "text.secondary" }}>
+							Igrači
+						</TableCell>
+						<TableCell sx={{ fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.08em", fontSize: "0.72rem", color: "text.secondary" }}>
+							<Stack direction="row" spacing={0.75} alignItems="center">
+								<InfoOutlinedIcon sx={{ fontSize: "0.9rem", opacity: 0.7 }} />
+								<span>Rezultati po setovima</span>
+							</Stack>
+						</TableCell>
+						<TableCell
+							align="right"
+							sx={{ fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.08em", fontSize: "0.72rem", color: "text.secondary" }}
+						>
+							Konačni ishod
+						</TableCell>
 						{isAuthenticated && isAdmin && (
-							<TableCell style={{ width: "2rem" }} colSpan={2} sx={{ fontWeight: "bold" }}>
-								Akcije
-							</TableCell>
+							<TableCell sx={{ width: "5rem" }} />
 						)}
 					</TableRow>
 				</TableHead>
 				<TableBody>
 					{data.map((match: Match) => {
 						const isUncounted = match.countsForStandings === false;
+						const formattedDay = dayjs(match.date).locale("hr").format("ddd");
+						const formattedDate = dayjs(match.date).locale("hr").format("DD.MM.YYYY.");
+						const locationText = match.location || "ŠD Hotanj";
 
 						return (
-						<TableRow
-							key={match.id}
-							sx={isUncounted ? { backgroundColor: "action.hover" } : undefined}
-						>
-							<TableCell style={{ width: "12rem" }}>
-								<Stack spacing={0.5} alignItems="flex-start">
-									<Typography variant="body1">
-										{dayjs(match.date).locale("hr").format("ddd DD.MM.YYYY.")}
-									</Typography>
-									<Typography variant="body2" color="text.secondary">
-										{match.location || "ŠD Hotanj"} 19:00
-									</Typography>
-									{isUncounted && (
-										<Chip
-											size="small"
-											label="Ne broji se"
-											color="warning"
-											variant="outlined"
-											sx={{ height: 20, fontSize: "0.7rem", fontWeight: "bold" }}
+							<TableRow
+								key={match.id}
+								sx={{
+									verticalAlign: "top",
+									"&:hover": { backgroundColor: "action.hover" },
+								}}
+							>
+								{/* --- Date & Location --- */}
+								<TableCell sx={{ width: "160px", pt: 2 }}>
+									<Stack spacing={0.5} alignItems="flex-start">
+										<Stack direction="row" spacing={0.75} alignItems="center">
+											<FiberManualRecordIcon sx={{ fontSize: "0.55rem", color: "primary.main" }} />
+											<Typography variant="body2" fontWeight="bold" color="text.primary">
+												{formattedDay}. {formattedDate}
+											</Typography>
+										</Stack>
+										<Stack direction="row" spacing={0.5} alignItems="center" sx={{ pl: 1.5 }}>
+											<LocationOnIcon sx={{ fontSize: "0.85rem", color: "text.secondary" }} />
+											<Typography variant="caption" color="text.secondary">
+												{locationText} 19:00
+											</Typography>
+										</Stack>
+										{isUncounted && (
+											<Box sx={{ pl: 1.5 }}>
+												<Chip
+													size="small"
+													label="Ne broji se"
+													color="warning"
+													variant="outlined"
+													sx={{ height: 20, fontSize: "0.7rem", fontWeight: "bold" }}
+												/>
+											</Box>
+										)}
+									</Stack>
+								</TableCell>
+
+								{/* --- Players --- */}
+								<TableCell sx={{ pt: 2 }}>
+									<Stack spacing={1}>
+										{/* Black team */}
+										<Box>
+											<Stack direction="row" spacing={0.5} alignItems="center" sx={{ mb: 0.25 }}>
+												<Box
+													sx={{
+														width: 7,
+														height: 7,
+														borderRadius: "50%",
+														backgroundColor: "text.secondary",
+													}}
+												/>
+												<Typography variant="caption" fontWeight="bold" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
+													Crni:
+												</Typography>
+											</Stack>
+											<Typography variant="body2" color="text.primary">
+												{match.secondTeam.playerNames.join(", ")}
+											</Typography>
+										</Box>
+
+										{/* White team */}
+										<Box>
+											<Stack direction="row" spacing={0.5} alignItems="center" sx={{ mb: 0.25 }}>
+												<Box
+													sx={{
+														width: 7,
+														height: 7,
+														borderRadius: "50%",
+														backgroundColor: "background.paper",
+														border: "1px solid",
+														borderColor: "divider",
+													}}
+												/>
+												<Typography variant="caption" fontWeight="bold" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
+													Bijeli:
+												</Typography>
+											</Stack>
+											<Typography variant="body2" color="text.primary">
+												{match.firstTeam.playerNames.join(", ")}
+											</Typography>
+										</Box>
+
+										{isUncounted && match.note && (
+											<Stack direction="row" spacing={0.5} alignItems="center">
+												<InfoOutlinedIcon sx={{ fontSize: 14, color: "warning.main" }} />
+												<Typography variant="caption" color="text.secondary" fontStyle="italic">
+													{match.note}
+												</Typography>
+											</Stack>
+										)}
+									</Stack>
+								</TableCell>
+
+								{/* --- Set results --- */}
+								<TableCell sx={{ pt: 2 }}>
+									{isUncounted && match.totalSets === 0 ? (
+										<Typography color="text.secondary">-</Typography>
+									) : (
+										<Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+											{match.secondTeam.goalsPerSet.map((blackGoal, index) => (
+												<SetPill
+													key={index}
+													setIndex={index}
+													blackGoals={blackGoal}
+													whiteGoals={match.firstTeam.goalsPerSet[index] ?? 0}
+												/>
+											))}
+										</Stack>
+									)}
+								</TableCell>
+
+								{/* --- Final outcome --- */}
+								<TableCell align="right" sx={{ pt: 2 }}>
+									{isUncounted ? (
+										<Typography color="text.secondary">-</Typography>
+									) : (
+										<FinalOutcomeBadge
+											blackSetsWon={match.secondTeam.setsWon}
+											whiteSetsWon={match.firstTeam.setsWon}
+											blackTeamName={match.secondTeam.teamName || "Crni"}
+											whiteTeamName={match.firstTeam.teamName || "Bijeli"}
 										/>
 									)}
-								</Stack>
-							</TableCell>
-							<TableCell style={{ width: "6rem" }}>
-								<Typography variant="body1">Crni</Typography>
-								<Typography variant="body1">Bijeli</Typography>
-							</TableCell>
-							<TableCell>
-								<Box
-									sx={{
-										display: "flex",
-										flexWrap: "wrap",
-									}}
-								>
-									<Typography>{match.secondTeam.playerNames.join(", ")}</Typography>
-								</Box>
-								<Box
-									sx={{
-										display: "flex",
-										flexWrap: "wrap",
-									}}
-								>
-									<Typography>{match.firstTeam.playerNames.join(", ")}</Typography>
-								</Box>
-								{isUncounted && match.note && (
-									<Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.75 }}>
-										<InfoOutlinedIcon sx={{ fontSize: 16, color: "warning.main" }} />
-										<Typography variant="caption" color="text.secondary" fontStyle="italic">
-											{match.note}
-										</Typography>
-									</Box>
-								)}
-							</TableCell>
-							<TableCell style={{ width: "10rem" }}>
-								{isUncounted && match.totalSets === 0 ? (
-									<Typography color="text.secondary">-</Typography>
-								) : (
-									<>
-										<Stack spacing={2} direction={"row"}>
-											{match.secondTeam.goalsPerSet.map((goal, index) => (
-												<Typography key={index}>{goal}</Typography>
-											))}
-										</Stack>
-										<Stack spacing={2} direction={"row"}>
-											{match.firstTeam.goalsPerSet.map((goal, index) => (
-												<Typography key={index}>{goal}</Typography>
-											))}
-										</Stack>
-									</>
-								)}
-							</TableCell>
-							<TableCell style={{ width: "3rem" }}>
-								{isUncounted ? (
-									<Typography color="text.secondary">-</Typography>
-								) : (
-									<>
-										<Typography>{match.secondTeam.setsWon}</Typography>
-										<Typography>{match.firstTeam.setsWon}</Typography>
-									</>
-								)}
-							</TableCell>
-							{/* Column 6: Summary */}
-							{/* <TableCell style={{ width: "3rem" }}>
-										<Typography>{match.blackScore}</Typography>
-										<Typography>{match.whiteScore}</Typography>
-									</TableCell> */}
-							{isAuthenticated && isAdmin && (
-								<TableCell style={{ width: "1rem" }}>
-									<IconButton
-										sx={{
-											borderRadius: "4px",
-											background: theme.palette.divider,
-										}}
-										aria-label="edit"
-										size="small"
-										onClick={() => {
-											setEditingMatchId(match.id);
-											setEditModalOpen(true);
-										}}
-									>
-										<EditIcon fontSize="inherit" />
-									</IconButton>
 								</TableCell>
-							)}
-							{isAuthenticated && isAdmin && (
-								<TableCell style={{ width: "1rem" }}>
-									<IconButton
-										sx={{
-											borderRadius: "4px",
-											background: theme.palette.divider,
-										}}
-										aria-label="delete"
-										size="small"
-										onClick={() => {
-											setDeletingMatchId(match.id);
-											setDeleteDialogOpen(true);
-										}}
-									>
-										<DeleteIcon fontSize="inherit" color="error" />
-									</IconButton>
-								</TableCell>
-							)}
-						</TableRow>
+
+								{/* --- Admin actions --- */}
+								{isAuthenticated && isAdmin && (
+									<TableCell sx={{ width: "5rem", pt: 2 }}>
+										<Stack direction="row" spacing={0.5}>
+											<IconButton
+												sx={{
+													borderRadius: "4px",
+													background: theme.palette.divider,
+												}}
+												aria-label="edit"
+												size="small"
+												onClick={() => {
+													setEditingMatchId(match.id);
+													setEditModalOpen(true);
+												}}
+											>
+												<EditIcon fontSize="inherit" />
+											</IconButton>
+											<IconButton
+												sx={{
+													borderRadius: "4px",
+													background: theme.palette.divider,
+												}}
+												aria-label="delete"
+												size="small"
+												onClick={() => {
+													setDeletingMatchId(match.id);
+													setDeleteDialogOpen(true);
+												}}
+											>
+												<DeleteIcon fontSize="inherit" color="error" />
+											</IconButton>
+										</Stack>
+									</TableCell>
+								)}
+							</TableRow>
 						);
 					})}
 				</TableBody>

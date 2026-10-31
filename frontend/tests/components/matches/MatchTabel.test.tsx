@@ -74,12 +74,13 @@ describe("MatchTabel", () => {
 		expect(screen.getByText("Ivan, Marko")).toBeInTheDocument();
 		expect(screen.getByText("Luka, Matej")).toBeInTheDocument();
 
-		expect(screen.getByText("4")).toBeInTheDocument();
-		expect(screen.getByText("8")).toBeInTheDocument();
-		expect(screen.getByText("5")).toBeInTheDocument();
+		// Set pills render as "N : M" combined text
+		expect(screen.getByText("6 : 4")).toBeInTheDocument();
+		expect(screen.getByText("3 : 8")).toBeInTheDocument();
+		expect(screen.getByText("7 : 5")).toBeInTheDocument();
 
-		expect(screen.getByText("1")).toBeInTheDocument();
-		expect(screen.getByText("2")).toBeInTheDocument();
+		// Final outcome badge: "blackSetsWon : whiteSetsWon"
+		expect(screen.getByText("2 : 1")).toBeInTheDocument();
 
 		expect(screen.queryByLabelText("edit")).not.toBeInTheDocument();
 		expect(screen.queryByLabelText("delete")).not.toBeInTheDocument();
