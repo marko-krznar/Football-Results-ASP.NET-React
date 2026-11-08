@@ -14,8 +14,6 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import dayjs from "dayjs";
 import "dayjs/locale/hr";
 import { useTheme } from "@mui/material/styles";
@@ -63,15 +61,7 @@ const TH_SX = {
 };
 
 /** Small pill for a single set score */
-function SetPill({
-	setIndex,
-	blackGoals,
-	whiteGoals,
-}: {
-	setIndex: number;
-	blackGoals: number;
-	whiteGoals: number;
-}) {
+function SetPill({ setIndex, blackGoals, whiteGoals }: { setIndex: number; blackGoals: number; whiteGoals: number }) {
 	return (
 		<Box
 			sx={{
@@ -116,7 +106,7 @@ function FinalOutcomeBadge({
 }) {
 	const theme = useTheme();
 	const blackWon = blackSetsWon > whiteSetsWon;
-	const winnerName = blackWon ? blackTeamName || "Crni" : whiteTeamName || "Bijeli";
+	const winnerName = blackSetsWon === whiteSetsWon ? "" : blackWon ? blackTeamName : whiteTeamName;
 
 	return (
 		<Box
@@ -137,7 +127,6 @@ function FinalOutcomeBadge({
 				{blackSetsWon} : {whiteSetsWon}
 			</Typography>
 			<Stack direction="row" spacing={0.4} alignItems="center">
-				<FiberManualRecordIcon sx={{ fontSize: "0.45rem", color: "primary.main" }} />
 				<Typography
 					variant="caption"
 					fontWeight="bold"
@@ -187,14 +176,11 @@ export default function MatchTabel({
 						<TableCell sx={{ ...TH_SX }}>Igrači</TableCell>
 						<TableCell sx={{ ...TH_SX }}>
 							<Stack direction="row" spacing={0.5} alignItems="center">
-								<InfoOutlinedIcon sx={{ fontSize: "0.85rem", opacity: 0.6 }} />
 								<span>Rezultati po setovima</span>
 							</Stack>
 						</TableCell>
 						<TableCell sx={{ ...TH_SX, width: 110, textAlign: "right" }}>Konačni ishod</TableCell>
-						{isAuthenticated && isAdmin && (
-							<TableCell sx={{ ...TH_SX, width: 64 }} />
-						)}
+						{isAuthenticated && isAdmin && <TableCell sx={{ ...TH_SX, width: 64 }} />}
 					</TableRow>
 				</TableHead>
 
@@ -217,17 +203,13 @@ export default function MatchTabel({
 								<TableCell sx={{ py: 2, borderBottom: "1px solid", borderColor: "divider" }}>
 									<Stack spacing={0.5}>
 										<Stack direction="row" spacing={0.75} alignItems="center">
-											<FiberManualRecordIcon
-												sx={{ fontSize: "0.5rem", color: isUncounted ? "warning.main" : "primary.main", flexShrink: 0 }}
-											/>
-											<Typography variant="body2" fontWeight="bold" color="text.primary" sx={{ lineHeight: 1.3 }}>
-												{dayjs(match.date).locale("hr").format("ddd. DD.MM.YYYY.")}
-											</Typography>
-										</Stack>
-										<Stack direction="row" spacing={0.5} alignItems="center" sx={{ pl: 1.5 }}>
-											<LocationOnIcon sx={{ fontSize: "0.8rem", color: "text.secondary", flexShrink: 0 }} />
-											<Typography variant="caption" color="text.secondary">
-												{match.location || "ŠD Hotanj"} 19:00
+											<Typography
+												variant="body2"
+												fontWeight="bold"
+												color="text.primary"
+												sx={{ lineHeight: 1.3 }}
+											>
+												{dayjs(match.date).locale("hr").format("DD.MM.YYYY.")}
 											</Typography>
 										</Stack>
 										{isUncounted && (
@@ -250,7 +232,12 @@ export default function MatchTabel({
 										<Stack spacing={0.4}>
 											<Stack direction="row" spacing={0.6} alignItems="center">
 												<TeamDot dark />
-												<Typography variant="caption" fontWeight="bold" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.07em" }}>
+												<Typography
+													variant="caption"
+													fontWeight="bold"
+													color="text.secondary"
+													sx={{ textTransform: "uppercase", letterSpacing: "0.07em" }}
+												>
 													Crni:
 												</Typography>
 											</Stack>
@@ -262,7 +249,12 @@ export default function MatchTabel({
 										<Stack spacing={0.4}>
 											<Stack direction="row" spacing={0.6} alignItems="center">
 												<TeamDot dark={false} />
-												<Typography variant="caption" fontWeight="bold" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.07em" }}>
+												<Typography
+													variant="caption"
+													fontWeight="bold"
+													color="text.secondary"
+													sx={{ textTransform: "uppercase", letterSpacing: "0.07em" }}
+												>
 													Bijeli:
 												</Typography>
 											</Stack>
@@ -273,7 +265,14 @@ export default function MatchTabel({
 
 										{isUncounted && match.note && (
 											<Stack direction="row" spacing={0.5} alignItems="flex-start">
-												<InfoOutlinedIcon sx={{ fontSize: "0.85rem", color: "warning.main", mt: 0.15, flexShrink: 0 }} />
+												<InfoOutlinedIcon
+													sx={{
+														fontSize: "0.85rem",
+														color: "warning.main",
+														mt: 0.15,
+														flexShrink: 0,
+													}}
+												/>
 												<Typography variant="caption" color="text.secondary" fontStyle="italic">
 													{match.note}
 												</Typography>
@@ -303,10 +302,7 @@ export default function MatchTabel({
 								</TableCell>
 
 								{/* ── Final outcome ── */}
-								<TableCell
-									align="right"
-									sx={{ py: 2, borderBottom: "1px solid", borderColor: "divider" }}
-								>
+								<TableCell sx={{ py: 2, borderBottom: "1px solid", borderColor: "divider" }}>
 									{isUncounted ? (
 										<Typography variant="body2" color="text.secondary">
 											—
@@ -315,8 +311,8 @@ export default function MatchTabel({
 										<FinalOutcomeBadge
 											blackSetsWon={match.secondTeam.setsWon}
 											whiteSetsWon={match.firstTeam.setsWon}
-											blackTeamName={match.secondTeam.teamName || "Crni"}
-											whiteTeamName={match.firstTeam.teamName || "Bijeli"}
+											blackTeamName={match.secondTeam.teamName}
+											whiteTeamName={match.firstTeam.teamName}
 										/>
 									)}
 								</TableCell>
