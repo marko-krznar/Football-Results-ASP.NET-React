@@ -1,5 +1,8 @@
 import {
 	Box,
+	Card,
+	CardContent,
+	Chip,
 	Container,
 	Dialog,
 	DialogTitle,
@@ -7,7 +10,9 @@ import {
 	DialogContentText,
 	DialogActions,
 	Button,
+	Divider,
 	Stack,
+	Typography,
 	useMediaQuery,
 	useTheme,
 } from "@mui/material";
@@ -37,16 +42,19 @@ export default function Matches() {
 	const [deletingMatchId, setDeletingMatchId] = useState<number | null>(null);
 
 	const selectedSeason = seasons && seasons.find((season) => season.id === selectedSeasonId);
+	const totalMatches = data?.length;
 
 	return (
 		<Container maxWidth="xl">
-			<Box
-				sx={{
-					paddingBlock: 4,
-				}}
-			>
+			<Box sx={{ paddingBlock: 4 }}>
+				{/* ─── Top hero row ─── */}
 				<Stack direction={{ xs: "column", sm: "row" }} spacing={4} sx={{ width: "100%", mb: 4 }}>
-					{selectedSeason && <MatchesIntro season={selectedSeason.name} />}
+					{selectedSeason && (
+						<MatchesIntro
+							season={selectedSeason.name}
+							totalMatches={totalMatches}
+						/>
+					)}
 					{totalSeasonScore && (
 						<MatchesIntroCard
 							firstTeamName={totalSeasonScore.firstTeam.teamName}
@@ -56,26 +64,48 @@ export default function Matches() {
 						/>
 					)}
 				</Stack>
+
+				{/* ─── Table section ─── */}
 				{data && (
-					isMobile ? (
-						<MatchesMobileCardList
-							data={data}
-							setDeletingMatchId={setDeletingMatchId}
-							setDeleteDialogOpen={setDeleteDialogOpen}
-							setEditingMatchId={setEditingMatchId}
-							setEditModalOpen={setEditModalOpen}
-						/>
-					) : (
-						<MatchTabel
-							data={data}
-							setDeletingMatchId={setDeletingMatchId}
-							setDeleteDialogOpen={setDeleteDialogOpen}
-							setEditingMatchId={setEditingMatchId}
-							setEditModalOpen={setEditModalOpen}
-						/>
-					)
+					<Card>
+						<CardContent>
+							{/* Table header */}
+							<Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }} gap={1}>
+								<Box>
+									<Typography variant="h4" fontWeight="bold">
+										Tablica odigranih termina
+									</Typography>
+									<Typography variant="body2" color="text.secondary">
+										Detaljan pregled sastava, rezultata po setovima i konačnog ishoda
+									</Typography>
+								</Box>
+								<Chip label={`Prikazano: ${data.length} susreta`} variant="outlined" sx={{ borderColor: "divider" }} />
+							</Stack>
+
+							<Divider />
+
+							{isMobile ? (
+								<MatchesMobileCardList
+									data={data}
+									setDeletingMatchId={setDeletingMatchId}
+									setDeleteDialogOpen={setDeleteDialogOpen}
+									setEditingMatchId={setEditingMatchId}
+									setEditModalOpen={setEditModalOpen}
+								/>
+							) : (
+								<MatchTabel
+									data={data}
+									setDeletingMatchId={setDeletingMatchId}
+									setDeleteDialogOpen={setDeleteDialogOpen}
+									setEditingMatchId={setEditingMatchId}
+									setEditModalOpen={setEditModalOpen}
+								/>
+							)}
+						</CardContent>
+					</Card>
 				)}
 			</Box>
+
 			{addModalOpen && <AddMatchModal open={addModalOpen} onClose={() => setAddModalOpen(false)} />}
 			{editModalOpen && (
 				<EditMatchModal
