@@ -7,6 +7,7 @@ import Matches from "./pages/Matches";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Seasons from "./pages/Seasons";
+import Statistics from "./pages/Statistics";
 
 export const router = createBrowserRouter([
 	{
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
 			{
 				path: "matches",
 				element: <Matches />,
+			},
+			{
+				path: "statistics",
+				element: <Statistics />,
 			},
 			{
 				path: "teams",

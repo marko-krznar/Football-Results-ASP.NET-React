@@ -6,6 +6,7 @@ export interface NavLinkItem {
 export const MAIN_NAV_LINKS: NavLinkItem[] = [
 	{ label: "Naslovna", to: "/" },
 	{ label: "Termini", to: "/matches" },
+	{ label: "Statistika", to: "/statistics" },
 	{ label: "Momčadi", to: "/teams" },
 	{ label: "Sezone", to: "/seasons" },
 ];
