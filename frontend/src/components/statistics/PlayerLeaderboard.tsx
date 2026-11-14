@@ -21,12 +21,7 @@ interface PlayerLeaderboardProps {
 	countType: "total" | "black" | "white" | "winRate";
 }
 
-export default function PlayerLeaderboard({
-	title,
-	description,
-	players,
-	countType,
-}: PlayerLeaderboardProps) {
+export default function PlayerLeaderboard({ title, description, players, countType }: PlayerLeaderboardProps) {
 	const getDisplayCount = (player: PlayerStat) => {
 		switch (countType) {
 			case "black":
@@ -49,8 +44,17 @@ export default function PlayerLeaderboard({
 	};
 
 	return (
-		<Card sx={{ height: "100%" }}>
-			<CardContent>
+		<Card
+			sx={{
+				height: "100%",
+				display: "flex",
+				flexDirection: "column",
+				backgroundColor: "background.paper",
+				border: 1,
+				borderColor: "divider",
+			}}
+		>
+			<CardContent sx={{ p: 3, "&:last-child": { pb: 3 } }}>
 				<Typography variant="h4" fontWeight="bold">
 					{title}
 				</Typography>
@@ -94,14 +98,24 @@ export default function PlayerLeaderboard({
 												</Typography>
 											</TableCell>
 											<TableCell align="right">
-												<Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
+												<Stack
+													direction="row"
+													spacing={1}
+													justifyContent="flex-end"
+													alignItems="center"
+												>
 													<Box>
-														<Typography variant="body2" fontWeight="bold" color="text.primary">
+														<Typography
+															variant="body2"
+															fontWeight="bold"
+															color="text.primary"
+														>
 															{getDisplayCount(player)}
 														</Typography>
 														{countType === "total" && (
 															<Typography variant="caption" color="text.secondary">
-																Crni: {player.blackAppearances} | Bijeli: {player.whiteAppearances}
+																Crni: {player.blackAppearances} | Bijeli:{" "}
+																{player.whiteAppearances}
 															</Typography>
 														)}
 													</Box>
