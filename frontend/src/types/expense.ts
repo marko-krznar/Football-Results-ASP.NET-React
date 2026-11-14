@@ -3,9 +3,15 @@ import { Dayjs } from "dayjs";
 export enum ExpenseOption {
 	HPD_PRSTEN = 0,
 	OSTALO = 1,
+	VELIKI_NOGOMET_NEDJELJOM = 2,
+	VELESAJAM_UTORKOM = 3,
 }
 
-export type ExpenseOptionValue = ExpenseOption.HPD_PRSTEN | ExpenseOption.OSTALO;
+export type ExpenseOptionValue =
+	| ExpenseOption.HPD_PRSTEN
+	| ExpenseOption.OSTALO
+	| ExpenseOption.VELIKI_NOGOMET_NEDJELJOM
+	| ExpenseOption.VELESAJAM_UTORKOM;
 
 export interface Expense {
 	id?: number;

@@ -75,6 +75,8 @@ export default function ModalAddExpense({
 								}
 							>
 								<FormControlLabel value={0} control={<Radio />} label="HPD Prsten" />
+								<FormControlLabel value={2} control={<Radio />} label="Veliki nogomet nedjeljom" />
+								<FormControlLabel value={3} control={<Radio />} label="Velesajam 22h utorkom" />
 								<FormControlLabel value={1} control={<Radio />} label="Ostalo" />
 							</RadioGroup>
 						</FormControl>

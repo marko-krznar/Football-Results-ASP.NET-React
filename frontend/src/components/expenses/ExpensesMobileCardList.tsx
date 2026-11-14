@@ -61,6 +61,8 @@ export default function ExpensesMobileCardList({
 	const filteredExpenses = useMemo(() => {
 		if (activeFilter === "all") return expenses;
 		if (activeFilter === "hpd") return expenses.filter((e) => e.option === 0);
+		if (activeFilter === "veliki_nogomet") return expenses.filter((e) => e.option === 2);
+		if (activeFilter === "velesajam") return expenses.filter((e) => e.option === 3);
 		if (activeFilter === "ostalo") return expenses.filter((e) => e.option === 1);
 		// check if filter is month key (YYYY-MM)
 		return expenses.filter((e) => e.date && dayjs(e.date).format("YYYY-MM") === activeFilter);
@@ -161,23 +163,45 @@ export default function ExpensesMobileCardList({
 				*/}
 
 				<Chip
-					label="Termini"
-					clickable
-					color={activeFilter === "ostalo" ? "primary" : "default"}
-					variant={activeFilter === "ostalo" ? "filled" : "outlined"}
-					onClick={() => {
-						setActiveFilter("ostalo");
-						setPage(1);
-					}}
-				/>
-
-				<Chip
 					label="HPD Prsten"
 					clickable
 					color={activeFilter === "hpd" ? "primary" : "default"}
 					variant={activeFilter === "hpd" ? "filled" : "outlined"}
 					onClick={() => {
 						setActiveFilter("hpd");
+						setPage(1);
+					}}
+				/>
+
+				<Chip
+					label="Veliki nogomet"
+					clickable
+					color={activeFilter === "veliki_nogomet" ? "primary" : "default"}
+					variant={activeFilter === "veliki_nogomet" ? "filled" : "outlined"}
+					onClick={() => {
+						setActiveFilter("veliki_nogomet");
+						setPage(1);
+					}}
+				/>
+
+				<Chip
+					label="Velesajam"
+					clickable
+					color={activeFilter === "velesajam" ? "primary" : "default"}
+					variant={activeFilter === "velesajam" ? "filled" : "outlined"}
+					onClick={() => {
+						setActiveFilter("velesajam");
+						setPage(1);
+					}}
+				/>
+
+				<Chip
+					label="Ostalo"
+					clickable
+					color={activeFilter === "ostalo" ? "primary" : "default"}
+					variant={activeFilter === "ostalo" ? "filled" : "outlined"}
+					onClick={() => {
+						setActiveFilter("ostalo");
 						setPage(1);
 					}}
 				/>
@@ -234,6 +258,15 @@ export default function ExpensesMobileCardList({
 				) : (
 					paginatedExpenses.map((expense) => {
 						const isHpdPrsten = expense.option === 0;
+						let optionLabel = "Ostalo";
+						if (expense.option === 0) {
+							optionLabel = "HPD Prsten";
+						} else if (expense.option === 2) {
+							optionLabel = "Veliki nogomet";
+						} else if (expense.option === 3) {
+							optionLabel = "Velesajam";
+						}
+
 						const formattedDate = expense.date
 							? isHpdPrsten
 								? dayjs(expense.date).locale("hr").format("MMMM YYYY")
@@ -252,7 +285,7 @@ export default function ExpensesMobileCardList({
 									<Stack direction="row" justifyContent="space-between" alignItems="center">
 										<Stack direction="row" spacing={1} alignItems="center">
 											<Chip
-												label={isHpdPrsten ? "HPD Prsten" : "Ostalo"}
+												label={optionLabel}
 												size="small"
 												color={isHpdPrsten ? "primary" : "default"}
 												variant={isHpdPrsten ? "filled" : "outlined"}
