@@ -36,18 +36,24 @@ export default function AdminBottomNav() {
 
 	return (
 		<Paper
-			elevation={8}
+			elevation={0}
+			data-testid="admin-bottom-nav"
 			sx={{
 				position: "fixed",
 				bottom: 0,
 				left: 0,
 				right: 0,
 				zIndex: (t) => t.zIndex.appBar,
+				borderTop: "1px solid",
+				borderColor: "divider",
+				backgroundColor: "rgba(14, 15, 14, 0.88)",
+				backdropFilter: "blur(16px)",
 			}}
 		>
 			<BottomNavigation
 				sx={{
 					height: "auto",
+					backgroundColor: "transparent",
 				}}
 				showLabels
 				value={activeTab}
@@ -64,10 +70,18 @@ export default function AdminBottomNav() {
 						sx={(t) => ({
 							py: 1.5,
 							minWidth: 0,
+							color: "text.secondary",
+							"&.Mui-selected": {
+								color: "primary.main",
+							},
 							"& .MuiBottomNavigationAction-label": {
 								...t.typography.caption,
+								fontSize: "0.72rem",
+								fontWeight: 500,
 								"&.Mui-selected": {
 									...t.typography.caption,
+									fontSize: "0.72rem",
+									fontWeight: 700,
 								},
 							},
 						})}

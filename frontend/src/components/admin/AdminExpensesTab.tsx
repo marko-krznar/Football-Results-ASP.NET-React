@@ -106,30 +106,38 @@ export default function AdminExpensesTab() {
 	};
 
 	return (
-		<Stack spacing={4}>
-			{!isMobile && (
-				<Stack
-					direction="row"
-					alignItems="center"
-					justifyContent="space-between"
-					spacing={2}
+		<Stack spacing={3}>
+			<Stack
+				direction={{ xs: "column", sm: "row" }}
+				alignItems={{ xs: "flex-start", sm: "center" }}
+				justifyContent="space-between"
+				spacing={2}
+			>
+				<Box flex={1}>
+					<Typography variant="h3" component="h2" gutterBottom>
+						Troškovi
+					</Typography>
+					<Typography variant="body2" sx={{ color: "text.secondary" }}>
+						Evidencija troškova dvorane (standardni termin na ŠD Hotanj je 75€).
+					</Typography>
+				</Box>
+				<Button
+					variant="contained"
+					color="primary"
+					startIcon={<AddIcon />}
+					onClick={handleOpenAdd}
+					sx={{
+						borderRadius: "20px",
+						px: 2.5,
+						py: 1,
+						fontWeight: 600,
+						textTransform: "none",
+						whiteSpace: "nowrap",
+					}}
 				>
-					<Box flex={1}>
-						<Typography variant="h3" component="h2" gutterBottom>
-							Troškovi
-						</Typography>
-						<Typography variant="body2">Troškovi za termin na ŠD Hotanj je 75€.</Typography>
-					</Box>
-					<Button
-						variant="contained"
-						startIcon={<AddIcon />}
-						onClick={handleOpenAdd}
-						sx={{ whiteSpace: "nowrap" }}
-					>
-						Dodaj trošak
-					</Button>
-				</Stack>
-			)}
+					Dodaj trošak
+				</Button>
+			</Stack>
 
 			{isLoading && <Typography>Loading…</Typography>}
 			{isError && <Typography color="error">Učitavanje troškova nije uspjelo.</Typography>}

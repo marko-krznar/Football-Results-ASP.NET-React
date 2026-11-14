@@ -19,7 +19,6 @@ import {
 	TableRow,
 	TextField,
 	Typography,
-	useTheme,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
@@ -32,7 +31,6 @@ import {
 } from "../../redux/api/playersApi";
 
 export default function AdminPlayersTab() {
-	const theme = useTheme();
 	const { data: playersList, isLoading: isFetching } = useGetPlayersQuery();
 	const [addPlayer, { isLoading: isAdding }] = useAddPlayerMutation();
 	const [updatePlayer, { isLoading: isUpdating }] = useUpdatePlayerMutation();
@@ -96,14 +94,24 @@ export default function AdminPlayersTab() {
 	};
 
 	return (
-		<Stack spacing={4}>
+		<Stack spacing={3}>
 			<Box>
 				<Typography variant="h3" component="h2" gutterBottom>
 					Upravljanje igračima
 				</Typography>
+				<Typography variant="body2" sx={{ color: "text.secondary" }}>
+					Popis registriranih igrača lige i brzo dodavanje novih članova.
+				</Typography>
 			</Box>
 
-			<Card variant="outlined" sx={{ background: theme.palette.grey[900] }}>
+			<Card
+				variant="outlined"
+				sx={{
+					backgroundColor: "background.paper",
+					borderColor: "divider",
+					borderRadius: "1rem",
+				}}
+			>
 				<CardContent>
 					{formError && (
 						<Alert severity="error" sx={{ mb: 2 }}>
@@ -115,7 +123,54 @@ export default function AdminPlayersTab() {
 							{successMsg}
 						</Alert>
 					)}
-					<Box sx={{ mt: 2 }}>
+
+					{/* Quick add form */}
+					<Box
+						component="form"
+						onSubmit={handleAddSubmit}
+						sx={{
+							p: 2,
+							borderRadius: "12px",
+							backgroundColor: "action.hover",
+							border: "1px solid",
+							borderColor: "divider",
+							mb: 3,
+						}}
+					>
+						<Typography variant="subtitle1" sx={{ color: "text.primary", mb: 2 }}>
+							Novi igrač
+						</Typography>
+						<Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
+							<TextField
+								size="small"
+								label="Ime i prezime igrača"
+								value={newPlayerName}
+								onChange={(e) => setNewPlayerName(e.target.value)}
+								fullWidth
+								required
+							/>
+							<Button
+								type="submit"
+								variant="contained"
+								color="primary"
+								size="medium"
+								disabled={isAdding}
+								startIcon={<AddIcon />}
+								sx={{
+									borderRadius: "20px",
+									px: 3,
+									fontWeight: 600,
+									textTransform: "none",
+									whiteSpace: "nowrap",
+								}}
+							>
+								{isAdding ? "Dodavanje…" : "Dodaj igrača"}
+							</Button>
+						</Stack>
+					</Box>
+
+					{/* Players table */}
+					<Box sx={{ mt: 1 }}>
 						{isFetching ? (
 							<CircularProgress sx={{ display: "block", mx: "auto", my: 2 }} />
 						) : (
@@ -123,29 +178,37 @@ export default function AdminPlayersTab() {
 								<Table size="small">
 									<TableHead>
 										<TableRow>
-											<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>ID</TableCell>
-											<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>
+											<TableCell sx={{ color: "text.primary", fontWeight: "bold", width: 70 }}>
+												ID
+											</TableCell>
+											<TableCell sx={{ color: "text.primary", fontWeight: "bold" }}>
 												Ime i prezime
 											</TableCell>
-											<TableCell align="right" sx={{ color: "#fff", fontWeight: "bold" }}>
+											<TableCell align="right" sx={{ color: "text.primary", fontWeight: "bold" }}>
 												Akcije
 											</TableCell>
 										</TableRow>
 									</TableHead>
 									<TableBody>
 										{playersList?.map((player) => (
-											<TableRow key={player.id}>
-												<TableCell sx={{ color: "rgba(255,255,255,0.7)" }}>
-													{player.id}
+											<TableRow
+												key={player.id}
+												sx={{ "&:hover": { backgroundColor: "action.hover" } }}
+											>
+												<TableCell sx={{ color: "text.secondary" }}>
+													#{player.id}
 												</TableCell>
-												<TableCell sx={{ color: "#fff" }}>{player.name}</TableCell>
+												<TableCell sx={{ color: "text.primary", fontWeight: 500 }}>
+													{player.name}
+												</TableCell>
 												<TableCell align="right">
 													<IconButton
 														color="primary"
 														onClick={() => handleOpenEditModal(player)}
 														aria-label={`Uredi ${player.name}`}
+														size="small"
 													>
-														<EditIcon />
+														<EditIcon fontSize="small" />
 													</IconButton>
 												</TableCell>
 											</TableRow>
@@ -154,27 +217,6 @@ export default function AdminPlayersTab() {
 								</Table>
 							</TableContainer>
 						)}
-					</Box>
-					<Box component="form" onSubmit={handleAddSubmit}>
-						<TextField
-							label="Ime i prezime igrača"
-							value={newPlayerName}
-							onChange={(e) => setNewPlayerName(e.target.value)}
-							fullWidth
-							required
-						/>
-						<Stack direction={{ xs: "column", sm: "row" }} justifyContent="flex-end" mt={4}>
-							<Button
-								type="submit"
-								variant="contained"
-								color="primary"
-								size="large"
-								disabled={isAdding}
-								startIcon={<AddIcon />}
-							>
-								Dodaj igrača
-							</Button>
-						</Stack>
 					</Box>
 				</CardContent>
 			</Card>

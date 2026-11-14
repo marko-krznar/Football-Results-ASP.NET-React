@@ -11,7 +11,6 @@ import {
 	RadioGroup,
 	Stack,
 	Typography,
-	useTheme,
 } from "@mui/material";
 import { useState } from "react";
 import { useAddSeasonMutation } from "../../redux/api/seasonsApi";
@@ -21,8 +20,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 
 export default function AdminSeasonsTab() {
-	const theme = useTheme();
-
 	const [addSeason, { isLoading: isAdding }] = useAddSeasonMutation();
 
 	const [formError, setFormError] = useState<string>("");
@@ -64,13 +61,23 @@ export default function AdminSeasonsTab() {
 	};
 
 	return (
-		<Stack spacing={4}>
+		<Stack spacing={3}>
 			<Box>
-				<Typography variant="h3" component="h2" gutterBottom>
-					Upravljanje Sezonama
+				<Typography variant="h3" component="h1" gutterBottom>
+					Upravljanje sezonama
+				</Typography>
+				<Typography variant="body2" sx={{ color: "text.secondary" }}>
+					Otvaranje nove natjecateljske sezone i definiranje razdoblja trajanja.
 				</Typography>
 			</Box>
-			<Card sx={{ background: theme.palette.grey[900] }}>
+			<Card
+				variant="outlined"
+				sx={{
+					backgroundColor: "background.paper",
+					borderColor: "divider",
+					borderRadius: "1rem",
+				}}
+			>
 				<CardContent>
 					{formError && (
 						<Alert severity="error" sx={{ mb: 2 }}>
@@ -100,11 +107,11 @@ export default function AdminSeasonsTab() {
 									<FormLabel
 										id="season-type-label"
 										sx={{
-											color: "rgba(255, 255, 255, 0.7)",
-											"&.Mui-focused": { color: "#fff" },
+											color: "text.secondary",
+											"&.Mui-focused": { color: "primary.main" },
 										}}
 									>
-										Tip Sezone
+										Tip sezone
 									</FormLabel>
 									<RadioGroup
 										row
@@ -115,29 +122,15 @@ export default function AdminSeasonsTab() {
 									>
 										<FormControlLabel
 											value="Spring"
-											control={
-												<Radio
-													sx={{
-														color: "rgba(255, 255, 255, 0.7)",
-														"&.Mui-checked": { color: "#fff" },
-													}}
-												/>
-											}
+											control={<Radio color="primary" />}
 											label="Proljeće (Spring)"
-											sx={{ color: "#fff" }}
+											sx={{ color: "text.primary" }}
 										/>
 										<FormControlLabel
 											value="Autumn"
-											control={
-												<Radio
-													sx={{
-														color: "rgba(255, 255, 255, 0.7)",
-														"&.Mui-checked": { color: "#fff" },
-													}}
-												/>
-											}
+											control={<Radio color="primary" />}
 											label="Jesen (Autumn)"
-											sx={{ color: "#fff" }}
+											sx={{ color: "text.primary" }}
 										/>
 									</RadioGroup>
 								</FormControl>
@@ -160,11 +153,17 @@ export default function AdminSeasonsTab() {
 										type="submit"
 										variant="contained"
 										color="primary"
-										size="large"
+										size="medium"
 										disabled={isAdding}
-										sx={{ mt: 2 }}
+										sx={{
+											mt: 2,
+											borderRadius: "20px",
+											px: 3,
+											fontWeight: 600,
+											textTransform: "none",
+										}}
 									>
-										Spremi Sezonu
+										{isAdding ? "Spremanje…" : "Spremi sezonu"}
 									</Button>
 								</Stack>
 							</Stack>

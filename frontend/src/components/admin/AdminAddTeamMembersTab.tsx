@@ -12,7 +12,6 @@ import {
 	RadioGroup,
 	Stack,
 	Typography,
-	useTheme,
 } from "@mui/material";
 import { useGetTeamsQuery } from "../../redux/api/teamsApi";
 import { useState } from "react";
@@ -21,7 +20,6 @@ import React from "react";
 import { useAddTeamMembersMutation } from "../../redux/api/teamMembersApi";
 
 export default function AdminAddTeamMembersTab() {
-	const theme = useTheme();
 	const [addTeamMembers, { isLoading: isAdding }] = useAddTeamMembersMutation();
 	const { data: playersList } = useGetPlayersQuery();
 	const { data: teamsList } = useGetTeamsQuery();
@@ -47,14 +45,24 @@ export default function AdminAddTeamMembersTab() {
 		}
 	};
 	return (
-		<Stack spacing={4}>
+		<Stack spacing={3}>
 			<Box>
 				<Typography variant="h3" component="h2" gutterBottom>
 					Upravljanje članovima tima
 				</Typography>
+				<Typography variant="body2" sx={{ color: "text.secondary" }}>
+					Grupni odabir i dodjela igrača u odabranu ekipu.
+				</Typography>
 			</Box>
 
-			<Card variant="outlined" sx={{ background: "#1E1F1E", borderColor: "#2E302F" }}>
+			<Card
+				variant="outlined"
+				sx={{
+					backgroundColor: "background.paper",
+					borderColor: "divider",
+					borderRadius: "1rem",
+				}}
+			>
 				<CardContent>
 					{formError && (
 						<Alert severity="error" sx={{ mb: 2 }}>
@@ -73,7 +81,7 @@ export default function AdminAddTeamMembersTab() {
 								<FormControl component="fieldset">
 									<FormLabel
 										id="team-select-label"
-										sx={{ color: "rgba(255, 255, 255, 0.7)", "&.Mui-focused": { color: "#fff" } }}
+										sx={{ color: "text.secondary", "&.Mui-focused": { color: "primary.main" } }}
 									>
 										Odaberi tim
 									</FormLabel>
@@ -88,18 +96,11 @@ export default function AdminAddTeamMembersTab() {
 											<FormControlLabel
 												key={team.id}
 												value={team.id}
-												control={
-													<Radio
-														sx={{
-															color: "rgba(255, 255, 255, 0.7)",
-															"&.Mui-checked": { color: "#fff" },
-														}}
-													/>
-												}
+												control={<Radio color="primary" />}
 												label={
 													team.seasonName ? `${team.name} (${team.seasonName})` : team.name
 												}
-												sx={{ color: "#fff" }}
+												sx={{ color: "text.primary" }}
 											/>
 										))}
 									</RadioGroup>
@@ -110,24 +111,23 @@ export default function AdminAddTeamMembersTab() {
 										spacing={1}
 										alignItems="center"
 										justifyContent="space-between"
-										sx={{ mb: 1 }}
+										sx={{ mb: 1.5 }}
 									>
-										<Typography sx={{ fontWeight: "medium", color: "#fff" }}>Igrači</Typography>
+										<Typography sx={{ fontWeight: 600, color: "text.primary" }}>Igrači</Typography>
 										<Box>
 											<Button
 												size="small"
 												onClick={() => setPersonName(playersList?.map((p) => p.id) ?? [])}
 												disabled={!playersList?.length}
-												sx={{ color: "#fff" }}
+												sx={{ color: "primary.main", textTransform: "none", fontWeight: 600 }}
 											>
 												Odaberi sve
 											</Button>
 											<Button
 												size="small"
-												color="inherit"
 												onClick={() => setPersonName([])}
 												disabled={!personName.length}
-												sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+												sx={{ color: "text.secondary", textTransform: "none" }}
 											>
 												Očisti
 											</Button>
@@ -138,10 +138,12 @@ export default function AdminAddTeamMembersTab() {
 											sx={{
 												display: "grid",
 												gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-												backgroundColor: theme.palette.background.paper,
+												backgroundColor: "action.hover",
+												border: "1px solid",
+												borderColor: "divider",
 												padding: 2,
 												gap: 1,
-												borderRadius: 2,
+												borderRadius: "12px",
 											}}
 										>
 											{playersList.map((player) => (
@@ -149,6 +151,7 @@ export default function AdminAddTeamMembersTab() {
 													key={player.id}
 													control={
 														<Checkbox
+															color="primary"
 															checked={personName.includes(player.id)}
 															onChange={() => {
 																setPersonName((prev) =>
@@ -157,14 +160,10 @@ export default function AdminAddTeamMembersTab() {
 																		: [...prev, player.id]
 																);
 															}}
-															sx={{
-																color: "rgba(255, 255, 255, 0.7)",
-																"&.Mui-checked": { color: "#fff" },
-															}}
 														/>
 													}
 													label={
-														<Typography variant="body2" sx={{ color: "#fff" }}>
+														<Typography variant="body2" sx={{ color: "text.primary" }}>
 															{player.name}
 														</Typography>
 													}
@@ -178,11 +177,17 @@ export default function AdminAddTeamMembersTab() {
 										type="submit"
 										variant="contained"
 										color="primary"
-										size="large"
+										size="medium"
 										disabled={isAdding}
-										sx={{ mt: 2 }}
+										sx={{
+											mt: 2,
+											borderRadius: "20px",
+											px: 3,
+											fontWeight: 600,
+											textTransform: "none",
+										}}
 									>
-										Spremi Članove
+										{isAdding ? "Spremanje…" : "Spremi članove"}
 									</Button>
 								</Stack>
 							</Stack>

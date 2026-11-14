@@ -23,7 +23,6 @@ import {
 	TableRow,
 	TextField,
 	Typography,
-	useTheme,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import GroupIcon from "@mui/icons-material/Group";
@@ -40,7 +39,6 @@ import {
 } from "../../redux/api/teamMembersApi";
 
 export default function AdminTeamsTab() {
-	const theme = useTheme();
 	const { data: teamsList, isLoading: teamsLoading } = useGetTeamsQuery();
 	const { data: seasonsList } = useGetSeasonsQuery();
 	const { data: playersList } = useGetPlayersQuery();
@@ -163,14 +161,24 @@ export default function AdminTeamsTab() {
 	const availablePlayersToAdd = playersList?.filter((p) => !currentMemberPlayerIds.includes(p.id)) ?? [];
 
 	return (
-		<Stack spacing={4}>
+		<Stack spacing={3}>
 			<Box>
 				<Typography variant="h3" component="h2" gutterBottom>
 					Uređivanje ekipa i sastava
 				</Typography>
+				<Typography variant="body2" sx={{ color: "text.secondary" }}>
+					Popis registriranih ekipa s opcijom uređivanja kapetana i sastava igrača.
+				</Typography>
 			</Box>
 
-			<Card variant="outlined" sx={{ background: theme.palette.grey[900] }}>
+			<Card
+				variant="outlined"
+				sx={{
+					backgroundColor: "background.paper",
+					borderColor: "divider",
+					borderRadius: "1rem",
+				}}
+			>
 				<CardContent>
 					{formError && (
 						<Alert severity="error" sx={{ mb: 2 }}>
@@ -190,20 +198,20 @@ export default function AdminTeamsTab() {
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Ekipa</TableCell>
-										<TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Kapetan</TableCell>
-										<TableCell align="right" sx={{ color: "#fff", fontWeight: "bold" }}>
+										<TableCell sx={{ color: "text.primary", fontWeight: "bold" }}>Ekipa</TableCell>
+										<TableCell sx={{ color: "text.primary", fontWeight: "bold" }}>Kapetan</TableCell>
+										<TableCell align="right" sx={{ color: "text.primary", fontWeight: "bold" }}>
 											Akcije
 										</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
 									{teamsList?.map((team) => (
-										<TableRow key={team.id}>
-											<TableCell>
+										<TableRow key={team.id} sx={{ "&:hover": { backgroundColor: "action.hover" } }}>
+											<TableCell sx={{ color: "text.primary", fontWeight: 500 }}>
 												{team.name} - {team.seasonName}
 											</TableCell>
-											<TableCell sx={{ color: "rgba(255,255,255,0.7)" }}>
+											<TableCell sx={{ color: "text.secondary" }}>
 												{team.captainName || "-"}
 											</TableCell>
 											<TableCell align="right">
@@ -213,14 +221,27 @@ export default function AdminTeamsTab() {
 														variant="outlined"
 														startIcon={<EditIcon />}
 														onClick={() => handleOpenEditTeam(team)}
+														sx={{
+															borderRadius: "16px",
+															textTransform: "none",
+															borderColor: "divider",
+															color: "text.primary",
+															"&:hover": { borderColor: "text.primary" },
+														}}
 													>
 														Uredi
 													</Button>
 													<Button
 														size="small"
 														variant="contained"
+														color="primary"
 														startIcon={<GroupIcon />}
 														onClick={() => handleOpenRosterModal(team)}
+														sx={{
+															borderRadius: "16px",
+															textTransform: "none",
+															fontWeight: 600,
+														}}
 													>
 														Igrači
 													</Button>
@@ -350,7 +371,8 @@ export default function AdminTeamsTab() {
 											maxHeight: 200,
 											overflowY: "auto",
 											p: 1,
-											border: "1px solid rgba(255,255,255,0.12)",
+											border: "1px solid",
+											borderColor: "divider",
 											borderRadius: 1,
 										}}
 									>
