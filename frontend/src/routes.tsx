@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router";
-import App from "./App";
+import PublicLayout from "./components/layout/PublicLayout";
+import AdminLayout from "./components/layout/AdminLayout";
 import Landing from "./pages/Landing";
 import Teams from "./pages/Teams";
 import Admin from "./pages/Admin";
@@ -16,7 +17,7 @@ export const router = createBrowserRouter([
 	},
 	{
 		path: "/",
-		element: <App />,
+		element: <PublicLayout />,
 		children: [
 			{
 				index: true,
@@ -38,11 +39,17 @@ export const router = createBrowserRouter([
 				path: "seasons",
 				element: <Seasons />,
 			},
+		],
+	},
+	{
+		element: <ProtectedRoute />,
+		children: [
 			{
-				element: <ProtectedRoute />,
+				path: "/admin",
+				element: <AdminLayout />,
 				children: [
 					{
-						path: "admin",
+						index: true,
 						element: <Admin />,
 					},
 				],
