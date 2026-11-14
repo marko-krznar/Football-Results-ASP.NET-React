@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
 	Box,
 	Button,
+	Chip,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -43,26 +44,64 @@ export default function AdminMatchesTab() {
 	const selectedSeason = seasons && seasons.find((s) => s.id === selectedSeasonId);
 
 	return (
-		<Stack spacing={4}>
+		<Stack spacing={3}>
 			<Stack
-				direction={isMobile ? "column" : "row"}
-				alignItems="center"
+				direction={{ xs: "column", sm: "row" }}
+				alignItems={{ xs: "flex-start", sm: "center" }}
 				justifyContent="space-between"
 				spacing={2}
 			>
 				<Box>
-					<Typography variant="h3" component="h2" gutterBottom>
-						Upravljanje terminima
+					<Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 0.5 }}>
+						<Typography variant="h3" component="h1">
+							Upravljanje terminima
+						</Typography>
+						{data && (
+							<Chip
+								label={`${data.length} termina`}
+								size="small"
+								sx={{
+									backgroundColor: "action.selected",
+									border: "1px solid",
+									borderColor: "divider",
+									fontWeight: 600,
+									color: "text.secondary",
+								}}
+							/>
+						)}
+					</Stack>
+					<Typography variant="body2" sx={{ color: "text.secondary" }}>
+						{selectedSeason
+							? `Pregled, unos i uređivanje odigranih termina za sezonu ${selectedSeason.name}`
+							: "Pregled, unos i uređivanje odigranih termina"}
 					</Typography>
-					{selectedSeason && <Typography variant="body2">Sezona: {selectedSeason.name}</Typography>}
 				</Box>
+
+				<Button
+					variant="contained"
+					color="primary"
+					startIcon={<AddIcon />}
+					onClick={() => setAddModalOpen(true)}
+					sx={{
+						display: { xs: "none", sm: "inline-flex" },
+						borderRadius: "20px",
+						px: 2.5,
+						py: 1,
+						fontWeight: 600,
+						textTransform: "none",
+						whiteSpace: "nowrap",
+					}}
+				>
+					Novi termin
+				</Button>
 			</Stack>
 
 			<Box
 				sx={{
+					display: { xs: "flex", sm: "none" },
 					position: "fixed",
-					bottom: { xs: 76, md: 32 },
-					right: { xs: 16, sm: 24, md: 32 },
+					bottom: 76,
+					right: 16,
 					zIndex: (t) => t.zIndex.speedDial,
 				}}
 			>
@@ -122,10 +161,10 @@ export default function AdminMatchesTab() {
 					aria-labelledby="admin-delete-dialog-title"
 					aria-describedby="admin-delete-dialog-description"
 				>
-					<DialogTitle id="admin-delete-dialog-title">Confirm Delete</DialogTitle>
+					<DialogTitle id="admin-delete-dialog-title">Potvrda brisanja</DialogTitle>
 					<DialogContent>
 						<DialogContentText id="admin-delete-dialog-description">
-							Are you sure you want to permanently delete this match? This action cannot be undone.
+							Jeste li sigurni da želite trajno izbrisati ovaj termin? Ova radnja se ne može poništiti.
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
@@ -135,7 +174,7 @@ export default function AdminMatchesTab() {
 								setDeletingMatchId(null);
 							}}
 						>
-							Cancel
+							Odustani
 						</Button>
 						<Button
 							color="error"
@@ -148,7 +187,7 @@ export default function AdminMatchesTab() {
 								setDeletingMatchId(null);
 							}}
 						>
-							Delete
+							Izbriši
 						</Button>
 					</DialogActions>
 				</Dialog>

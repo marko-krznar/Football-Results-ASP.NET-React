@@ -13,7 +13,6 @@ import {
 	Stack,
 	TextField,
 	Typography,
-	useTheme,
 } from "@mui/material";
 import { useAddTeamMutation } from "../../redux/api/teamsApi";
 import { useState } from "react";
@@ -21,7 +20,6 @@ import { useGetPlayersQuery } from "../../redux/api/playersApi";
 import { useGetSeasonsQuery } from "../../redux/api/seasonsApi";
 
 export default function AdminAddTeamTab() {
-	const theme = useTheme();
 	const [addTeam, { isLoading: isAdding }] = useAddTeamMutation();
 	const { data: playersList } = useGetPlayersQuery();
 	const { data: seasonsList } = useGetSeasonsQuery();
@@ -59,14 +57,24 @@ export default function AdminAddTeamTab() {
 		}
 	};
 	return (
-		<Stack spacing={4}>
+		<Stack spacing={3}>
 			<Box>
 				<Typography variant="h3" component="h2" gutterBottom>
-					Upravljanje timovima
+					Kreiranje ekipe
+				</Typography>
+				<Typography variant="body2" sx={{ color: "text.secondary" }}>
+					Dodijelite boju, sezonu i kapetana novoj ekipi.
 				</Typography>
 			</Box>
 
-			<Card variant="outlined" sx={{ background: theme.palette.grey[900] }}>
+			<Card
+				variant="outlined"
+				sx={{
+					backgroundColor: "background.paper",
+					borderColor: "divider",
+					borderRadius: "1rem",
+				}}
+			>
 				<CardContent>
 					{formError && (
 						<Alert severity="error" sx={{ mb: 2 }}>
@@ -82,7 +90,15 @@ export default function AdminAddTeamTab() {
 					<Box component="form" onSubmit={handleSubmit}>
 						<Stack spacing={3}>
 							<FormControl component="fieldset">
-								<FormLabel id="team-color-label">Tim</FormLabel>
+								<FormLabel
+									id="team-color-label"
+									sx={{
+										color: "text.secondary",
+										"&.Mui-focused": { color: "primary.main" },
+									}}
+								>
+									Tim
+								</FormLabel>
 								<RadioGroup
 									row
 									aria-labelledby="team-color-label"
@@ -94,16 +110,9 @@ export default function AdminAddTeamTab() {
 										<FormControlLabel
 											key={option.value}
 											value={option.label}
-											control={
-												<Radio
-													sx={{
-														color: "rgba(255, 255, 255, 0.7)",
-														"&.Mui-checked": { color: "#fff" },
-													}}
-												/>
-											}
+											control={<Radio color="primary" />}
 											label={option.label}
-											sx={{ color: "#fff" }}
+											sx={{ color: "text.primary" }}
 										/>
 									))}
 								</RadioGroup>
@@ -145,11 +154,17 @@ export default function AdminAddTeamTab() {
 									type="submit"
 									variant="contained"
 									color="primary"
-									size="large"
+									size="medium"
 									disabled={isAdding}
-									sx={{ mt: 2 }}
+									sx={{
+										mt: 2,
+										borderRadius: "20px",
+										px: 3,
+										fontWeight: 600,
+										textTransform: "none",
+									}}
 								>
-									Spremi Tim
+									{isAdding ? "Spremanje…" : "Spremi tim"}
 								</Button>
 							</Stack>
 						</Stack>
