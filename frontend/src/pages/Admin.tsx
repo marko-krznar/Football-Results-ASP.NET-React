@@ -1,5 +1,6 @@
 import {
 	Box,
+	Button,
 	Container,
 	List,
 	ListItem,
@@ -8,15 +9,17 @@ import {
 	ListItemText,
 	Paper,
 	Stack,
+	Typography,
 	useMediaQuery,
 	useTheme,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import GroupsIcon from "@mui/icons-material/Groups";
 import PersonIcon from "@mui/icons-material/Person";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 
 // Admin tab components
 import AdminSeasonsTab from "../components/admin/AdminSeasonsTab";
@@ -69,14 +72,49 @@ export default function Admin() {
 	};
 
 	return (
-		<Container maxWidth="xl">
+		<Container maxWidth="xl" sx={{ pt: 2 }}>
+			{/* Admin Header / Exit to site */}
 			<Box
 				sx={{
 					display: "flex",
-					minHeight: "calc(100vh - 64px)",
+					justifyContent: "space-between",
+					alignItems: "center",
+					pb: 2,
+					borderBottom: "1px solid",
+					borderColor: "divider",
 				}}
 			>
-				{/* Desktop sidebar — hidden on mobile (global AdminBottomNav handles mobile nav) */}
+				<Typography variant="h6" fontWeight={700}>
+					Admin Portal
+				</Typography>
+				<Button
+					component={Link}
+					to="/"
+					variant="outlined"
+					size="small"
+					startIcon={<ArrowBackIcon />}
+					sx={{
+						textTransform: "none",
+						borderColor: "divider",
+						color: "text.secondary",
+						"&:hover": {
+							borderColor: "text.primary",
+							color: "text.primary",
+						},
+					}}
+				>
+					Povratak na stranicu
+				</Button>
+			</Box>
+
+			<Box
+				sx={{
+					display: "flex",
+					minHeight: "calc(100vh - 120px)",
+				}}
+			>
+				{/* Desktop sidebar — hidden on mobile (AdminBottomNav handles mobile nav within AdminLayout) */}
+
 				{!isMobile && (
 					<Paper
 						elevation={0}

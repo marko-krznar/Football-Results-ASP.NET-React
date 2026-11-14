@@ -42,11 +42,13 @@ export interface Match {
 type MatchTableProps = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	data: Match[] | any;
-	setDeletingMatchId: React.Dispatch<React.SetStateAction<number | null>>;
-	setDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	setEditingMatchId: React.Dispatch<React.SetStateAction<number | null>>;
-	setEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	showActions?: boolean;
+	setDeletingMatchId?: React.Dispatch<React.SetStateAction<number | null>>;
+	setDeleteDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+	setEditingMatchId?: React.Dispatch<React.SetStateAction<number | null>>;
+	setEditModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 
 const TH_SX = {
 	fontWeight: 700,
@@ -159,6 +161,7 @@ function TeamDot({ dark }: { dark: boolean }) {
 
 export default function MatchTabel({
 	data,
+	showActions = false,
 	setDeletingMatchId,
 	setDeleteDialogOpen,
 	setEditingMatchId,
@@ -166,6 +169,7 @@ export default function MatchTabel({
 }: MatchTableProps) {
 	const theme = useTheme();
 	const { isAuthenticated, isAdmin } = useCurrentUser();
+	const canShowActions = showActions && isAuthenticated && isAdmin;
 
 	return (
 		<TableContainer sx={{ width: "100%", overflowX: "auto" }}>
@@ -180,7 +184,7 @@ export default function MatchTabel({
 							</Stack>
 						</TableCell>
 						<TableCell sx={{ ...TH_SX, width: 110, textAlign: "right" }}>Konačni ishod</TableCell>
-						{isAuthenticated && isAdmin && <TableCell sx={{ ...TH_SX, width: 64 }} />}
+						{canShowActions && <TableCell sx={{ ...TH_SX, width: 64 }} />}
 					</TableRow>
 				</TableHead>
 
@@ -318,7 +322,7 @@ export default function MatchTabel({
 								</TableCell>
 
 								{/* ── Admin actions ── */}
-								{isAuthenticated && isAdmin && (
+								{canShowActions && (
 									<TableCell sx={{ py: 2, borderBottom: "1px solid", borderColor: "divider" }}>
 										<Stack direction="row" spacing={0.5}>
 											<IconButton
@@ -326,8 +330,8 @@ export default function MatchTabel({
 												aria-label="edit"
 												size="small"
 												onClick={() => {
-													setEditingMatchId(match.id);
-													setEditModalOpen(true);
+													setEditingMatchId?.(match.id);
+													setEditModalOpen?.(true);
 												}}
 											>
 												<EditIcon fontSize="inherit" />
@@ -337,8 +341,8 @@ export default function MatchTabel({
 												aria-label="delete"
 												size="small"
 												onClick={() => {
-													setDeletingMatchId(match.id);
-													setDeleteDialogOpen(true);
+													setDeletingMatchId?.(match.id);
+													setDeleteDialogOpen?.(true);
 												}}
 											>
 												<DeleteIcon fontSize="inherit" color="error" />
@@ -346,6 +350,7 @@ export default function MatchTabel({
 										</Stack>
 									</TableCell>
 								)}
+
 							</TableRow>
 						);
 					})}

@@ -80,7 +80,20 @@ describe("MatchesMobileCardList", () => {
 		expect(screen.queryByLabelText("delete")).not.toBeInTheDocument();
 	});
 
-	it("renders admin action buttons and triggers callbacks on click", () => {
+	it("hides action buttons even for admin when showActions is false (public pages)", () => {
+		vi.spyOn(hooks, "useCurrentUser").mockReturnValue({
+			...mockCurrentUser,
+			isAuthenticated: true,
+			isAdmin: true,
+		});
+
+		render(<MatchesMobileCardList data={mockMatches} />);
+
+		expect(screen.queryByLabelText("edit")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("delete")).not.toBeInTheDocument();
+	});
+
+	it("renders admin action buttons and triggers callbacks when showActions is true", () => {
 		vi.spyOn(hooks, "useCurrentUser").mockReturnValue({
 			...mockCurrentUser,
 			isAuthenticated: true,
@@ -90,12 +103,14 @@ describe("MatchesMobileCardList", () => {
 		render(
 			<MatchesMobileCardList
 				data={mockMatches}
+				showActions
 				setDeletingMatchId={setDeletingMatchId}
 				setDeleteDialogOpen={setDeleteDialogOpen}
 				setEditingMatchId={setEditingMatchId}
 				setEditModalOpen={setEditModalOpen}
 			/>
 		);
+
 
 		const editBtn = screen.getByLabelText("edit");
 		const deleteBtn = screen.getByLabelText("delete");
