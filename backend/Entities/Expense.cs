@@ -5,7 +5,9 @@ namespace backend.Entities;
 public enum ExpenseOption
 {
     HPD_PRSTEN,
-    OTHER
+    OTHER,
+    VELIKI_NOGOMET_NEDJELJOM,
+    VELESAJAM_UTORKOM
 }
 
 public class Expense

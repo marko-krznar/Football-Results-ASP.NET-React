@@ -58,16 +58,27 @@ export default function ExpenseGrid({ expenses, onEdit, onDelete }: ExpenseGridP
 		},
 	];
 
-	const formatExpenses = expenses.map((expense: Expense) => ({
-		...expense,
-		id: expense.id,
-		option: expense.option === 0 ? "HPD Prsten" : "Ostalo",
-		amount: expense.amount ? `${expense.amount.toFixed(2)} €` : "0.00 €",
-		date:
-			expense.date && expense.option === 0
-				? dayjs(expense.date).locale("hr").format("MMMM")
-				: dayjs(expense.date).locale("hr").format("DD.MM.YYYY - dddd"),
-	}));
+	const formatExpenses = expenses.map((expense: Expense) => {
+		let optionLabel = "Ostalo";
+		if (expense.option === 0) {
+			optionLabel = "HPD Prsten";
+		} else if (expense.option === 2) {
+			optionLabel = "Veliki nogomet nedjeljom";
+		} else if (expense.option === 3) {
+			optionLabel = "Velesajam 22h utorkom";
+		}
+
+		return {
+			...expense,
+			id: expense.id,
+			option: optionLabel,
+			amount: expense.amount ? `${expense.amount.toFixed(2)} €` : "0.00 €",
+			date:
+				expense.date && expense.option === 0
+					? dayjs(expense.date).locale("hr").format("MMMM")
+					: dayjs(expense.date).locale("hr").format("DD.MM.YYYY - dddd"),
+		};
+	});
 
 	const CustomFooter = () => (
 		<GridFooterContainer sx={{ paddingX: 2, paddingY: 1, justifyContent: "space-between" }}>
