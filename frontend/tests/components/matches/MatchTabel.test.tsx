@@ -86,7 +86,20 @@ describe("MatchTabel", () => {
 		expect(screen.queryByLabelText("delete")).not.toBeInTheDocument();
 	});
 
-	it("shows action buttons and calls callbacks when user is admin", () => {
+	it("hides action buttons even for admin when showActions is false (public pages)", () => {
+		vi.spyOn(hooks, "useCurrentUser").mockReturnValue({
+			...mockCurrentUser,
+			isAuthenticated: true,
+			isAdmin: true,
+		});
+
+		render(<MatchTabel data={mockMatches} />);
+
+		expect(screen.queryByLabelText("edit")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("delete")).not.toBeInTheDocument();
+	});
+
+	it("shows action buttons and calls callbacks when user is admin and showActions is true", () => {
 		vi.spyOn(hooks, "useCurrentUser").mockReturnValue({
 			...mockCurrentUser,
 			isAuthenticated: true,
@@ -96,12 +109,14 @@ describe("MatchTabel", () => {
 		render(
 			<MatchTabel
 				data={mockMatches}
+				showActions
 				setDeletingMatchId={setDeletingMatchId}
 				setDeleteDialogOpen={setDeleteDialogOpen}
 				setEditingMatchId={setEditingMatchId}
 				setEditModalOpen={setEditModalOpen}
 			/>
 		);
+
 
 		const editButton = screen.getByLabelText("edit");
 		const deleteButton = screen.getByLabelText("delete");

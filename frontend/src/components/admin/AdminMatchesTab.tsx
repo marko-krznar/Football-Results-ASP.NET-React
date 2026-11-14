@@ -81,6 +81,7 @@ export default function AdminMatchesTab() {
 				(isMobile ? (
 					<MatchesMobileCardList
 						data={data}
+						showActions
 						setDeletingMatchId={setDeletingMatchId}
 						setDeleteDialogOpen={setDeleteDialogOpen}
 						setEditingMatchId={setEditingMatchId}
@@ -89,12 +90,14 @@ export default function AdminMatchesTab() {
 				) : (
 					<MatchTabel
 						data={data}
+						showActions
 						setDeletingMatchId={setDeletingMatchId}
 						setDeleteDialogOpen={setDeleteDialogOpen}
 						setEditingMatchId={setEditingMatchId}
 						setEditModalOpen={setEditModalOpen}
 					/>
 				))}
+
 
 			{addModalOpen && <AddMatchModal open={addModalOpen} onClose={() => setAddModalOpen(false)} />}
 

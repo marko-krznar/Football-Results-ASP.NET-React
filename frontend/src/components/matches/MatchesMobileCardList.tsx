@@ -10,11 +10,13 @@ import type { Match } from "./MatchTabel";
 
 type MatchesMobileCardListProps = {
 	data: Match[];
-	setDeletingMatchId: React.Dispatch<React.SetStateAction<number | null>>;
-	setDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	setEditingMatchId: React.Dispatch<React.SetStateAction<number | null>>;
-	setEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	showActions?: boolean;
+	setDeletingMatchId?: React.Dispatch<React.SetStateAction<number | null>>;
+	setDeleteDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+	setEditingMatchId?: React.Dispatch<React.SetStateAction<number | null>>;
+	setEditModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 
 type TeamScoreColumnProps = {
 	teamName: string;
@@ -123,15 +125,18 @@ function TeamRosterBox({
 
 export default function MatchesMobileCardList({
 	data,
+	showActions = false,
 	setDeletingMatchId,
 	setDeleteDialogOpen,
 	setEditingMatchId,
 	setEditModalOpen,
 }: MatchesMobileCardListProps) {
 	const { isAuthenticated, isAdmin } = useCurrentUser();
+	const canShowActions = showActions && isAuthenticated && isAdmin;
 
 	return (
 		<Stack spacing={2.5} sx={{ width: "100%" }}>
+
 			{data.map((match: Match) => {
 				const isUncounted = match.countsForStandings === false;
 				const formattedDate = dayjs(match.date).locale("hr").format("ddd DD.MM.YYYY.");
@@ -182,7 +187,7 @@ export default function MatchesMobileCardList({
 								</Box>
 
 								{/* Admin Actions */}
-								{isAuthenticated && isAdmin && (
+								{canShowActions && (
 									<Stack direction="row" spacing={1}>
 										<IconButton
 											size="small"
@@ -195,8 +200,8 @@ export default function MatchesMobileCardList({
 												borderColor: "divider",
 											}}
 											onClick={() => {
-												setEditingMatchId(match.id);
-												setEditModalOpen(true);
+												setEditingMatchId?.(match.id);
+												setEditModalOpen?.(true);
 											}}
 										>
 											<EditIcon sx={{ fontSize: 18 }} />
@@ -212,14 +217,15 @@ export default function MatchesMobileCardList({
 												borderColor: "error.main",
 											}}
 											onClick={() => {
-												setDeletingMatchId(match.id);
-												setDeleteDialogOpen(true);
+												setDeletingMatchId?.(match.id);
+												setDeleteDialogOpen?.(true);
 											}}
 										>
 											<DeleteIcon sx={{ fontSize: 18 }} color="error" />
 										</IconButton>
 									</Stack>
 								)}
+
 							</Stack>
 
 							{isUncounted && match.note && (
