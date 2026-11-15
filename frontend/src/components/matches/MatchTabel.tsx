@@ -142,23 +142,6 @@ function FinalOutcomeBadge({
 	);
 }
 
-/** Small dot used for team indicators */
-function TeamDot({ dark }: { dark: boolean }) {
-	return (
-		<Box
-			sx={{
-				width: 7,
-				height: 7,
-				borderRadius: "50%",
-				flexShrink: 0,
-				backgroundColor: dark ? "text.secondary" : "background.paper",
-				border: dark ? 0 : "1px solid",
-				borderColor: "divider",
-			}}
-		/>
-	);
-}
-
 export default function MatchTabel({
 	data,
 	showActions = false,
@@ -234,34 +217,28 @@ export default function MatchTabel({
 								<TableCell sx={{ py: 2, borderBottom: "1px solid", borderColor: "divider" }}>
 									<Stack spacing={1.25}>
 										<Stack spacing={0.4}>
-											<Stack direction="row" spacing={0.6} alignItems="center">
-												<TeamDot dark />
-												<Typography
-													variant="caption"
-													fontWeight="bold"
-													color="text.secondary"
-													sx={{ textTransform: "uppercase", letterSpacing: "0.07em" }}
-												>
-													Crni:
-												</Typography>
-											</Stack>
+											<Typography
+												variant="caption"
+												fontWeight="bold"
+												color="text.secondary"
+												sx={{ textTransform: "uppercase", letterSpacing: "0.07em" }}
+											>
+												Crni:
+											</Typography>
 											<Typography variant="body2" color="text.primary">
 												{match.secondTeam.playerNames.join(", ")}
 											</Typography>
 										</Stack>
 
 										<Stack spacing={0.4}>
-											<Stack direction="row" spacing={0.6} alignItems="center">
-												<TeamDot dark={false} />
-												<Typography
-													variant="caption"
-													fontWeight="bold"
-													color="text.secondary"
-													sx={{ textTransform: "uppercase", letterSpacing: "0.07em" }}
-												>
-													Bijeli:
-												</Typography>
-											</Stack>
+											<Typography
+												variant="caption"
+												fontWeight="bold"
+												color="text.secondary"
+												sx={{ textTransform: "uppercase", letterSpacing: "0.07em" }}
+											>
+												Bijeli:
+											</Typography>
 											<Typography variant="body2" color="text.primary">
 												{match.firstTeam.playerNames.join(", ")}
 											</Typography>

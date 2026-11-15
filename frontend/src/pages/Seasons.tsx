@@ -16,7 +16,7 @@ import {
 	getNextMatchDate,
 } from "../utils/seasonUtils";
 import SeasonMetricsOverview from "../components/seasons/SeasonMetricsOverview";
-import SeasonFilterBar, { type FilterTab, type ViewMode } from "../components/seasons/SeasonFilterBar";
+import SeasonFilterBar, { type FilterTab } from "../components/seasons/SeasonFilterBar";
 import SeasonCard from "../components/seasons/SeasonCard";
 
 export default function Seasons() {
@@ -25,7 +25,6 @@ export default function Seasons() {
 	const { data: displayMatches } = useGetMatchesQuery(undefined);
 
 	const [statusFilter, setStatusFilter] = useState<FilterTab>("all");
-	const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
 	// Prefer rawMatches from /api/matches as it includes SeasonId and set scores directly
 	const allMatches = useMemo(() => {
@@ -115,12 +114,10 @@ export default function Seasons() {
 				</Typography>
 			</Stack>
 
-			{/* Filter Tabs and View Toggle */}
+			{/* Filter Tabs */}
 			<SeasonFilterBar
 				statusFilter={statusFilter}
 				onFilterChange={setStatusFilter}
-				viewMode={viewMode}
-				onViewModeChange={setViewMode}
 			/>
 
 			{/* Loading & Error States */}
@@ -136,13 +133,12 @@ export default function Seasons() {
 				</Alert>
 			)}
 
-			{/* Season Cards Grid / List */}
+			{/* Season Cards Grid */}
 			{!seasonsLoading && filteredSeasons && (
 				<Box
 					sx={{
 						display: "grid",
-						gridTemplateColumns:
-							viewMode === "grid" ? { xs: "1fr", md: "repeat(2, 1fr)" } : "1fr",
+						gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)" },
 						gap: 3.5,
 					}}
 				>

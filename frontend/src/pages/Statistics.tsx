@@ -165,8 +165,8 @@ export default function Statistics() {
 										<PlayerLeaderboard
 											title="Najviše nastupa za Crne"
 											description="Top 5 igrača u crnom dresu"
-											players={stats.mostAppearancesBlack}
-											countType="black"
+											players={stats.mostAppearancesWhite}
+											countType="white"
 										/>
 									</Stack>
 								</Grid>
@@ -196,8 +196,8 @@ export default function Statistics() {
 										<PlayerLeaderboard
 											title="Najviše nastupa za Bijele"
 											description="Top 5 igrača u bijelom dresu"
-											players={stats.mostAppearancesWhite}
-											countType="white"
+											players={stats.mostAppearancesBlack}
+											countType="black"
 										/>
 									</Stack>
 								</Grid>

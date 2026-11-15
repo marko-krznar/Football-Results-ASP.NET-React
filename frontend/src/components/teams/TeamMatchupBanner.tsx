@@ -1,5 +1,4 @@
-import { Box, Card, Chip, Stack, Typography, useTheme } from "@mui/material";
-import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import { Box, Card, Chip, Stack, Typography } from "@mui/material";
 
 interface TeamBannerProps {
 	teamName: string;
@@ -9,7 +8,6 @@ interface TeamBannerProps {
 }
 
 export function TeamBannerCard({ teamName, kitType, captainName, playerCount }: TeamBannerProps) {
-	const theme = useTheme();
 	const isDark = kitType === "dark";
 
 	return (
@@ -26,60 +24,30 @@ export function TeamBannerCard({ teamName, kitType, captainName, playerCount }: 
 			}}
 		>
 			<Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-				{/* Left side: Icon + Name/Kit + Captain */}
-				<Stack direction="row" spacing={1.5} alignItems="center">
-					<Box
-						sx={{
-							width: 44,
-							height: 44,
-							borderRadius: 2,
-							bgcolor: isDark ? theme.palette.grey[900] : theme.palette.grey[800],
-							border: 1,
-							borderColor: "divider",
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							flexShrink: 0,
-						}}
-					>
-						{isDark ? (
-							<SportsSoccerIcon sx={{ color: "text.secondary" }} />
-						) : (
-							<Box
-								sx={{
-									width: 16,
-									height: 16,
-									borderRadius: "50%",
-									bgcolor: "#ffffff",
-								}}
-							/>
-						)}
-					</Box>
-
-					<Box>
-						<Stack direction="row" spacing={1} alignItems="center">
-							<Typography variant="h5" sx={{ fontWeight: 800, color: "text.primary" }}>
-								{teamName}
-							</Typography>
-							<Chip
-								label={isDark ? "TAMNI DRES" : "SVIJETLI DRES"}
-								size="small"
-								sx={{
-									height: 18,
-									fontSize: "0.62rem",
-									fontWeight: 700,
-									letterSpacing: "0.04em",
-									borderRadius: 1,
-									bgcolor: "rgba(255, 255, 255, 0.08)",
-									color: "text.secondary",
-								}}
-							/>
-						</Stack>
-						<Typography variant="caption" color="text.secondary" sx={{ mt: 0.25 }} display="block">
-							Kapetan: {captainName || "Nije dodijeljen"}
+				{/* Left side: Name/Kit + Captain */}
+				<Box>
+					<Stack direction="row" spacing={1} alignItems="center">
+						<Typography variant="h5" sx={{ fontWeight: 800, color: "text.primary" }}>
+							{teamName}
 						</Typography>
-					</Box>
-				</Stack>
+						<Chip
+							label={isDark ? "TAMNI DRES" : "SVIJETLI DRES"}
+							size="small"
+							sx={{
+								height: 18,
+								fontSize: "0.62rem",
+								fontWeight: 700,
+								letterSpacing: "0.04em",
+								borderRadius: 1,
+								bgcolor: "rgba(255, 255, 255, 0.08)",
+								color: "text.secondary",
+							}}
+						/>
+					</Stack>
+					<Typography variant="caption" color="text.secondary" sx={{ mt: 0.25 }} display="block">
+						Kapetan: {captainName || "Nije dodijeljen"}
+					</Typography>
+				</Box>
 
 				{/* Right side: Player count */}
 				<Stack alignItems="flex-end" flexShrink={0}>
